@@ -14,8 +14,15 @@
             <views:HelpView/>
         </DataTemplate>
         <!-- Styles -->
+        <!-- Main Button Style -->
         <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="0 0 0 3"/>
+        </Style>
+        <!-- Main TextBox Style -->
+        <Style x:Key="MainTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
     </Application.Resources>
 </Application>
