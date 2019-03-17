@@ -34,15 +34,14 @@ namespace LinkHierarchy2JSON.ViewModel
             json = (new JSONCode { Code = "Enter Chrome JSON Here" });
             info = (new Info { Text = "Info: " });
 
-            //going to append 'Command' to all the command code methods below for less confusion
-            CopyCommand = new MyICommand(OnCopy, CanCopy);
-            LoadCommand = new MyICommand(OnLoad, CanLoad);
-            ClearAllCommand = new MyICommand(OnClearAll, CanClearAll);
-            SerializeCommand = new MyICommand(OnSerialize, CanSerialize);
-            RemoveUrlCommand = new MyICommand(OnRemoveUrl, CanRemoveUrl);
-            RemoveFolderCommand = new MyICommand(OnRemoveFolder, CanRemoveFolder);
-            AddUrlCommand = new MyICommand(OnAddUrl, CanAddUrl);
-            AddFolderCommand = new MyICommand(OnAddFolder, CanAddFolder);
+            CopyCommand = new MyICommand(OnCopyCommand, CanCopyCommand);
+            LoadCommand = new MyICommand(OnLoadCommand, CanLoadCommand);
+            ClearAllCommand = new MyICommand(OnClearAllCommand, CanClearAllCommand);
+            SerializeCommand = new MyICommand(OnSerializeCommand, CanSerializeCommand);
+            RemoveUrlCommand = new MyICommand(OnRemoveUrlCommand, CanRemoveUrlCommand);
+            RemoveFolderCommand = new MyICommand(OnRemoveFolderCommand, CanRemoveFolderCommand);
+            AddUrlCommand = new MyICommand(OnAddUrlCommand, CanAddUrlCommand);
+            AddFolderCommand = new MyICommand(OnAddFolderCommand, CanAddFolderCommand);
             ShowHelpCommand = new MyICommand(onShowHelpCommand, canShowHelpCommand);
             LoadTree();
             _canLoad = true;
@@ -57,7 +56,7 @@ namespace LinkHierarchy2JSON.ViewModel
             return true;
         }
 
-        private async void OnSerialize()
+        private async void OnSerializeCommand()
         {
             string ConvertedCode = string.Empty;
             changeInfo("Serializeing Tree...");
@@ -66,7 +65,7 @@ namespace LinkHierarchy2JSON.ViewModel
             changeInfo("Tree Serialized");
         }
 
-        private bool CanSerialize()
+        private bool CanSerializeCommand()
         {
             return true;
         }
@@ -86,7 +85,7 @@ namespace LinkHierarchy2JSON.ViewModel
             info.Text = String.Format("Info:  {0}", message);
         }
 
-        private void OnCopy()
+        private void OnCopyCommand()
         {
             try
             {
@@ -100,13 +99,13 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanCopy()
+        private bool CanCopyCommand()
         {
             return true;
         }
 
 
-        private async void OnLoad()
+        private async void OnLoadCommand()
         {
             try
             {
@@ -141,7 +140,7 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanLoad()
+        private bool CanLoadCommand()
         {
             return _canLoad;
         }
@@ -432,7 +431,7 @@ namespace LinkHierarchy2JSON.ViewModel
         }
 
         // ADD FOLDER
-        private void OnAddFolder()
+        private void OnAddFolderCommand()
         {
             if (HighlightedItem != null)
             {
@@ -450,13 +449,13 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanAddFolder()
+        private bool CanAddFolderCommand()
         {
             return HighlightedItem != null && HighlightedItem is Folder || HighlightedItem is ManagedBookmarks;
         }
 
         // ADD URL
-        private void OnAddUrl()
+        private void OnAddUrlCommand()
         {
             if(HighlightedItem != null)
             {
@@ -474,13 +473,13 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanAddUrl()
+        private bool CanAddUrlCommand()
         {
             return HighlightedItem != null && HighlightedItem is Folder || HighlightedItem is ManagedBookmarks;
         }
         
         // REMOVE FOLDER -- redo this using linq
-        private void OnRemoveFolder()
+        private void OnRemoveFolderCommand()
         {
             if(HighlightedItem != null)
             {
@@ -523,13 +522,13 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanRemoveFolder()
+        private bool CanRemoveFolderCommand()
         {
             return HighlightedItem != null && HighlightedItem is Folder;
         }
 
         // REMOVE URL -- redo this using linq
-        private void OnRemoveUrl()
+        private void OnRemoveUrlCommand()
         {
             if (HighlightedItem != null)
             {
@@ -572,19 +571,19 @@ namespace LinkHierarchy2JSON.ViewModel
             }
         }
 
-        private bool CanRemoveUrl()
+        private bool CanRemoveUrlCommand()
         {
             return HighlightedItem != null && HighlightedItem is URL;
         }
 
         // CLEAR ALL
-        private void OnClearAll()
+        private void OnClearAllCommand()
         {
             ChromeBookmarks.Clear();
             ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
         }
 
-        private bool CanClearAll()
+        private bool CanClearAllCommand()
         {
             return (ChromeBookmarks[0].Folders != null || ChromeBookmarks[0].URLs != null);
         }
