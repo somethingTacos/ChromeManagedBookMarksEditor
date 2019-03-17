@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace LinkHierarchy2JSON.ViewModel
 {
+    //This is all going to change... I think... I would like something a little more flexable and I hate using images, but we shall see.
     public class HelpViewModel
     {
         public Guide HelpGuide { get; set; }
