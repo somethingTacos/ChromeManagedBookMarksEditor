@@ -1,9 +1,21 @@
-﻿<Application x:Class="ChromeManagedBookmarksEditor.App"
+﻿<Application x:Class="LinkHierarchy2JSON.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ChromeManagedBookmarksEditor"
+             xmlns:local="clr-namespace:LinkHierarchy2JSON"
+             xmlns:vm="clr-namespace:LinkHierarchy2JSON.ViewModel"
+             xmlns:views="clr-namespace:LinkHierarchy2JSON.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Data Templates -->
+        <DataTemplate DataType="{x:Type vm:ManagedBookmarksViewModel}">
+            <views:ManagedBookmarksView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HelpViewModel}">
+            <views:HelpView/>
+        </DataTemplate>
+        <!-- Styles -->
+        <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="0 0 0 3"/>
+        </Style>
     </Application.Resources>
 </Application>
