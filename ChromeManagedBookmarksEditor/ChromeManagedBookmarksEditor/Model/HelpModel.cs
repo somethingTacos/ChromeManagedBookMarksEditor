@@ -2,7 +2,7 @@
 
 using PropertyChanged;
 
-namespace LinkHierarchy2JSON.Model
+namespace ChromeManagedBookmarksEditor.Model
 {
     public class HelpModel { }
 

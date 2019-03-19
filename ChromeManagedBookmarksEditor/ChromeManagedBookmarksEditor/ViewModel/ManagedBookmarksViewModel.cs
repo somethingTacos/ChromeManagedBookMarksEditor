@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows;
 using System.Collections.ObjectModel;
-using LinkHierarchy2JSON.Model;
-using LinkHierarchy2JSON.Helpers;
+using ChromeManagedBookmarksEditor.Model;
+using ChromeManagedBookmarksEditor.Helpers;
 
-namespace LinkHierarchy2JSON.ViewModel
+namespace ChromeManagedBookmarksEditor.ViewModel
 {
     public class ManagedBookmarksViewModel
     {

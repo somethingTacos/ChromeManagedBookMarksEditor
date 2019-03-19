@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ChromeManagedBookmarksEditor.Views
 {
     /// <summary>
-    /// Interaction logic for HelpView.xaml
+    /// Interaction logic for CurrentFolderView.xaml
     /// </summary>
-    public partial class HelpView : UserControl
+    public partial class CurrentFolderView : UserControl
     {
-        public HelpView()
+        public CurrentFolderView()
         {
             InitializeComponent();
         }

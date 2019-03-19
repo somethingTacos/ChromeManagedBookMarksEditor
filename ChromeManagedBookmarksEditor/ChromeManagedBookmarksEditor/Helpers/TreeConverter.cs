@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkHierarchy2JSON.Helpers
+namespace ChromeManagedBookmarksEditor.Helpers
 {
     public static class TreeConverter
     {

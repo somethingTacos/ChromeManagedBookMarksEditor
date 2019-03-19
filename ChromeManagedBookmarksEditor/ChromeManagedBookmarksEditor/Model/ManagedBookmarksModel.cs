@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Data;
 using PropertyChanged;
 
-namespace LinkHierarchy2JSON.Model
+namespace ChromeManagedBookmarksEditor.Model
 {
     public class ManagedBookmarksModel { }
 
@@ -78,4 +78,10 @@ namespace LinkHierarchy2JSON.Model
         public string Code { get; set; } = "";
     }
 
+
+    public static class StaticManagedBookmarks
+    {
+        public static ObservableCollection<ManagedBookmarks> BookmarksCollection { get; set; } = new ObservableCollection<ManagedBookmarks>();
+        public static string CurrentWorkingFolderPath { get; set; } = "";
+    }
 }

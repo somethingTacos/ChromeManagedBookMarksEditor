@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace LinkHierarchy2JSON.Helpers
+namespace ChromeManagedBookmarksEditor.Helpers
 {
     public interface IRaiseCanExecuteChanged
     {

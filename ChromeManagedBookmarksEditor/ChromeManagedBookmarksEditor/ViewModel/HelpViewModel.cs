@@ -1,16 +1,19 @@
-﻿using LinkHierarchy2JSON.Model;
+﻿using ChromeManagedBookmarksEditor.Model;
 using System.Collections.ObjectModel;
-
-namespace LinkHierarchy2JSON.ViewModel
+using ChromeManagedBookmarksEditor.Helpers;
+namespace ChromeManagedBookmarksEditor.ViewModel
 {
     //This is all going to change... I think... I would like something a little more flexable and I hate using images, but we shall see.
     public class HelpViewModel
     {
         public Guide HelpGuide { get; set; }
         private NavigationViewModel _navigationViewModel { get; set; }
+        public MyICommand BackCommand { get; set; }
+
         public HelpViewModel(NavigationViewModel navigationViewModel)
         {
             _navigationViewModel = navigationViewModel;
+            BackCommand = new MyICommand(onBackCommand);
             Guide blah = new Guide();
             blah.TopicCollection = new ObservableCollection<HelpTopic>();
 
@@ -26,6 +29,11 @@ namespace LinkHierarchy2JSON.ViewModel
             blah.CurrentHelpImage = SetCurrentHelpImage(0);
 
             HelpGuide = blah;
+        }
+
+        public void onBackCommand()
+        {
+            _navigationViewModel.SelectedViewModel = new ManagedBookmarksViewModel(_navigationViewModel);
         }
 
         private HelpTopic _currentTopic;

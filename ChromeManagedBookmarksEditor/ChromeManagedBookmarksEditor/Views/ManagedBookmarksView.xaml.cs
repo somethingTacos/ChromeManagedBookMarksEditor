@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LinkHierarchy2JSON.Views
+namespace ChromeManagedBookmarksEditor.Views
 {
     /// <summary>
     /// Interaction logic for ManagedBookmarksView.xaml

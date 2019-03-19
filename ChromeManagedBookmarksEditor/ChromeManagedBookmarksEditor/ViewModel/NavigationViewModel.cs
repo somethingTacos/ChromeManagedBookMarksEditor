@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LinkHierarchy2JSON.ViewModel
+namespace ChromeManagedBookmarksEditor.ViewModel
 {
     public class NavigationViewModel : INotifyPropertyChanged
     {

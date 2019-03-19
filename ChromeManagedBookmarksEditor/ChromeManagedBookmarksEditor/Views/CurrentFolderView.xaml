@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ChromeManagedBookmarksEditor.Views.CurrentFolderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChromeManagedBookmarksEditor.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" BorderBrush="DimGray" BorderThickness="2">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Path > To > Current > Folder" FontSize="20" Background="DimGray" Foreground="Gainsboro"/>
+
+        <ScrollViewer Grid.Row="1" Background="Gainsboro">
+            <!-- Content Control for SubFolders -->
+            <!-- Content Control for URLs -->
+        </ScrollViewer>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="DimGray">
+            <Button Content="Add Folder" MinWidth="140" Background="Gainsboro"/>
+            <Button Content="Add URL" MinWidth="140" Background="Gainsboro"/>
+            <Button Content="Remove Selected" MinWidth="140" Background="Gainsboro"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

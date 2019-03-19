@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LinkHierarchy2JSON.Helpers
+namespace ChromeManagedBookmarksEditor.Helpers
 {
     public interface IAsyncCommand : IAsyncCommand<object>
     {

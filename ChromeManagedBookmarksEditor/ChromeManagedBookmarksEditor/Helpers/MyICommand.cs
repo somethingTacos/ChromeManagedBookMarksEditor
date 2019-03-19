@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace LinkHierarchy2JSON.Helpers
+namespace ChromeManagedBookmarksEditor.Helpers
 {
 
     public class MyICommand : ICommand

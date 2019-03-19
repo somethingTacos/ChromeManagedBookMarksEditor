@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using LinkHierarchy2JSON.ViewModel;
+using ChromeManagedBookmarksEditor.ViewModel;
 
-namespace LinkHierarchy2JSON
+namespace ChromeManagedBookmarksEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
