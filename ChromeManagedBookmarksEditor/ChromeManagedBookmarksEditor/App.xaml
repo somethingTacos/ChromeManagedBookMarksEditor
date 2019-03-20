@@ -24,5 +24,38 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
+        <!-- URL TextBox Style -->
+        <Style x:Key="UrlTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="LightSteelBlue"/>
+            <Setter Property="Foreground" Value="DarkSlateBlue"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+        </Style>
+        <!-- Folder TextBox Style -->
+        <Style x:Key="FolderTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="DarkGoldenrod"/>
+            <Setter Property="Background" Value="Wheat"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+        </Style>
+        <!-- Current Path TextBlock Style -->
+        <Style x:Key="PathTextBoxStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Background" Value="DimGray"/>
+            <Setter Property="Foreground" Value="Gainsboro"/>
+        </Style>
+        <!-- Current Folder Panel Buttons Style -->
+        <Style x:Key="PanelButtonsStyle" TargetType="{x:Type Button}">
+            <Setter Property="MinWidth" Value="140"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="Gainsboro"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
     </Application.Resources>
 </Application>
