@@ -30,7 +30,10 @@
                         <Button Content="{Binding Name}" Background="Aqua"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type data:URL}">
-                        <Button Content="{Binding Name}" Background="Green"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Name}" Background="LightYellow" Margin="0 0 5 0"/>
+                            <TextBox Text="{Binding Url}" Background="LightYellow"/>
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.Resources>
             </ItemsControl>
