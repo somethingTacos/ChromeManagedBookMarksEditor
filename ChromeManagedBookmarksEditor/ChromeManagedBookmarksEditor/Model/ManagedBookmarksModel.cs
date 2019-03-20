@@ -11,6 +11,7 @@ namespace ChromeManagedBookmarksEditor.Model
     [ImplementPropertyChanged]
     public class ManagedBookmarks
     {
+        public string CurrentWorkingFolder { get; set; } = "";
         public string toplevel_name { get; set; } = "Root Folder";
         public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
         public ObservableCollection<URL> URLs { get; set; } = new ObservableCollection<URL>();
@@ -76,12 +77,5 @@ namespace ChromeManagedBookmarksEditor.Model
     public class JSONCode
     {
         public string Code { get; set; } = "";
-    }
-
-
-    public static class StaticManagedBookmarks
-    {
-        public static ObservableCollection<ManagedBookmarks> BookmarksCollection { get; set; } = new ObservableCollection<ManagedBookmarks>();
-        public static string CurrentWorkingFolderPath { get; set; } = "";
     }
 }

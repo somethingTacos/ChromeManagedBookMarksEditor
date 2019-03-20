@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChromeManagedBookmarksEditor.Views"
+             xmlns:data="clr-namespace:ChromeManagedBookmarksEditor.Model"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" BorderBrush="DimGray" BorderThickness="2">
     <Grid>
@@ -13,11 +14,26 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Path > To > Current > Folder" FontSize="20" Background="DimGray" Foreground="Gainsboro"/>
+        <TextBlock Text="{Binding ChromeBookmarks.CurrentWorkingFolder}"
+                   FontSize="20" Background="DimGray" Foreground="Gainsboro"
+                   />
 
         <ScrollViewer Grid.Row="1" Background="Gainsboro">
-            <!-- Content Control for SubFolders -->
-            <!-- Content Control for URLs -->
+            <ItemsControl ItemsSource="{Binding ChromeBookmarks.Children}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type data:Folder}">
+                        <Button Content="{Binding Name}" Background="Aqua"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type data:URL}">
+                        <Button Content="{Binding Name}" Background="Green"/>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+            </ItemsControl>
         </ScrollViewer>
         
         <StackPanel Orientation="Horizontal" Grid.Row="3" Background="DimGray">

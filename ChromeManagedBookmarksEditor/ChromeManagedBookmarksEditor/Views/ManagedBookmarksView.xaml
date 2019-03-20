@@ -27,7 +27,8 @@
         </Grid.RowDefinitions>
 
         <!-- Container for Inner view WIP -->
-        <DockPanel LastChildFill="True" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="4" Margin="3">
+        <DockPanel LastChildFill="True" Grid.Column="1" Grid.ColumnSpan="2" 
+                   Grid.Row="1" Grid.RowSpan="4" Margin="3">
             <views:CurrentFolderView/>
         </DockPanel>
 
@@ -40,7 +41,8 @@
         <Button Content="Copy" Grid.Column="3" Grid.Row="4"
                 Style="{StaticResource MainButtonStyle}"
                 />
-        <TextBox Text="" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="Gainsboro"
+        <TextBox Text="{Binding Json.Code, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                 Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="Gainsboro"
                  Style="{StaticResource MainTextBoxStyle}"
                  />
         <Button Content="Load" Grid.Column="2" Grid.Row="6"

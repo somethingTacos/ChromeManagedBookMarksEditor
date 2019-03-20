@@ -12,7 +12,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
     public class ManagedBookmarksViewModel
     {
         //Need to add regions to make viewing easier
-        public ObservableCollection<ManagedBookmarks> ChromeBookmarks { get; set; }
+        public ManagedBookmarks ChromeBookmarks { get; set; }
         public MyICommand SerializeCommand { get; set; }
         public MyICommand CopyCommand { get; set; }
         public MyICommand LoadCommand { get; set; }
@@ -22,8 +22,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand RemoveUrlCommand { get; set; }
         public MyICommand ClearAllCommand { get; set; }
         public MyICommand ShowHelpCommand { get; set; }
-        public JSONCode json { get; set; }
-        public Info info { get; set; }
+        public JSONCode Json { get; set; }
+        public Info Info { get; set; }
         public bool _canLoad { get; set; }
 
         private NavigationViewModel _navigationViewModel { get; set; }
@@ -31,8 +31,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public ManagedBookmarksViewModel(NavigationViewModel navigationViewModel)
         {
             _navigationViewModel = navigationViewModel;
-            json = (new JSONCode { Code = "Enter Chrome JSON Here" });
-            info = (new Info { Text = "Info: " });
+            Json = (new JSONCode { Code = "Enter Chrome JSON Here" });
+            Info = (new Info { Text = "Info: " });
 
             CopyCommand = new MyICommand(OnCopyCommand, CanCopyCommand);
             LoadCommand = new MyICommand(OnLoadCommand, CanLoadCommand);
@@ -61,7 +61,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             string ConvertedCode = string.Empty;
             changeInfo("Serializeing Tree...");
             //ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);       
-            json.Code = ConvertedCode;
+            Json.Code = ConvertedCode;
             changeInfo("Tree Serialized");
         }
 
@@ -73,23 +73,31 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         
         private void LoadTree()
         {
-            ObservableCollection<ManagedBookmarks> tempOC = new ObservableCollection<ManagedBookmarks>();
-            tempOC.Add(new ManagedBookmarks());
+            ManagedBookmarks tempMB = new ManagedBookmarks();
 
-            ChromeBookmarks = tempOC;
+            //Dummy Data to help hookup views
+            tempMB.CurrentWorkingFolder = "Dummy > Path > Test";
+
+            tempMB.Folders.Add(new Folder { Name = "Folder 1" });
+            tempMB.Folders.Add(new Folder { Name = "Folder 2" });
+
+            tempMB.URLs.Add(new URL { Name = "URL 1", Url = "http://url1.com" });
+            tempMB.URLs.Add(new URL { Name = "URL 2", Url = "http://url2.com" });
+
+            ChromeBookmarks = tempMB;
         }
 
 
         private void changeInfo(string message)
         {
-            info.Text = String.Format("Info:  {0}", message);
+            Info.Text = String.Format("Info:  {0}", message);
         }
 
         private void OnCopyCommand()
         {
             try
             {
-                Clipboard.SetText(json.Code);
+                Clipboard.SetText(Json.Code);
                 changeInfo("Text Copied to clipboard");
             }
             catch (Exception ex)
@@ -107,37 +115,37 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnLoadCommand() //This method is going to be changed
         {
-            try
-            {
-                ObservableCollection<ManagedBookmarks> tempBookMarks = new ObservableCollection<ManagedBookmarks>();
-                _canLoad = false;
-                LoadCommand.RaiseCanExecuteChanged();
-                changeInfo("Loading JSON...");
-                //tempBookMarks = await LoadJSON(json.Code);
+            //try
+            //{
+            //    ObservableCollection<ManagedBookmarks> tempBookMarks = new ObservableCollection<ManagedBookmarks>();
+            //    _canLoad = false;
+            //    LoadCommand.RaiseCanExecuteChanged();
+            //    changeInfo("Loading JSON...");
+            //    //tempBookMarks = await LoadJSON(json.Code);
 
-                if(tempBookMarks != null)
-                {
-                    ChromeBookmarks.Clear();
+            //    if(tempBookMarks != null)
+            //    {
+            //        ChromeBookmarks.Clear();
 
-                    foreach (ManagedBookmarks bkmk in tempBookMarks)
-                    {
-                        ChromeBookmarks.Add(bkmk);
-                    }
+            //        foreach (ManagedBookmarks bkmk in tempBookMarks)
+            //        {
+            //            ChromeBookmarks.Add(bkmk);
+            //        }
 
-                    changeInfo("JSON Code loaded into TreeView");
-                }
-                else
-                {
-                    changeInfo("Failed to load JSON, check syntax");
-                }
+            //        changeInfo("JSON Code loaded into TreeView");
+            //    }
+            //    else
+            //    {
+            //        changeInfo("Failed to load JSON, check syntax");
+            //    }
 
-                _canLoad = true;
-                LoadCommand.RaiseCanExecuteChanged();
-            }
-            catch(Exception)
-            {
-                changeInfo("Something went wrong, please restart program.  :(");
-            }
+            //    _canLoad = true;
+            //    LoadCommand.RaiseCanExecuteChanged();
+            //}
+            //catch(Exception)
+            //{
+            //    changeInfo("Something went wrong, please restart program.  :(");
+            //}
         }
 
         private bool CanLoadCommand()
@@ -218,45 +226,45 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         // REMOVE FOLDER -- redo this using linq
         private void OnRemoveFolderCommand()
         {
-            if(HighlightedItem != null)
-            {
-                if(HighlightedItem is Folder)
-                {
-                    ChromeBookmarks[0].Folders.Remove((Folder)HighlightedItem);
+            //if(HighlightedItem != null)
+            //{
+            //    if(HighlightedItem is Folder)
+            //    {
+            //        ChromeBookmarks[0].Folders.Remove((Folder)HighlightedItem);
 
-                    void removeFromSubFolders(Folder subFolder)
-                    {
-                        if (HighlightedItem is Folder)
-                        {
-                            subFolder.folders.Remove((Folder)HighlightedItem);
+            //        void removeFromSubFolders(Folder subFolder)
+            //        {
+            //            if (HighlightedItem is Folder)
+            //            {
+            //                subFolder.folders.Remove((Folder)HighlightedItem);
 
-                            if (subFolder.folders != null)
-                            {
-                                foreach (Folder folder in subFolder.folders)
-                                {
-                                    removeFromSubFolders(folder);
-                                }
-                            }
-                        }
-                    }
+            //                if (subFolder.folders != null)
+            //                {
+            //                    foreach (Folder folder in subFolder.folders)
+            //                    {
+            //                        removeFromSubFolders(folder);
+            //                    }
+            //                }
+            //            }
+            //        }
 
-                    foreach (Folder folder in ChromeBookmarks[0].Folders)
-                    {
-                        if (HighlightedItem is Folder)
-                        {
-                            folder.folders.Remove((Folder)HighlightedItem);
+            //        foreach (Folder folder in ChromeBookmarks[0].Folders)
+            //        {
+            //            if (HighlightedItem is Folder)
+            //            {
+            //                folder.folders.Remove((Folder)HighlightedItem);
 
-                            if (folder.folders != null)
-                            {
-                                foreach (Folder subFolder in folder.folders)
-                                {
-                                    removeFromSubFolders(subFolder);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                if (folder.folders != null)
+            //                {
+            //                    foreach (Folder subFolder in folder.folders)
+            //                    {
+            //                        removeFromSubFolders(subFolder);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private bool CanRemoveFolderCommand()
@@ -267,45 +275,45 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         // REMOVE URL -- redo this using linq
         private void OnRemoveUrlCommand()
         {
-            if (HighlightedItem != null)
-            {
-                if (HighlightedItem is URL)
-                {
-                    ChromeBookmarks[0].URLs.Remove((URL)HighlightedItem);
+            //if (HighlightedItem != null)
+            //{
+            //    if (HighlightedItem is URL)
+            //    {
+            //        ChromeBookmarks[0].URLs.Remove((URL)HighlightedItem);
 
-                    void removeFromSubFolders(Folder subFolder)
-                    {
-                        if (HighlightedItem is URL)
-                        {
-                            subFolder.URLs.Remove((URL)HighlightedItem);
+            //        void removeFromSubFolders(Folder subFolder)
+            //        {
+            //            if (HighlightedItem is URL)
+            //            {
+            //                subFolder.URLs.Remove((URL)HighlightedItem);
 
-                            if (subFolder.folders != null)
-                            {
-                                foreach (Folder folder in subFolder.folders)
-                                {
-                                    removeFromSubFolders(folder);
-                                }
-                            }
-                        }
-                    }
+            //                if (subFolder.folders != null)
+            //                {
+            //                    foreach (Folder folder in subFolder.folders)
+            //                    {
+            //                        removeFromSubFolders(folder);
+            //                    }
+            //                }
+            //            }
+            //        }
 
-                    foreach (Folder folder in ChromeBookmarks[0].Folders)
-                    {
-                        if (HighlightedItem is URL)
-                        {
-                            folder.URLs.Remove((URL)HighlightedItem);
+            //        foreach (Folder folder in ChromeBookmarks[0].Folders)
+            //        {
+            //            if (HighlightedItem is URL)
+            //            {
+            //                folder.URLs.Remove((URL)HighlightedItem);
 
-                            if (folder.folders != null)
-                            {
-                                foreach (Folder subFolder in folder.folders)
-                                {
-                                    removeFromSubFolders(subFolder);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                if (folder.folders != null)
+            //                {
+            //                    foreach (Folder subFolder in folder.folders)
+            //                    {
+            //                        removeFromSubFolders(subFolder);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private bool CanRemoveUrlCommand()
@@ -316,13 +324,14 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
         private void OnClearAllCommand()
         {
-            ChromeBookmarks.Clear();
-            ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
+            //ChromeBookmarks.Clear();
+            //ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
         }
 
         private bool CanClearAllCommand()
         {
-            return (ChromeBookmarks[0].Folders != null || ChromeBookmarks[0].URLs != null);
+            return true;
+            //return (ChromeBookmarks[0].Folders != null || ChromeBookmarks[0].URLs != null);
         }
     }
 }
