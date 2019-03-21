@@ -64,6 +64,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\AttachedCommandBehavior\BehaviorBinding.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\CommandBehavior.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\CommandBehaviorBinding.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\CommandBehaviorCollection.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\EventHandlerGenerator.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\ExecutionStrategy.cs" />
+    <Compile Include="Helpers\AttachedCommandBehavior\SimpleCommand.cs" />
     <Compile Include="ViewModel\HelpViewModel.cs" />
     <Compile Include="ViewModel\ManagedBookmarksViewModel.cs" />
     <Compile Include="ViewModel\NavigationViewModel.cs" />

@@ -58,6 +58,8 @@ namespace ChromeManagedBookmarksEditor.Model
                 };
             }
         }
+
+        public bool IsSelected { get; set; } = false;
     }
 
     [ImplementPropertyChanged]
@@ -65,6 +67,7 @@ namespace ChromeManagedBookmarksEditor.Model
     {
         public string Name { get; set; } = "";
         public string Url { get; set; } = "";
+        public bool IsSelected { get; set; } = false;
     }
 
     [ImplementPropertyChanged]
