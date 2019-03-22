@@ -175,6 +175,58 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             return _canLoad;
         }
+
+        private void OnAddFolderCommand(object parameter)
+        {
+
+        }
+        private bool canAddFolderCommand()
+        {
+            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
+        }
+
+        private void onAddUrlCommand(object parameter)
+        {
+
+        }
+        private bool CanAddUrlCommand()
+        {
+            return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
+        }
+
+        // REMOVE FOLDER -- redo this using linq
+        private void OnRemoveFolderCommand(object parameter)
+        {
+
+        }
+
+        private bool CanRemoveFolderCommand()
+        {
+            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
+        }
+
+        // REMOVE URL -- redo this using linq
+        private void OnRemoveUrlCommand(object parameter)
+        {
+
+        }
+
+        private bool CanRemoveUrlCommand()
+        {
+            return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
+        }
+
+        // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
+        private void OnClearAllCommand(object parameter)
+        {
+            //ChromeBookmarks.Clear();
+            //ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
+        }
+
+        private bool CanClearAllCommand()
+        {
+            return true;
+        }
         #endregion
 
         #region Misc Methods
@@ -195,184 +247,5 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             }
         }
         #endregion
-
-        private object _selectedItem;
-
-        //I hate this setup, I want to find a better way to do this.
-        public object HighlightedItem
-        {
-            get
-            {
-                return _selectedItem;
-            }
-            set
-            {
-                if (_selectedItem != value)
-                {
-                    _selectedItem = value;
-                    AddUrlCommand.RaiseCanExecuteChanged();
-                    AddFolderCommand.RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        // ADD FOLDER -- this whole 'HighlightedItem' thing is going to be reworked.
-        private void OnAddFolderCommand(object parameter)
-        {
-            if (HighlightedItem != null)
-            {
-                if (HighlightedItem is ManagedBookmarks)
-                {
-                    ManagedBookmarks root = (ManagedBookmarks)HighlightedItem;
-                    root.Folders.Add(new Folder { Name = "", URLs = new ObservableCollection<URL>(), folders = new ObservableCollection<Folder>() });
-                }
-
-                if (HighlightedItem is Folder)
-                {
-                    Folder folder = (Folder)HighlightedItem;
-                    folder.folders.Add(new Folder { Name = "", URLs = new ObservableCollection<URL>(), folders = new ObservableCollection<Folder>() });
-                }
-            }
-        }
-
-        private bool CanAddFolderCommand()
-        {
-            return HighlightedItem != null && HighlightedItem is Folder || HighlightedItem is ManagedBookmarks;
-        }
-
-        // ADD URL -- this whole 'HighlightedItem' thing is going to be reworked.
-        private void OnAddUrlCommand(object parameter)
-        {
-            if(HighlightedItem != null)
-            {
-                if(HighlightedItem is ManagedBookmarks)
-                {
-                    ManagedBookmarks root = (ManagedBookmarks)HighlightedItem;
-                    root.URLs.Add(new URL { Name = "", Url = "" });
-                }
-
-                if (HighlightedItem is Folder)
-                {
-                    Folder folder = (Folder)HighlightedItem;
-                    folder.URLs.Add(new URL { Name = "", Url = "" });
-                }
-            }
-        }
-
-        private bool CanAddUrlCommand()
-        {
-            return HighlightedItem != null && HighlightedItem is Folder || HighlightedItem is ManagedBookmarks;
-        }
-        
-        // REMOVE FOLDER -- redo this using linq
-        private void OnRemoveFolderCommand(object parameter)
-        {
-            //if(HighlightedItem != null)
-            //{
-            //    if(HighlightedItem is Folder)
-            //    {
-            //        ChromeBookmarks[0].Folders.Remove((Folder)HighlightedItem);
-
-            //        void removeFromSubFolders(Folder subFolder)
-            //        {
-            //            if (HighlightedItem is Folder)
-            //            {
-            //                subFolder.folders.Remove((Folder)HighlightedItem);
-
-            //                if (subFolder.folders != null)
-            //                {
-            //                    foreach (Folder folder in subFolder.folders)
-            //                    {
-            //                        removeFromSubFolders(folder);
-            //                    }
-            //                }
-            //            }
-            //        }
-
-            //        foreach (Folder folder in ChromeBookmarks[0].Folders)
-            //        {
-            //            if (HighlightedItem is Folder)
-            //            {
-            //                folder.folders.Remove((Folder)HighlightedItem);
-
-            //                if (folder.folders != null)
-            //                {
-            //                    foreach (Folder subFolder in folder.folders)
-            //                    {
-            //                        removeFromSubFolders(subFolder);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        }
-
-        private bool CanRemoveFolderCommand()
-        {
-            return HighlightedItem != null && HighlightedItem is Folder;
-        }
-
-        // REMOVE URL -- redo this using linq
-        private void OnRemoveUrlCommand(object parameter)
-        {
-            //if (HighlightedItem != null)
-            //{
-            //    if (HighlightedItem is URL)
-            //    {
-            //        ChromeBookmarks[0].URLs.Remove((URL)HighlightedItem);
-
-            //        void removeFromSubFolders(Folder subFolder)
-            //        {
-            //            if (HighlightedItem is URL)
-            //            {
-            //                subFolder.URLs.Remove((URL)HighlightedItem);
-
-            //                if (subFolder.folders != null)
-            //                {
-            //                    foreach (Folder folder in subFolder.folders)
-            //                    {
-            //                        removeFromSubFolders(folder);
-            //                    }
-            //                }
-            //            }
-            //        }
-
-            //        foreach (Folder folder in ChromeBookmarks[0].Folders)
-            //        {
-            //            if (HighlightedItem is URL)
-            //            {
-            //                folder.URLs.Remove((URL)HighlightedItem);
-
-            //                if (folder.folders != null)
-            //                {
-            //                    foreach (Folder subFolder in folder.folders)
-            //                    {
-            //                        removeFromSubFolders(subFolder);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        }
-
-        private bool CanRemoveUrlCommand()
-        {
-            return HighlightedItem != null && HighlightedItem is URL;
-        }
-
-        // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
-        private void OnClearAllCommand(object parameter)
-        {
-            //ChromeBookmarks.Clear();
-            //ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
-        }
-
-        private bool CanClearAllCommand()
-        {
-            return true;
-            //return (ChromeBookmarks[0].Folders != null || ChromeBookmarks[0].URLs != null);
-        }
     }
 }
