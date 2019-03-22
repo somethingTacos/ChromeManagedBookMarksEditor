@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\NewFolderBanner.xaml.cs">
+      <DependentUpon>NewFolderBanner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\SelectableTextBox.cs" />
     <Compile Include="Helpers\AttachedCommandBehavior\BehaviorBinding.cs" />
     <Compile Include="Helpers\AttachedCommandBehavior\CommandBehavior.cs" />
@@ -84,6 +87,10 @@
     <Compile Include="Views\ManagedBookmarksView.xaml.cs">
       <DependentUpon>ManagedBookmarksView.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomControls\NewFolderBanner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -20,8 +20,11 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand LoadCommand { get; set; }
         public MyICommand AddFolderCommand { get; set; }
         public MyICommand AddUrlCommand { get; set; }
-        public MyICommand RemoveFolderCommand { get; set; }
-        public MyICommand RemoveUrlCommand { get; set; }
+
+        public MyICommand RemoveSelectedCommand { get; set; }
+
+        //public MyICommand RemoveFolderCommand { get; set; }
+        //public MyICommand RemoveUrlCommand { get; set; }
         public MyICommand ClearAllCommand { get; set; }
         public MyICommand ShowHelpCommand { get; set; }
         public MyICommand ItemSelectedCommand { get; set; }
@@ -44,10 +47,14 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             LoadCommand = new MyICommand(OnLoadCommand, CanLoadCommand);
             ClearAllCommand = new MyICommand(OnClearAllCommand, CanClearAllCommand);
             SerializeCommand = new MyICommand(OnSerializeCommand, CanSerializeCommand);
-            RemoveUrlCommand = new MyICommand(OnRemoveUrlCommand, CanRemoveUrlCommand);
-            RemoveFolderCommand = new MyICommand(OnRemoveFolderCommand, CanRemoveFolderCommand);
-            AddUrlCommand = new MyICommand(OnAddUrlCommand, CanAddUrlCommand);
-            AddFolderCommand = new MyICommand(OnAddFolderCommand, CanAddFolderCommand);
+
+            RemoveSelectedCommand = new MyICommand(onRemoveSelectedCommand, canRemoveSelectedCommand);
+
+            //RemoveUrlCommand = new MyICommand(OnRemoveUrlCommand, CanRemoveUrlCommand);
+            //RemoveFolderCommand = new MyICommand(OnRemoveFolderCommand, CanRemoveFolderCommand);
+
+            AddUrlCommand = new MyICommand(onAddUrlCommand, CanAddUrlCommand);
+            AddFolderCommand = new MyICommand(OnAddFolderCommand, canAddFolderCommand);
             ShowHelpCommand = new MyICommand(onShowHelpCommand, canShowHelpCommand);
             ItemSelectedCommand = new MyICommand(onItemSelectedCommand, canItemSelectedCommand);
             LoadTree();
@@ -87,6 +94,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             {
                 url.IsSelected = true;
             }
+
+            RemoveSelectedCommand.RaiseCanExecuteChanged();
         }
         public bool canItemSelectedCommand()
         {
@@ -194,27 +203,45 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
         }
 
-        // REMOVE FOLDER -- redo this using linq
-        private void OnRemoveFolderCommand(object parameter)
+        private void onRemoveSelectedCommand(object parameter)
         {
+            if(ChromeBookmarks.Folders.Where(x => x.IsSelected).Count() > 0)
+            {
+                ChromeBookmarks.Folders.Remove(ChromeBookmarks.Folders.Where(x => x.IsSelected == true).FirstOrDefault());
+            }
+            if (ChromeBookmarks.URLs.Where(x => x.IsSelected).Count() > 0)
+            {
+                ChromeBookmarks.URLs.Remove(ChromeBookmarks.URLs.Where(x => x.IsSelected == true).FirstOrDefault());
+            }
 
+            RemoveSelectedCommand.RaiseCanExecuteChanged();
+        }
+        private bool canRemoveSelectedCommand()
+        {
+            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0 || ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
         }
 
-        private bool CanRemoveFolderCommand()
-        {
-            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
-        }
+        //// REMOVE FOLDER -- redo this using linq
+        //private void OnRemoveFolderCommand(object parameter)
+        //{
 
-        // REMOVE URL -- redo this using linq
-        private void OnRemoveUrlCommand(object parameter)
-        {
+        //}
 
-        }
+        //private bool CanRemoveFolderCommand()
+        //{
+        //    return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
+        //}
 
-        private bool CanRemoveUrlCommand()
-        {
-            return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
-        }
+        //// REMOVE URL -- redo this using linq
+        //private void OnRemoveUrlCommand(object parameter)
+        //{
+
+        //}
+
+        //private bool CanRemoveUrlCommand()
+        //{
+        //    return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
+        //}
 
         // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
         private void OnClearAllCommand(object parameter)

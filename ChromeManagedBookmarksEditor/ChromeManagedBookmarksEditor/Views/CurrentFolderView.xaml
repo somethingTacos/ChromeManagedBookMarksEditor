@@ -12,14 +12,16 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="{Binding ChromeBookmarks.CurrentWorkingFolder}"
                    Style="{StaticResource PathTextBoxStyle}"
                    />
-        <ScrollViewer Grid.Row="1" Background="Gainsboro">
+        <ScrollViewer Grid.Row="1" Grid.RowSpan="3" Background="Gainsboro">
             <ItemsControl ItemsSource="{Binding ChromeBookmarks.Children}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -63,13 +65,21 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="DimGray">
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Background="DimGray">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PanelButtonsStyle}"/>
             </StackPanel.Resources>
             <Button Content="Add Folder"/>
             <Button Content="Add URL"/>
-            <Button Content="Remove Selected"/>
+            <Button Content="Remove Selected"
+                    Command="{Binding RemoveSelectedCommand}"/>
         </StackPanel>
+
+        <Rectangle Grid.Row="0" Grid.RowSpan="2" Fill="Black" Visibility="Visible" Opacity=".4"/>
+        <Rectangle Grid.Row="2" Fill="Black" Visibility="Visible"/>
+        <Rectangle Grid.Row="3" Grid.RowSpan="2" Fill="Black" Visibility="Visible" Opacity=".4"/>
+
+        <cc:NewFolderBanner Grid.Row="2" Visibility="Visible"/>
+
     </Grid>
 </UserControl>
