@@ -6,13 +6,15 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using ChromeManagedBookmarksEditor.Model;
 using ChromeManagedBookmarksEditor.Helpers;
+using System.Linq;
 
 namespace ChromeManagedBookmarksEditor.ViewModel
 {
     public class ManagedBookmarksViewModel
     {
-        //Need to add regions to make viewing easier
+        #region Properties
         public ManagedBookmarks ChromeBookmarks { get; set; }
+
         public MyICommand SerializeCommand { get; set; }
         public MyICommand CopyCommand { get; set; }
         public MyICommand LoadCommand { get; set; }
@@ -22,12 +24,16 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand RemoveUrlCommand { get; set; }
         public MyICommand ClearAllCommand { get; set; }
         public MyICommand ShowHelpCommand { get; set; }
+        public MyICommand ItemSelectedCommand { get; set; }
+
         public JSONCode Json { get; set; }
         public Info Info { get; set; }
         public bool _canLoad { get; set; }
 
         private NavigationViewModel _navigationViewModel { get; set; }
+        #endregion
 
+        #region Default Contructor
         public ManagedBookmarksViewModel(NavigationViewModel navigationViewModel)
         {
             _navigationViewModel = navigationViewModel;
@@ -43,34 +49,13 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             AddUrlCommand = new MyICommand(OnAddUrlCommand, CanAddUrlCommand);
             AddFolderCommand = new MyICommand(OnAddFolderCommand, CanAddFolderCommand);
             ShowHelpCommand = new MyICommand(onShowHelpCommand, canShowHelpCommand);
+            ItemSelectedCommand = new MyICommand(onItemSelectedCommand, canItemSelectedCommand);
             LoadTree();
             _canLoad = true;
         }
+        #endregion
 
-        public void onShowHelpCommand()
-        {
-            _navigationViewModel.SelectedViewModel = new HelpViewModel(_navigationViewModel);
-        }
-        public bool canShowHelpCommand()
-        {
-            return true;
-        }
-
-        private async void OnSerializeCommand() //This method is going to be changed
-        {
-            string ConvertedCode = string.Empty;
-            changeInfo("Serializeing Tree...");
-            //ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);       
-            Json.Code = ConvertedCode;
-            changeInfo("Tree Serialized");
-        }
-
-        private bool CanSerializeCommand()
-        {
-            return true;
-        }
-
-        
+        #region Start Tasks
         private void LoadTree()
         {
             ManagedBookmarks tempMB = new ManagedBookmarks();
@@ -86,14 +71,52 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
             ChromeBookmarks = tempMB;
         }
+        #endregion
 
-
-        private void changeInfo(string message)
+        #region Commands Code
+        public void onItemSelectedCommand(object parameter)
         {
-            Info.Text = String.Format("Info:  {0}", message);
+            ClearSelectedItems();
+
+            if(parameter is Folder folder)
+            {
+                folder.IsSelected = true;
+            }
+
+            if(parameter is URL url)
+            {
+                url.IsSelected = true;
+            }
+        }
+        public bool canItemSelectedCommand()
+        {
+            return true;
         }
 
-        private void OnCopyCommand()
+        public void onShowHelpCommand(object parameter)
+        {
+            _navigationViewModel.SelectedViewModel = new HelpViewModel(_navigationViewModel);
+        }
+        public bool canShowHelpCommand()
+        {
+            return true;
+        }
+
+        private async void OnSerializeCommand(object parameter) //This method is going to be changed
+        {
+            string ConvertedCode = string.Empty;
+            changeInfo("Serializeing Tree...");
+            //ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);       
+            Json.Code = ConvertedCode;
+            changeInfo("Tree Serialized");
+        }
+
+        private bool CanSerializeCommand()
+        {
+            return true;
+        }
+
+        private void OnCopyCommand(object parameter)
         {
             try
             {
@@ -113,7 +136,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
 
 
-        private async void OnLoadCommand() //This method is going to be changed
+        private async void OnLoadCommand(object parameter) //This method is going to be changed
         {
             //try
             //{
@@ -152,8 +175,26 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             return _canLoad;
         }
+        #endregion
 
-        
+        #region Misc Methods
+        private void changeInfo(string message)
+        {
+            Info.Text = String.Format("Info:  {0}", message);
+        }
+
+        private void ClearSelectedItems()
+        {
+            foreach(Folder folder in ChromeBookmarks.Folders)
+            {
+                folder.IsSelected = false;
+            }
+            foreach(URL url in ChromeBookmarks.URLs)
+            {
+                url.IsSelected = false;
+            }
+        }
+        #endregion
 
         private object _selectedItem;
 
@@ -176,7 +217,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
 
         // ADD FOLDER -- this whole 'HighlightedItem' thing is going to be reworked.
-        private void OnAddFolderCommand()
+        private void OnAddFolderCommand(object parameter)
         {
             if (HighlightedItem != null)
             {
@@ -200,7 +241,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
 
         // ADD URL -- this whole 'HighlightedItem' thing is going to be reworked.
-        private void OnAddUrlCommand()
+        private void OnAddUrlCommand(object parameter)
         {
             if(HighlightedItem != null)
             {
@@ -224,7 +265,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
         
         // REMOVE FOLDER -- redo this using linq
-        private void OnRemoveFolderCommand()
+        private void OnRemoveFolderCommand(object parameter)
         {
             //if(HighlightedItem != null)
             //{
@@ -273,7 +314,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
 
         // REMOVE URL -- redo this using linq
-        private void OnRemoveUrlCommand()
+        private void OnRemoveUrlCommand(object parameter)
         {
             //if (HighlightedItem != null)
             //{
@@ -322,7 +363,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
 
         // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
-        private void OnClearAllCommand()
+        private void OnClearAllCommand(object parameter)
         {
             //ChromeBookmarks.Clear();
             //ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });

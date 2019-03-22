@@ -31,7 +31,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             HelpGuide = blah;
         }
 
-        public void onBackCommand()
+        public void onBackCommand(object parameter)
         {
             _navigationViewModel.SelectedViewModel = new ManagedBookmarksViewModel(_navigationViewModel);
         }

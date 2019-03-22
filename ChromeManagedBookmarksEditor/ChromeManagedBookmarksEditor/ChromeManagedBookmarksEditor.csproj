@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\SelectableTextBox.cs" />
     <Compile Include="Helpers\AttachedCommandBehavior\BehaviorBinding.cs" />
     <Compile Include="Helpers\AttachedCommandBehavior\CommandBehavior.cs" />
     <Compile Include="Helpers\AttachedCommandBehavior\CommandBehaviorBinding.cs" />

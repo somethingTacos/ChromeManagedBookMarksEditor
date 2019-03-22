@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:ChromeManagedBookmarksEditor"
              xmlns:vm="clr-namespace:ChromeManagedBookmarksEditor.ViewModel"
              xmlns:views="clr-namespace:ChromeManagedBookmarksEditor.Views"
+             xmlns:cc="clr-namespace:ChromeManagedBookmarksEditor.CustomControls"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Data Templates -->
@@ -24,8 +25,19 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
-        <!-- URL TextBox Style -->
-        <Style x:Key="UrlTextBoxStyle" TargetType="{x:Type TextBox}">
+        <!-- Selectable TextBox Base Triggers -->
+        <Style x:Key="SelectableTextBoxBaseTriggers" TargetType="{x:Type cc:SelectableTextBox}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="DarkOrange"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- URL Selectable TextBox Style -->
+        <Style x:Key="UrlTextBoxStyle" TargetType="{x:Type cc:SelectableTextBox}" BasedOn="{StaticResource SelectableTextBoxBaseTriggers}">
             <Setter Property="Background" Value="LightSteelBlue"/>
             <Setter Property="Foreground" Value="DarkSlateBlue"/>
             <Setter Property="FontSize" Value="14"/>
@@ -34,8 +46,8 @@
             <Setter Property="MinWidth" Value="200"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
         </Style>
-        <!-- Folder TextBox Style -->
-        <Style x:Key="FolderTextBoxStyle" TargetType="{x:Type TextBox}">
+        <!-- Folder Selectable TextBox Style -->
+        <Style x:Key="FolderTextBoxStyle" TargetType="{x:Type cc:SelectableTextBox}" BasedOn="{StaticResource SelectableTextBoxBaseTriggers}">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
