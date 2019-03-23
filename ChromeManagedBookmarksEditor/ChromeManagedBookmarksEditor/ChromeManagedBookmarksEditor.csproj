@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\BannerBacking.xaml.cs">
+      <DependentUpon>BannerBacking.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\NewFolderBanner.xaml.cs">
       <DependentUpon>NewFolderBanner.xaml</DependentUpon>
     </Compile>
@@ -87,6 +90,10 @@
     <Compile Include="Views\ManagedBookmarksView.xaml.cs">
       <DependentUpon>ManagedBookmarksView.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomControls\BannerBacking.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CustomControls\NewFolderBanner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

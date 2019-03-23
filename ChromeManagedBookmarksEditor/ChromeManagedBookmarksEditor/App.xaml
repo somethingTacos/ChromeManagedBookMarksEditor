@@ -69,5 +69,24 @@
             <Setter Property="Background" Value="Gainsboro"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
+
+        <Style x:Key="BannerBacking" TargetType="{x:Type cc:BannerBacking}">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Style.Triggers>
+                <Trigger Property="IsVisibleBanner" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BannerStyleBase" TargetType="{x:Type cc:NewFolderBanner}">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Height" Value="130"/>
+            <Style.Triggers>
+                <Trigger Property="IsVisibleBanner" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>

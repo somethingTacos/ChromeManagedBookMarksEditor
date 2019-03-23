@@ -81,4 +81,12 @@ namespace ChromeManagedBookmarksEditor.Model
     {
         public string Code { get; set; } = "";
     }
+
+    [ImplementPropertyChanged]
+    public class BannerInfo
+    {
+        public bool IsVisible { get; set; } = false;
+
+        public enum BannerType { Alert, NewFolder, ClearAll }
+    }
 }

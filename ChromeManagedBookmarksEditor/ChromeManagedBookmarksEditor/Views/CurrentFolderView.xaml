@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -75,11 +75,11 @@
                     Command="{Binding RemoveSelectedCommand}"/>
         </StackPanel>
 
-        <Rectangle Grid.Row="0" Grid.RowSpan="2" Fill="Black" Visibility="Visible" Opacity=".4"/>
-        <Rectangle Grid.Row="2" Fill="Black" Visibility="Visible"/>
-        <Rectangle Grid.Row="3" Grid.RowSpan="2" Fill="Black" Visibility="Visible" Opacity=".4"/>
+        <cc:BannerBacking Grid.Row="0" Grid.RowSpan="5" Style="{StaticResource BannerBacking}"
+                          IsVisibleBanner="{Binding Banners.IsVisible}"/>
 
-        <cc:NewFolderBanner Grid.Row="2" Visibility="Visible"/>
+        <cc:NewFolderBanner Grid.Row="2" Style="{StaticResource BannerStyleBase}" 
+                            IsVisibleBanner="{Binding Banners.IsVisible}"/>
 
     </Grid>
 </UserControl>

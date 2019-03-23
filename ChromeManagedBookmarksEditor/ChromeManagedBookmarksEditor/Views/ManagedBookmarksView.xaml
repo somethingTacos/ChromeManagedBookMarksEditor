@@ -35,9 +35,9 @@
         <Button Content="Help" Grid.Column="3" Grid.Row="1"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding ShowHelpCommand}"/>
-        <Button Content="Serialize" Grid.Column="3" Grid.Row="3"
+        <Button Content="Serialize (Temp Banner Test)" Grid.Column="3" Grid.Row="3"
                 Style="{StaticResource MainButtonStyle}"
-                />
+                Command="{Binding SerializeCommand}"/>
         <Button Content="Copy" Grid.Column="3" Grid.Row="4"
                 Style="{StaticResource MainButtonStyle}"
                 />

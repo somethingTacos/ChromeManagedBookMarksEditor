@@ -16,17 +16,17 @@ using System.Windows.Shapes;
 namespace ChromeManagedBookmarksEditor.CustomControls
 {
     /// <summary>
-    /// Interaction logic for NewFolderBanner.xaml
+    /// Interaction logic for BannerBacking.xaml
     /// </summary>
-    public partial class NewFolderBanner : UserControl
+    public partial class BannerBacking : UserControl
     {
-        public NewFolderBanner()
+        public BannerBacking()
         {
             InitializeComponent();
         }
 
         public static readonly DependencyProperty IsVisibleBannerProperty =
-            DependencyProperty.Register("IsVisibleBanner", typeof(bool), typeof(NewFolderBanner), new PropertyMetadata(false));
+            DependencyProperty.Register("IsVisibleBanner", typeof(bool), typeof(BannerBacking), new PropertyMetadata(false));
 
         public bool IsVisibleBanner
         {

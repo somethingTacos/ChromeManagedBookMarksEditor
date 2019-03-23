@@ -15,16 +15,14 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         #region Properties
         public ManagedBookmarks ChromeBookmarks { get; set; }
 
+        public BannerInfo Banners { get; set; }
+
         public MyICommand SerializeCommand { get; set; }
         public MyICommand CopyCommand { get; set; }
         public MyICommand LoadCommand { get; set; }
         public MyICommand AddFolderCommand { get; set; }
         public MyICommand AddUrlCommand { get; set; }
-
         public MyICommand RemoveSelectedCommand { get; set; }
-
-        //public MyICommand RemoveFolderCommand { get; set; }
-        //public MyICommand RemoveUrlCommand { get; set; }
         public MyICommand ClearAllCommand { get; set; }
         public MyICommand ShowHelpCommand { get; set; }
         public MyICommand ItemSelectedCommand { get; set; }
@@ -47,12 +45,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             LoadCommand = new MyICommand(OnLoadCommand, CanLoadCommand);
             ClearAllCommand = new MyICommand(OnClearAllCommand, CanClearAllCommand);
             SerializeCommand = new MyICommand(OnSerializeCommand, CanSerializeCommand);
-
             RemoveSelectedCommand = new MyICommand(onRemoveSelectedCommand, canRemoveSelectedCommand);
-
-            //RemoveUrlCommand = new MyICommand(OnRemoveUrlCommand, CanRemoveUrlCommand);
-            //RemoveFolderCommand = new MyICommand(OnRemoveFolderCommand, CanRemoveFolderCommand);
-
             AddUrlCommand = new MyICommand(onAddUrlCommand, CanAddUrlCommand);
             AddFolderCommand = new MyICommand(OnAddFolderCommand, canAddFolderCommand);
             ShowHelpCommand = new MyICommand(onShowHelpCommand, canShowHelpCommand);
@@ -66,6 +59,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         private void LoadTree()
         {
             ManagedBookmarks tempMB = new ManagedBookmarks();
+            BannerInfo tempBI = new BannerInfo();
 
             //Dummy Data to help hookup views
             tempMB.CurrentWorkingFolder = "Dummy > Path > Test";
@@ -77,6 +71,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             tempMB.URLs.Add(new URL { Name = "URL 2", Url = "http://url2.com" });
 
             ChromeBookmarks = tempMB;
+            Banners = tempBI;
         }
         #endregion
 
@@ -113,11 +108,12 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnSerializeCommand(object parameter) //This method is going to be changed
         {
-            string ConvertedCode = string.Empty;
-            changeInfo("Serializeing Tree...");
-            //ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);       
-            Json.Code = ConvertedCode;
-            changeInfo("Tree Serialized");
+            Banners.IsVisible = true;
+            //string ConvertedCode = string.Empty;
+            //changeInfo("Serializeing Tree...");
+            ////ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);       
+            //Json.Code = ConvertedCode;
+            //changeInfo("Tree Serialized");
         }
 
         private bool CanSerializeCommand()
@@ -220,28 +216,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0 || ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
         }
-
-        //// REMOVE FOLDER -- redo this using linq
-        //private void OnRemoveFolderCommand(object parameter)
-        //{
-
-        //}
-
-        //private bool CanRemoveFolderCommand()
-        //{
-        //    return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
-        //}
-
-        //// REMOVE URL -- redo this using linq
-        //private void OnRemoveUrlCommand(object parameter)
-        //{
-
-        //}
-
-        //private bool CanRemoveUrlCommand()
-        //{
-        //    return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
-        //}
 
         // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
         private void OnClearAllCommand(object parameter)
