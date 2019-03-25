@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Chrome Managed Bookmarks Editor" Height="600" MinHeight="600" Width="800" MinWidth="800" WindowStartupLocation="CenterScreen"
-        Icon="/Images/chrome-logo.png">
+        Icon="/Images/chrome-logo.png" IsTabStop="False">
         <!--<div>Icons made by
             <a href="http://www.freepik.com" title="Freepik">Freepik</a> from
             <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by
@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-            <ContentControl x:Name="Pages" DockPanel.Dock="Right" Content="{Binding SelectedViewModel}"/>
+            <ContentControl x:Name="Pages" DockPanel.Dock="Right" Content="{Binding SelectedViewModel}" IsTabStop="False"/>
         </DockPanel>
     </Grid>
 </Window>

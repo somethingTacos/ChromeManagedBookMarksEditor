@@ -85,8 +85,37 @@ namespace ChromeManagedBookmarksEditor.Model
     [ImplementPropertyChanged]
     public class BannerInfo
     {
-        public bool IsVisible { get; set; } = false;
+        public enum BannerType { NewFolder, Alert }
 
-        public enum BannerType { Alert, NewFolder, ClearAll }
+        public bool BannerBackingVisible { get; set; } = false;
+
+        public bool NewFolderVisible { get; set; } = false;
+
+        public bool AlertVisible { get; set; } = false;
+
+        public string AlertText { get; set; } = "";
+
+        public void ShowNewFolderBanner()
+        {
+            BannerBackingVisible = true;
+            NewFolderVisible = true;
+        }
+        public void HideNewFolderBanner()
+        {
+            BannerBackingVisible = false;
+            NewFolderVisible = false;
+        }
+
+        public void ShowAlertBanner(string text)
+        {
+            AlertText = text;
+            BannerBackingVisible = true;
+            AlertVisible = true;
+        }
+        public void HideAlertBanner()
+        {
+            BannerBackingVisible = false;
+            AlertVisible = false;
+        }
     }
 }

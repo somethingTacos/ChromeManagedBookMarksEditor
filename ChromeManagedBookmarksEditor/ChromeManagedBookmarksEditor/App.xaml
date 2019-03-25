@@ -18,11 +18,13 @@
         <!-- Main Button Style -->
         <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="0 0 0 3"/>
+            <Setter Property="IsTabStop" Value="False"/>
         </Style>
         <!-- Main TextBox Style -->
         <Style x:Key="MainTextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="3"/>
             <Setter Property="FontSize" Value="18"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <!-- Selectable TextBox Base Triggers -->
@@ -32,6 +34,7 @@
                     <Setter Property="Background" Value="DodgerBlue"/>
                     <Setter Property="Foreground" Value="Gainsboro"/>
                     <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="IsTabStop" Value="True"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -45,6 +48,7 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="MinWidth" Value="200"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="IsTabStop" Value="False"/>
         </Style>
         <!-- Folder Selectable TextBox Style -->
         <Style x:Key="FolderTextBoxStyle" TargetType="{x:Type cc:SelectableTextBox}" BasedOn="{StaticResource SelectableTextBoxBaseTriggers}">
@@ -55,6 +59,7 @@
             <Setter Property="Background" Value="Wheat"/>
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="IsTabStop" Value="False"/>
         </Style>
         <!-- Current Path TextBlock Style -->
         <Style x:Key="PathTextBoxStyle" TargetType="{x:Type TextBlock}">
@@ -68,8 +73,9 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Background" Value="Gainsboro"/>
             <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="IsTabStop" Value="False"/>
         </Style>
-
+        <!-- Banner Backing Style -->
         <Style x:Key="BannerBacking" TargetType="{x:Type cc:BannerBacking}">
             <Setter Property="Visibility" Value="Hidden"/>
             <Style.Triggers>
@@ -78,8 +84,18 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-        <Style x:Key="BannerStyleBase" TargetType="{x:Type cc:NewFolderBanner}">
+        <!-- New Folder Banner Style-->
+        <Style x:Key="NewFolderBannerStyle" TargetType="{x:Type cc:NewFolderBanner}">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Height" Value="130"/>
+            <Style.Triggers>
+                <Trigger Property="IsVisibleBanner" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Alert Banner Style-->
+        <Style x:Key="AlertBannerStyle" TargetType="{x:Type cc:AlertBanner}">
             <Setter Property="Visibility" Value="Hidden"/>
             <Setter Property="Height" Value="130"/>
             <Style.Triggers>

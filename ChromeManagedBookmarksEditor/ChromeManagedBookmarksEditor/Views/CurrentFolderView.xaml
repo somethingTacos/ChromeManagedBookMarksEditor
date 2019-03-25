@@ -8,7 +8,7 @@
              xmlns:att_helper="clr-namespace:ChromeManagedBookmarksEditor.Helpers.AttachedCommandBehavior"
              xmlns:cc="clr-namespace:ChromeManagedBookmarksEditor.CustomControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" BorderBrush="DimGray" BorderThickness="2">
+             d:DesignHeight="450" d:DesignWidth="800" BorderBrush="DimGray" BorderThickness="2" IsTabStop="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -21,8 +21,8 @@
         <TextBlock Text="{Binding ChromeBookmarks.CurrentWorkingFolder}"
                    Style="{StaticResource PathTextBoxStyle}"
                    />
-        <ScrollViewer Grid.Row="1" Grid.RowSpan="3" Background="Gainsboro">
-            <ItemsControl ItemsSource="{Binding ChromeBookmarks.Children}">
+        <ScrollViewer Grid.Row="1" Grid.RowSpan="3" Background="Gainsboro" IsTabStop="False">
+            <ItemsControl ItemsSource="{Binding ChromeBookmarks.Children}" IsTabStop="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -76,10 +76,13 @@
         </StackPanel>
 
         <cc:BannerBacking Grid.Row="0" Grid.RowSpan="5" Style="{StaticResource BannerBacking}"
-                          IsVisibleBanner="{Binding Banners.IsVisible}"/>
+                          IsVisibleBanner="{Binding Banners.BannerBackingVisible}"/>
 
-        <cc:NewFolderBanner Grid.Row="2" Style="{StaticResource BannerStyleBase}" 
-                            IsVisibleBanner="{Binding Banners.IsVisible}"/>
+        <cc:NewFolderBanner Grid.Row="2" Style="{StaticResource NewFolderBannerStyle}" 
+                            IsVisibleBanner="{Binding Banners.NewFolderVisible}"/>
+
+        <cc:AlertBanner Grid.Row="2" Style="{StaticResource AlertBannerStyle}" 
+                            IsVisibleBanner="{Binding Banners.AlertVisible}"/>
 
     </Grid>
 </UserControl>
