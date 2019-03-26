@@ -18,11 +18,11 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding ChromeBookmarks.CurrentWorkingFolder}"
+        <TextBlock Text="{Binding ChromeBookmarks.CurrentWorkingFolderPath}"
                    Style="{StaticResource PathTextBoxStyle}"
                    />
         <ScrollViewer Grid.Row="1" Grid.RowSpan="3" Background="Gainsboro" IsTabStop="False">
-            <ItemsControl ItemsSource="{Binding ChromeBookmarks.Children}" IsTabStop="False">
+            <ItemsControl ItemsSource="{Binding ChromeBookmarks.CurrentWorkingFolder.subFolderChildren}" IsTabStop="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -31,12 +31,24 @@
                 <ItemsControl.Resources>
                     <DataTemplate DataType="{x:Type data:Folder}">
                         <cc:SelectableTextBox Text="{Binding Name}" IsSelected="{Binding IsSelected}"
-                                 att_helper:CommandBehavior.Event="GotKeyboardFocus"
-                                 att_helper:CommandBehavior.Command="{Binding DataContext.ItemSelectedCommand,
-                                                   RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
-                                 att_helper:CommandBehavior.CommandParameter="{Binding}"
-                                 Style="{StaticResource FolderTextBoxStyle}"
-                                 />
+                                              Style="{StaticResource FolderTextBoxStyle}">
+
+                            <att_helper:CommandBehaviorCollection.Behaviors>
+                                
+                                <att_helper:BehaviorBinding Event="MouseDoubleClick"
+                                                            Command="{Binding DataContext.EnterFolderCommand,
+                                                            RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
+                                                            CommandParameter="{Binding}"
+                                                            />
+                                <att_helper:BehaviorBinding Event="GotKeyboardFocus" 
+                                                            Command="{Binding DataContext.ItemSelectedCommand,
+                                                            RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
+                                                            CommandParameter="{Binding}"
+                                                            />
+                                
+                            </att_helper:CommandBehaviorCollection.Behaviors>
+
+                        </cc:SelectableTextBox>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type data:URL}">
                         <DockPanel HorizontalAlignment="Stretch">
@@ -69,10 +81,18 @@
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PanelButtonsStyle}"/>
             </StackPanel.Resources>
-            <Button Content="Add Folder"/>
-            <Button Content="Add URL"/>
+            <Button Content=".."
+                    Command="{Binding ExitFolderCommand}"
+                    />
+            <Button Content="Add Folder" 
+                    Command="{Binding StartAddFolderCommand}"
+                    />
+            <Button Content="Add URL"
+                    Command="{Binding AddUrlCommand}"/>
             <Button Content="Remove Selected"
-                    Command="{Binding RemoveSelectedCommand}"/>
+                    Command="{Binding RemoveSelectedCommand}"
+                    />
+            
         </StackPanel>
 
         <cc:BannerBacking Grid.Row="0" Grid.RowSpan="5" Style="{StaticResource BannerBacking}"

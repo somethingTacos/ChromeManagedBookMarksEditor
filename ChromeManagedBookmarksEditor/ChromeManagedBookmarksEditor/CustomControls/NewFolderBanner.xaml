@@ -20,9 +20,13 @@
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="New Folder Name" FontSize="20" Margin="50 5" Foreground="Gainsboro"/>
-        <TextBox Grid.Row="1" Grid.ColumnSpan="5" Margin="50 0" Height="30"
+        <TextBox Grid.Row="1" Grid.ColumnSpan="5" Margin="50 0" Height="30" Text="{Binding NewFolder.Name}"
                  VerticalContentAlignment="Center"/>
-        <Button Content="OK" Grid.Row="3" Grid.Column="1" Height="30" Width="100"/>
-        <Button Content="Cancel"  Grid.Row="3" Grid.Column="3" Height="30" Width="100"/>
+        <Button Content="OK" Grid.Row="3" Grid.Column="1" Height="30" Width="100"
+                Command="{Binding AddNewFolderCommand}"
+                CommandParameter="{Binding ChromeBookmarks.CurrentWorkingFolder}"
+                />
+        <Button Content="Cancel"  Grid.Row="3" Grid.Column="3" Height="30" Width="100"
+                Command="{Binding CancelAddNewFolderCommand}"/>
     </Grid>
 </UserControl>

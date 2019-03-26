@@ -20,15 +20,20 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand SerializeCommand { get; set; }
         public MyICommand CopyCommand { get; set; }
         public MyICommand LoadCommand { get; set; }
-        public MyICommand AddFolderCommand { get; set; }
+        public MyICommand StartAddFolderCommand { get; set; }
+        public MyICommand AddNewFolderCommand { get; set; }
+        public MyICommand CancelAddNewFolderCommand { get; set; }
         public MyICommand AddUrlCommand { get; set; }
         public MyICommand RemoveSelectedCommand { get; set; }
         public MyICommand ConfirmBulkRemoveCommand { get; set; }
         public MyICommand CancelBulkRemoveCommand { get; set; }
+        public MyICommand EnterFolderCommand { get; set; }
+        public MyICommand ExitFolderCommand { get; set; }
         public MyICommand ClearAllCommand { get; set; }
         public MyICommand ShowHelpCommand { get; set; }
         public MyICommand ItemSelectedCommand { get; set; }
 
+        public Folder NewFolder { get; set; }
         public JSONCode Json { get; set; }
         public Info Info { get; set; }
         public bool _canLoad { get; set; }
@@ -41,7 +46,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             _navigationViewModel = navigationViewModel;
             Json = (new JSONCode { Code = "Enter Chrome JSON Here" });
-            Info = (new Info { Text = "Info: " });
+            Info = new Info();
 
             CopyCommand = new MyICommand(OnCopyCommand, CanCopyCommand);
             LoadCommand = new MyICommand(OnLoadCommand, CanLoadCommand);
@@ -49,11 +54,15 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             SerializeCommand = new MyICommand(OnSerializeCommand, CanSerializeCommand);
             RemoveSelectedCommand = new MyICommand(onRemoveSelectedCommand, canRemoveSelectedCommand);
             AddUrlCommand = new MyICommand(onAddUrlCommand, CanAddUrlCommand);
-            AddFolderCommand = new MyICommand(OnAddFolderCommand, canAddFolderCommand);
+            StartAddFolderCommand = new MyICommand(OnStartAddFolderCommand, canStartAddFolderCommand);
+            AddNewFolderCommand = new MyICommand(onAddNewFolderCommand, canAddNewFolderCommand);
             ShowHelpCommand = new MyICommand(onShowHelpCommand, canShowHelpCommand);
             ItemSelectedCommand = new MyICommand(onItemSelectedCommand, canItemSelectedCommand);
             ConfirmBulkRemoveCommand = new MyICommand(onConfirmBulkRemoveCommand, canConfirmBulkRemoveCommand);
             CancelBulkRemoveCommand = new MyICommand(onCancelBulkRemoveCommand, canCancelBulkRemoveCommand);
+            CancelAddNewFolderCommand = new MyICommand(onCancelAddNewFolderCommand, canCancelAddNewFolderCommand);
+            EnterFolderCommand = new MyICommand(onEnterFolderCommand, canEnterFolderCommand);
+            ExitFolderCommand = new MyICommand(onExitFolderCommand, canExitFolderCommand);
             LoadTree();
             _canLoad = true;
         }
@@ -62,47 +71,89 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         #region Start Tasks
         private void LoadTree()
         {
+            Folder tempFolder = new Folder();
             ManagedBookmarks tempMB = new ManagedBookmarks();
             BannerInfo tempBI = new BannerInfo();
 
-            //Dummy Data to help hookup views
-            tempMB.CurrentWorkingFolder = "Dummy > Path > Test";
-
-            Folder tempFolder = new Folder();
-            tempFolder.Name = "Folder with children";
-            tempFolder.folders.Add(new Folder { Name = "blahfolder" });
-            tempFolder.folders.Add(new Folder { Name = "blahfolder2" });
-            tempFolder.folders.Add(new Folder { Name = "blahfolder3" });
-            tempFolder.URLs.Add(new URL { Name = "blah" });
-            tempFolder.URLs.Add(new URL { Name = "blah2" });
-
-            tempMB.Folders.Add(new Folder { Name = "Folder 1" });
-            tempMB.Folders.Add(new Folder { Name = "Folder 2" });
-            tempMB.Folders.Add(tempFolder);
-
-            tempMB.URLs.Add(new URL { Name = "URL 1", Url = "http://url1.com" });
-            tempMB.URLs.Add(new URL { Name = "URL 2", Url = "http://url2.com" });
+            tempMB.CurrentWorkingFolder.Name = "Root Folder";
+            tempMB.CurrentWorkingFolderPath = "Root Folder";
 
             ChromeBookmarks = tempMB;
             Banners = tempBI;
+            NewFolder = tempFolder;
         }
         #endregion
 
         #region Commands Code
+        private void onCancelAddNewFolderCommand(object parameter)
+        {
+            NewFolder.Name = "";
+            Banners.HideNewFolderBanner();
+        }
+        private bool canCancelAddNewFolderCommand()
+        {
+            return true;
+        }
+
+        private void onAddNewFolderCommand(object parameter)
+        {
+            if(parameter is Folder parentFolder)
+            {
+                Folder newFolder = new Folder();
+                newFolder.Name = NewFolder.Name.ToString();
+                newFolder.Parent = parentFolder;
+                newFolder.FolderIndex = parentFolder.FolderIndex + 1;
+
+                parentFolder.folders.Add(newFolder);
+            }
+
+            NewFolder.Name = "";
+            Banners.HideNewFolderBanner();
+        }
+        private bool canAddNewFolderCommand()
+        {
+            //check if the folder name already exists inside the current folder.
+            return true;
+        }
+        private void onEnterFolderCommand(object parameter)
+        {
+            if (parameter is Folder subFolder)
+            {
+                ChromeBookmarks.CurrentWorkingFolder = subFolder;
+                UpdateWorkingPath();
+            }
+        }
+        private bool canEnterFolderCommand()
+        {
+            return ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected == true).Count() > 0;
+        }
+
+        public void onExitFolderCommand(object parameter)
+        {
+            ChromeBookmarks.CurrentWorkingFolder = ChromeBookmarks.CurrentWorkingFolder.Parent;
+            UpdateWorkingPath();
+        }
+        public bool canExitFolderCommand()
+        {
+            //need to make sure folder is not root folder.
+            return ChromeBookmarks.CurrentWorkingFolder.FolderIndex != 0;
+        }
+
         public void onItemSelectedCommand(object parameter)
         {
             ClearSelectedItems();
 
-            if(parameter is Folder folder)
+            if (parameter is Folder folder)
             {
                 folder.IsSelected = true;
             }
 
-            if(parameter is URL url)
+            if (parameter is URL url)
             {
                 url.IsSelected = true;
             }
 
+            EnterFolderCommand.RaiseCanExecuteChanged();
             RemoveSelectedCommand.RaiseCanExecuteChanged();
         }
         public bool canItemSelectedCommand()
@@ -121,17 +172,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnSerializeCommand(object parameter) //This method is going to be changed
         {
-            //if(Banners.NewFolderVisible)
-            //{
-            //    Banners.HideNewFolderBanner();
-            //}
-            //else
-            //{
-            //    Banners.ShowNewFolderBanner();
-            //}
-
-
-
             //string ConvertedCode = string.Empty;
             //changeInfo("Serializeing Tree...");
             ////ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);
@@ -149,12 +189,13 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             try
             {
                 Clipboard.SetText(Json.Code);
-                changeInfo("Text Copied to clipboard");
+                Info.CopyText = "Copied!";
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                changeInfo("Error coping to clipboard");
+                Info.CopyText = "Error :(";
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -204,29 +245,29 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             return _canLoad;
         }
 
-        private void OnAddFolderCommand(object parameter)
+        private void OnStartAddFolderCommand(object parameter)
         {
-
+            Banners.ShowNewFolderBanner();
         }
-        private bool canAddFolderCommand()
+        private bool canStartAddFolderCommand()
         {
-            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0;
+            return true;
         }
 
         private void onAddUrlCommand(object parameter)
         {
-
+            ChromeBookmarks.CurrentWorkingFolder.URLs.Add(new URL { Name = "", Url = "" });
         }
         private bool CanAddUrlCommand()
         {
-            return ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
+            return true; // ChromeBookmarks.CurrentWorkingFolder.URLs.Where(x => x.IsSelected == true).Count() > 0;
         }
 
         private void onRemoveSelectedCommand(object parameter)
         {
-            if(ChromeBookmarks.Folders.Where(x => x.IsSelected).Count() > 0)
+            if(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).Count() > 0)
             {
-                Folder SelectedFolder = ChromeBookmarks.Folders.Where(x => x.IsSelected).FirstOrDefault();
+                Folder SelectedFolder = ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault();
                 string AlertMessage = "";
 
                 if (SelectedFolder.folders.Count > 0 || SelectedFolder.URLs.Count > 0)
@@ -265,24 +306,25 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                 }
                 else
                 {
-                    ChromeBookmarks.Folders.Remove(ChromeBookmarks.Folders.Where(x => x.IsSelected == true).FirstOrDefault());
+                    ChromeBookmarks.CurrentWorkingFolder.folders.Remove(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected == true).FirstOrDefault());
                 }
             }
-            if (ChromeBookmarks.URLs.Where(x => x.IsSelected).Count() > 0)
+            if (ChromeBookmarks.CurrentWorkingFolder.URLs.Where(x => x.IsSelected).Count() > 0)
             {
-                ChromeBookmarks.URLs.Remove(ChromeBookmarks.URLs.Where(x => x.IsSelected == true).FirstOrDefault());
+                ChromeBookmarks.CurrentWorkingFolder.URLs.Remove(ChromeBookmarks.CurrentWorkingFolder.URLs.Where(x => x.IsSelected == true).FirstOrDefault());
             }
 
             RemoveSelectedCommand.RaiseCanExecuteChanged();
         }
         private bool canRemoveSelectedCommand()
         {
-            return ChromeBookmarks.Folders.Where(x => x.IsSelected == true).Count() > 0 || ChromeBookmarks.URLs.Where(x => x.IsSelected == true).Count() > 0;
+            return ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected == true).Count() > 0 || ChromeBookmarks.CurrentWorkingFolder.URLs.Where(x => x.IsSelected == true).Count() > 0;
         }
 
         private void onConfirmBulkRemoveCommand(object parameter)
         {
-            ChromeBookmarks.Folders.Remove(ChromeBookmarks.Folders.Where(x => x.IsSelected == true).FirstOrDefault());
+            ChromeBookmarks.CurrentWorkingFolder.folders.Remove(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected == true).FirstOrDefault());
+            ClearSelectedItems();
             Banners.HideAlertBanner();
         }
         private bool canConfirmBulkRemoveCommand()
@@ -313,21 +355,49 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         #endregion
 
         #region Misc Methods
-        private void changeInfo(string message)
-        {
-            Info.Text = String.Format("Info:  {0}", message);
-        }
 
         private void ClearSelectedItems()
         {
-            foreach(Folder folder in ChromeBookmarks.Folders)
+            foreach (Folder folder in ChromeBookmarks.CurrentWorkingFolder.folders)
             {
                 folder.IsSelected = false;
             }
-            foreach(URL url in ChromeBookmarks.URLs)
+            foreach (URL url in ChromeBookmarks.CurrentWorkingFolder.URLs)
             {
                 url.IsSelected = false;
             }
+
+            RemoveSelectedCommand.RaiseCanExecuteChanged();
+        }
+
+        private void UpdateWorkingPath()
+        {
+            string newPath = string.Empty;
+            List<string> reversePathList = new List<string>();
+            int index = ChromeBookmarks.CurrentWorkingFolder.FolderIndex;
+            Folder parentFolder = ChromeBookmarks.CurrentWorkingFolder;
+
+            reversePathList.Add(parentFolder.Name.ToString());
+
+            for(int i = 0; i < index; i++)
+            {
+                reversePathList.Add(parentFolder.Parent.Name.ToString());
+                parentFolder = parentFolder.Parent;
+            }
+
+            for(int i = reversePathList.Count() -1; i >= 0; i--)
+            {
+                newPath += reversePathList[i].ToString();
+
+                if(i != 0)
+                {
+                    newPath += " > ";
+                }
+            }
+
+            ChromeBookmarks.CurrentWorkingFolderPath = newPath;
+            ClearSelectedItems();
+            ExitFolderCommand.RaiseCanExecuteChanged();
         }
         #endregion
     }

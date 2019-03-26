@@ -11,39 +11,44 @@ namespace ChromeManagedBookmarksEditor.Model
     [ImplementPropertyChanged]
     public class ManagedBookmarks
     {
-        public string CurrentWorkingFolder { get; set; } = "";
+        public string CurrentWorkingFolderPath { get; set; } = "";
+        public Folder CurrentWorkingFolder { get; set; } = new Folder();
         public string toplevel_name { get; set; } = "Root Folder";
-        public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
-        public ObservableCollection<URL> URLs { get; set; } = new ObservableCollection<URL>();
-        public IList Children
-        {
-            get
-            {
-                return new CompositeCollection()
-                {
-                    new CollectionContainer() { Collection = Folders },
-                    new CollectionContainer() { Collection = URLs }
-                };
-            }
-        }
+
+        //Might not need these anymore... idk...
+        //public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
+        //public ObservableCollection<URL> URLs { get; set; } = new ObservableCollection<URL>();
+        //public IList Children
+        //{
+        //    get
+        //    {
+        //        return new CompositeCollection()
+        //        {
+        //            new CollectionContainer() { Collection = Folders },
+        //            new CollectionContainer() { Collection = URLs }
+        //        };
+        //    }
+        //}
     }
 
-    [ImplementPropertyChanged]
-    public class RootFolder
-    {
-        public string toplevel_name { get; set; } = "";
-    }
+    //[ImplementPropertyChanged]
+    //public class RootFolder
+    //{
+    //    public string toplevel_name { get; set; } = "";
+    //}
 
-    [ImplementPropertyChanged]
-    public class ParsedFolders
-    {
-        public string Name { get; set; } = "";
-        public JArray children { get; set; } = new JArray();
-    }
+    //[ImplementPropertyChanged]
+    //public class ParsedFolders
+    //{
+    //    public string Name { get; set; } = "";
+    //    public JArray children { get; set; } = new JArray();
+    //}
 
     [ImplementPropertyChanged]
     public class Folder
     {
+        public Folder Parent { get; set; }
+        public int FolderIndex { get; set; } = 0;
         public string Name { get; set; } = "";
         public ObservableCollection<Folder> folders { get; set; } = new ObservableCollection<Folder>();
         public ObservableCollection<URL> URLs { get; set; } = new ObservableCollection<URL>();
@@ -73,7 +78,9 @@ namespace ChromeManagedBookmarksEditor.Model
     [ImplementPropertyChanged]
     public class Info
     {
-        public string Text { get; set; } = "";
+        public string LoadText { get; set; } = "Load";
+        public string CopyText { get; set; } = "Copy";
+        public string SerializeText { get; set; } = "Serialize";
     }
 
     [ImplementPropertyChanged]

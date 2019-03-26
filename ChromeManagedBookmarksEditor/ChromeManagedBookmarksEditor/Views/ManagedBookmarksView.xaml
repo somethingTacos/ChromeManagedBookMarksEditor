@@ -35,17 +35,17 @@
         <Button Content="Help" Grid.Column="3" Grid.Row="1"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding ShowHelpCommand}"/>
-        <Button Content="Serialize (Temp Banner Test)" Grid.Column="3" Grid.Row="3"
+        <Button Content="{Binding Info.SerializeText}" Grid.Column="3" Grid.Row="3"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding SerializeCommand}"/>
-        <Button Content="Copy" Grid.Column="3" Grid.Row="4"
+        <Button Content="{Binding Info.CopyText}" Grid.Column="3" Grid.Row="4"
                 Style="{StaticResource MainButtonStyle}"
-                />
+                Command="{Binding CopyCommand}"/>
         <TextBox Text="{Binding Json.Code, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                  Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="Gainsboro"
                  Style="{StaticResource MainTextBoxStyle}"
                  />
-        <Button Content="Load" Grid.Column="2" Grid.Row="6"
+        <Button Content="{Binding Info.LoadText}" Grid.Column="2" Grid.Row="6"
                 Style="{StaticResource MainButtonStyle}"
                 />
     </Grid>

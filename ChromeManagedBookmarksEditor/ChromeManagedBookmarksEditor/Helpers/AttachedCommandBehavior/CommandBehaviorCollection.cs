@@ -52,7 +52,7 @@ namespace ChromeManagedBookmarksEditor.Helpers.AttachedCommandBehavior
         /// Provides a secure method for setting the Behaviors property.  
         /// This dependency property indicates ....
         /// </summary>
-        private static void SetBehaviors(DependencyObject d, BehaviorBindingCollection value)
+        public static void SetBehaviors(DependencyObject d, BehaviorBindingCollection value)
         {
             d.SetValue(BehaviorsPropertyKey, value);
             INotifyCollectionChanged collection = (INotifyCollectionChanged)value;
