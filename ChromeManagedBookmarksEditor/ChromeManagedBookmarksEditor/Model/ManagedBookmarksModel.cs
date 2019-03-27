@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 using PropertyChanged;
@@ -13,7 +12,7 @@ namespace ChromeManagedBookmarksEditor.Model
     {
         public string CurrentWorkingFolderPath { get; set; } = "";
         public Folder CurrentWorkingFolder { get; set; } = new Folder();
-        public string toplevel_name { get; set; } = "Root Folder";
+        public string toplevel_name { get; set; } = "Root Folder";  //maybe just make this another folder... or not... idk...
 
         //Might not need these anymore... idk...
         //public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
@@ -90,39 +89,48 @@ namespace ChromeManagedBookmarksEditor.Model
     }
 
     [ImplementPropertyChanged]
-    public class BannerInfo
+    public class BannerInfo //I think this might need a rename... it's a bit more than just informative at this point...
     {
-        public enum BannerType { NewFolder, Alert }
+        public enum BannerAction { AddNewFolder, RemoveFolder, RenameFolder, ClearAllData, Alert}
 
         public bool BannerBackingVisible { get; set; } = false;
 
-        public bool NewFolderVisible { get; set; } = false;
+        public BannerAction ActiveAction { get; set; }
 
-        public bool AlertVisible { get; set; } = false;
+        public bool FolderBannerVisible { get; set; } = false;
+        public string FolderBannerText { get; set; } = "";
+        public string FolderBannerButtonText { get; set; } = "";
 
-        public string AlertText { get; set; } = "";
+        public bool AlertBannerVisible { get; set; } = false;
+        public string AlertBannerText { get; set; } = "";
+        public string AlertBannerButtonText { get; set; } = "";
 
-        public void ShowNewFolderBanner()
+        public void ShowFolderBanner(string Message, string ConfirmButtonText, BannerAction Action)
         {
+            ActiveAction = Action;
+            FolderBannerText = Message;
+            FolderBannerButtonText = ConfirmButtonText;
             BannerBackingVisible = true;
-            NewFolderVisible = true;
+            FolderBannerVisible = true;
         }
-        public void HideNewFolderBanner()
+        public void HideFolderBanner()
         {
             BannerBackingVisible = false;
-            NewFolderVisible = false;
+            FolderBannerVisible = false;
         }
 
-        public void ShowAlertBanner(string text)
+        public void ShowAlertBanner(string Message,string ConfirmButtonText, BannerAction Action)
         {
-            AlertText = text;
+            ActiveAction = Action;
+            AlertBannerText = Message;
+            AlertBannerButtonText = ConfirmButtonText;
             BannerBackingVisible = true;
-            AlertVisible = true;
+            AlertBannerVisible = true;
         }
         public void HideAlertBanner()
         {
             BannerBackingVisible = false;
-            AlertVisible = false;
+            AlertBannerVisible = false;
         }
     }
 }

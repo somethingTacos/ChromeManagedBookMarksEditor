@@ -18,11 +18,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Banners.AlertText}" FontSize="18" Margin="50 5" Foreground="Gainsboro" TextWrapping="Wrap"
+        <TextBlock Text="{Binding Banners.AlertBannerText}" FontSize="18" Margin="50 5" Foreground="Gainsboro" TextWrapping="Wrap"
                    Grid.ColumnSpan="5"/>
-        <Button Content="Remove" Grid.Row="3" Grid.Column="1" Height="30" Width="100"
-                Command="{Binding ConfirmBulkRemoveCommand}"/>
+        <Button Content="{Binding Banners.AlertBannerButtonText}" Grid.Row="3" Grid.Column="1" Height="30" Width="100"
+                Command="{Binding ConfirmAlertBannerCommand}"/>
         <Button Content="Cancel"  Grid.Row="3" Grid.Column="3" Height="30" Width="100"
-                Command="{Binding CancelBulkRemoveCommand}"/>
+                Command="{Binding CancelAlertBannerCommand}"/>
     </Grid>
 </UserControl>

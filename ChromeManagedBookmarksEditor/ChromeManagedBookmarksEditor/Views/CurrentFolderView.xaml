@@ -45,7 +45,11 @@
                                                             RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
                                                             CommandParameter="{Binding}"
                                                             />
-                                
+                                <att_helper:BehaviorBinding Event="PreviewMouseRightButtonDown"
+                                                            Command="{Binding DataContext.RenameFolderCommand,
+                                                            RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
+                                                            CommandParameter="{Binding}"/>
+
                             </att_helper:CommandBehaviorCollection.Behaviors>
 
                         </cc:SelectableTextBox>
@@ -85,7 +89,7 @@
                     Command="{Binding ExitFolderCommand}"
                     />
             <Button Content="Add Folder" 
-                    Command="{Binding StartAddFolderCommand}"
+                    Command="{Binding AddNewFolderCommand}"
                     />
             <Button Content="Add URL"
                     Command="{Binding AddUrlCommand}"/>
@@ -98,11 +102,11 @@
         <cc:BannerBacking Grid.Row="0" Grid.RowSpan="5" Style="{StaticResource BannerBacking}"
                           IsVisibleBanner="{Binding Banners.BannerBackingVisible}"/>
 
-        <cc:NewFolderBanner Grid.Row="2" Style="{StaticResource NewFolderBannerStyle}" 
-                            IsVisibleBanner="{Binding Banners.NewFolderVisible}"/>
+        <cc:FolderBanner Grid.Row="2" Style="{StaticResource NewFolderBannerStyle}" 
+                            IsVisibleBanner="{Binding Banners.FolderBannerVisible}"/>
 
         <cc:AlertBanner Grid.Row="2" Style="{StaticResource AlertBannerStyle}" 
-                            IsVisibleBanner="{Binding Banners.AlertVisible}"/>
+                            IsVisibleBanner="{Binding Banners.AlertBannerVisible}"/>
 
     </Grid>
 </UserControl>

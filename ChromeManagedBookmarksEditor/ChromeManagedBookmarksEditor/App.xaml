@@ -85,7 +85,7 @@
             </Style.Triggers>
         </Style>
         <!-- New Folder Banner Style-->
-        <Style x:Key="NewFolderBannerStyle" TargetType="{x:Type cc:NewFolderBanner}">
+        <Style x:Key="NewFolderBannerStyle" TargetType="{x:Type cc:FolderBanner}">
             <Setter Property="Visibility" Value="Hidden"/>
             <Setter Property="Height" Value="130"/>
             <Style.Triggers>

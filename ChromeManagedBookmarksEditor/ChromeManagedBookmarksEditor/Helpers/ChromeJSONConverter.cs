@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
-    public static class TreeConverter
+    public static class ChromeJSONConverter
     {
 
     }
