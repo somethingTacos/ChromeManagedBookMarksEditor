@@ -22,6 +22,17 @@
                    Style="{StaticResource PathTextBoxStyle}"
                    />
         <ScrollViewer Grid.Row="1" Grid.RowSpan="3" Background="Gainsboro" IsTabStop="False">
+            <ScrollViewer.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{Binding ChromeBookmarks.CurrentWorkingFolderContextMenuText}"
+                              Command="{Binding RenameFolderCommand}"
+                              CommandParameter="{Binding ChromeBookmarks.CurrentWorkingFolder}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/edit.png" Height="20"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ScrollViewer.ContextMenu>
             <ItemsControl ItemsSource="{Binding ChromeBookmarks.CurrentWorkingFolder.subFolderChildren}" IsTabStop="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

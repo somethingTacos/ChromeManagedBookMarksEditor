@@ -11,6 +11,7 @@ namespace ChromeManagedBookmarksEditor.Model
     public class ManagedBookmarks
     {
         public string CurrentWorkingFolderPath { get; set; } = "";
+        public string CurrentWorkingFolderContextMenuText { get; set; } = "";
         public Folder CurrentWorkingFolder { get; set; } = new Folder();
         public string toplevel_name { get; set; } = "Root Folder";  //maybe just make this another folder... or not... idk...
 

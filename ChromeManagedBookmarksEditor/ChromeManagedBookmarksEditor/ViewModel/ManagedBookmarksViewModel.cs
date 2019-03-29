@@ -80,11 +80,12 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             BannerInfo tempBI = new BannerInfo();
 
             tempMB.CurrentWorkingFolder.Name = "Root Folder";
-            tempMB.CurrentWorkingFolderPath = "Root Folder";
 
             ChromeBookmarks = tempMB;
             Banners = tempBI;
             NewFolder = tempFolder;
+
+            UpdateWorkingPath();
         }
         #endregion
 
@@ -292,7 +293,15 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                     }
                 case BannerInfo.BannerAction.RenameFolder:
                     {
-                        Folder FolderToRename = ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault();
+                        Folder FolderToRename = new Folder();
+                        if (ChromeBookmarks.CurrentWorkingFolder.FolderIndex == 0)
+                        {
+                            FolderToRename = ChromeBookmarks.CurrentWorkingFolder;
+                        }
+                        else
+                        {
+                            FolderToRename = ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault();
+                        }
                         if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
                         {
                             Banners.HideFolderBanner();
@@ -467,6 +476,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                 }
             }
 
+            ChromeBookmarks.CurrentWorkingFolderContextMenuText = $"Rename '{ChromeBookmarks.CurrentWorkingFolder.Name}'";
             ChromeBookmarks.CurrentWorkingFolderPath = newPath;
             ClearSelectedItems();
             ExitFolderCommand.RaiseCanExecuteChanged();
