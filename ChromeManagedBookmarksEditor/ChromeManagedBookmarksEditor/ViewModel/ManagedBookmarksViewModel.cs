@@ -283,23 +283,33 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             {
                 case BannerInfo.BannerAction.AddNewFolder:
                     {
-                        if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                        if (NewFolder.Name != "")
                         {
-                            Banners.HideFolderBanner();
-                            Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+
+
+                            if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                            {
+                                Banners.HideFolderBanner();
+                                Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                            }
+                            else
+                            {
+                                if (parameter is Folder parentFolder)
+                                {
+                                    Folder newFolder = new Folder();
+                                    newFolder.Name = NewFolder.Name.ToString().Trim();
+                                    newFolder.Parent = parentFolder;
+                                    newFolder.FolderIndex = parentFolder.FolderIndex + 1;
+
+                                    parentFolder.folders.Add(newFolder);
+                                    Banners.HideFolderBanner();
+                                }
+                            }
                         }
                         else
                         {
-                            if (parameter is Folder parentFolder)
-                            {
-                                Folder newFolder = new Folder();
-                                newFolder.Name = NewFolder.Name.ToString();
-                                newFolder.Parent = parentFolder;
-                                newFolder.FolderIndex = parentFolder.FolderIndex + 1;
-
-                                parentFolder.folders.Add(newFolder);
-                                Banners.HideFolderBanner();
-                            }
+                            Banners.HideFolderBanner();
+                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", BannerInfo.BannerAction.Alert);
                         }
 
                         NewFolder.Name = "";
@@ -317,16 +327,24 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         {
                             FolderToRename = ChromeBookmarks.CurrentWorkingFolder;
                         }
-                        
-                        if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+
+                        if (NewFolder.Name != "")
                         {
-                            Banners.HideFolderBanner();
-                            Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                            if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                            {
+                                Banners.HideFolderBanner();
+                                Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                            }
+                            else
+                            {
+                                FolderToRename.Name = NewFolder.Name.ToString().Trim();
+                                Banners.HideFolderBanner();
+                            }
                         }
                         else
                         {
-                            FolderToRename.Name = NewFolder.Name.ToString();
                             Banners.HideFolderBanner();
+                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", BannerInfo.BannerAction.Alert);
                         }
 
                         NewFolder.Name = "";
