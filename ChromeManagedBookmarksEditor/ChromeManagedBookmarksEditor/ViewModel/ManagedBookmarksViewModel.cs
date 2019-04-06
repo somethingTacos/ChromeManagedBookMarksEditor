@@ -18,7 +18,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand CancelAlertBannerCommand { get; set; }
         public MyICommand RemoveSelectedCommand { get; set; }
         public MyICommand AddNewFolderCommand { get; set; }
-        public MyICommand RenameFolderCommand { get; set; }
+        public MyICommand RenameSelectedFolderCommand { get; set; }
+        public MyICommand RenameParentFolderCommand { get; set; }
         public MyICommand ItemSelectedCommand { get; set; }
         public MyICommand EnterFolderCommand { get; set; }
         public MyICommand ExitFolderCommand { get; set; }
@@ -59,7 +60,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             CancelFolderBannerCommand = new MyICommand(onCancelFolderBannerCommand, canCancelFolderBannerCommand);
             //Item Commands
             AddNewFolderCommand = new MyICommand(onAddFolderCommand, canAddFolderCommand);
-            RenameFolderCommand = new MyICommand(onRenameFolderCommand, canRenameFolderCommand);
+            RenameSelectedFolderCommand = new MyICommand(onRenameSelectedFolderCommand, canRenameSelectedFolderCommand);
+            RenameParentFolderCommand = new MyICommand(onRenameParentFolderCommand, canRenameParentFolderCommand);
             AddUrlCommand = new MyICommand(onAddUrlCommand, CanAddUrlCommand);
             RemoveSelectedCommand = new MyICommand(onRemoveSelectedCommand, canRemoveSelectedCommand);
             ItemSelectedCommand = new MyICommand(onItemSelectedCommand, canItemSelectedCommand);
@@ -90,14 +92,26 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         #endregion
 
         #region Commands Code
-        private void onRenameFolderCommand(object parameter)
+        private void onRenameParentFolderCommand(object parameter)
+        {
+            if (parameter is Folder folderToRename)
+            {
+                ClearSelectedItems();
+                Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", BannerInfo.BannerAction.RenameFolder);
+            }
+        }
+        private bool canRenameParentFolderCommand()
+        {
+            return true;
+        }
+        private void onRenameSelectedFolderCommand(object parameter)
         {
             if(parameter is Folder folderToRename)
             {
                 Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", BannerInfo.BannerAction.RenameFolder);
             }
         }
-        private bool canRenameFolderCommand()
+        private bool canRenameSelectedFolderCommand()
         {
             return true;
         }
@@ -294,14 +308,16 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                 case BannerInfo.BannerAction.RenameFolder:
                     {
                         Folder FolderToRename = new Folder();
-                        if (ChromeBookmarks.CurrentWorkingFolder.FolderIndex == 0)
+                        
+                        if(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).Count() > 0)
                         {
-                            FolderToRename = ChromeBookmarks.CurrentWorkingFolder;
+                           FolderToRename = ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault();
                         }
                         else
                         {
-                            FolderToRename = ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault();
+                            FolderToRename = ChromeBookmarks.CurrentWorkingFolder;
                         }
+                        
                         if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
                         {
                             Banners.HideFolderBanner();
@@ -314,6 +330,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         }
 
                         NewFolder.Name = "";
+                        UpdateWorkingPath();
                         break;
                     }
             }

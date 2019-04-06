@@ -25,7 +25,7 @@
             <ScrollViewer.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{Binding ChromeBookmarks.CurrentWorkingFolderContextMenuText}"
-                              Command="{Binding RenameFolderCommand}"
+                              Command="{Binding RenameParentFolderCommand}"
                               CommandParameter="{Binding ChromeBookmarks.CurrentWorkingFolder}">
                         <MenuItem.Icon>
                             <Image Source="/Images/edit.png" Height="20"/>
@@ -57,7 +57,7 @@
                                                             CommandParameter="{Binding}"
                                                             />
                                 <att_helper:BehaviorBinding Event="PreviewMouseRightButtonDown"
-                                                            Command="{Binding DataContext.RenameFolderCommand,
+                                                            Command="{Binding DataContext.RenameSelectedFolderCommand,
                                                             RelativeSource={RelativeSource AncestorType=ScrollViewer, Mode=FindAncestor}}"
                                                             CommandParameter="{Binding}"/>
 
