@@ -81,7 +81,9 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             ManagedBookmarks tempMB = new ManagedBookmarks();
             BannerInfo tempBI = new BannerInfo();
 
-            tempMB.CurrentWorkingFolder.Name = "Root Folder";
+            tempMB.RootFolder.Name = "Root Folder";
+
+            tempMB.CurrentWorkingFolder = tempMB.RootFolder;
 
             ChromeBookmarks = tempMB;
             Banners = tempBI;
@@ -195,11 +197,11 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnSerializeCommand(object parameter) //This method is going to be changed
         {
-            //string ConvertedCode = string.Empty;
-            //changeInfo("Serializeing Tree...");
-            ////ConvertedCode = await ConvertTreeToJSON(ChromeBookmarks);
-            //Json.Code = ConvertedCode;
-            //changeInfo("Tree Serialized");
+            string ConvertedCode = string.Empty;
+            Info.SerializeText = "Serializing...";
+            ConvertedCode = await ChromeJSONConverter.ConvertToJSON(ChromeBookmarks.RootFolder);
+            Json.Code = ConvertedCode;
+            Info.SerializeText = "Serialize";
         }
 
         private bool CanSerializeCommand()

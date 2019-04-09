@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:ChromeManagedBookmarksEditor.Views"
-             mc:Ignorable="d" 
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" IsTabStop="False">
 
     <Grid>
@@ -35,9 +36,19 @@
         <Button Content="Help" Grid.Column="3" Grid.Row="1"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding ShowHelpCommand}"/>
-        <Button Content="{Binding Info.SerializeText}" Grid.Column="3" Grid.Row="3"
+        <Button Grid.Column="3" Grid.Row="3"
                 Style="{StaticResource MainButtonStyle}"
-                Command="{Binding SerializeCommand}"/>
+                Command="{Binding SerializeCommand}">
+            <Grid>
+                <Image gif:ImageBehavior.AnimatedSource="/Images/Gifs/BarberPole_LightPurple.gif"
+                       Stretch="Fill"/>
+                
+                <TextBlock Text="{Binding Info.SerializeText}" FontSize="16"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            
+        </Button>
         <Button Content="{Binding Info.CopyText}" Grid.Column="3" Grid.Row="4"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding CopyCommand}"/>

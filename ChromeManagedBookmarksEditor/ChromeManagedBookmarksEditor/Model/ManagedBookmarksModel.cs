@@ -13,7 +13,8 @@ namespace ChromeManagedBookmarksEditor.Model
         public string CurrentWorkingFolderPath { get; set; } = "";
         public string CurrentWorkingFolderContextMenuText { get; set; } = "";
         public Folder CurrentWorkingFolder { get; set; } = new Folder();
-        public string toplevel_name { get; set; } = "Root Folder";  //maybe just make this another folder... or not... idk...
+        public Folder RootFolder { get; set; } = new Folder();
+        //public string toplevel_name { get; set; } = "Root Folder";  //maybe just make this another folder... or not... idk..., I might not need this...
 
         //Might not need these anymore... idk...
         //public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
@@ -81,6 +82,9 @@ namespace ChromeManagedBookmarksEditor.Model
         public string LoadText { get; set; } = "Load";
         public string CopyText { get; set; } = "Copy";
         public string SerializeText { get; set; } = "Serialize";
+
+        public bool IsSerializing { get; set; } = false;
+        public bool IsLoadingJSON { get; set; } = false;
     }
 
     [ImplementPropertyChanged]

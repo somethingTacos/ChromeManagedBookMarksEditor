@@ -44,6 +44,16 @@
             <Setter Property="Margin" Value="0 0 0 3"/>
             <Setter Property="IsTabStop" Value="False"/>
         </Style>
+        
+        
+        
+        <!-- Serialize Button Animation testing stuff here. Going to make a custom button at some point. -->
+        <Style x:Key="SerializeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MainButtonStyle}">
+            
+        </Style>
+        
+        
+        
         <!-- Main TextBox Style -->
         <Style x:Key="MainTextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="3"/>

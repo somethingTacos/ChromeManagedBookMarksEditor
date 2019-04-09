@@ -3,12 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChromeManagedBookmarksEditor.Model;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
     public static class ChromeJSONConverter
     {
+        // Async methods to convert ManagedBookmarks object into JSON code
+        public static async Task<string> ConvertToJSON(Folder RootFolder)
+        {
+            string ReturnableJSON = string.Empty;
 
+            await Task.Run(() => 
+            {
+                ReturnableJSON = _ConvertToJSON(RootFolder);
+            });
+
+            return ReturnableJSON;
+        }
+
+        private static string _ConvertToJSON(Folder RootFolder)
+        {
+            string convertedJSON = string.Empty;
+
+            System.Threading.Thread.Sleep(5000);
+
+            return convertedJSON;
+        }
+
+        // Async Methods to parse JSON code into a ManagedBookmarks object
+        public static async Task<ManagedBookmarks> ParseJSON(string JSONCode)
+        {
+            ManagedBookmarks ReturnableManagedBookmarks = new ManagedBookmarks();
+
+            await Task.Run(() =>
+            {
+                ReturnableManagedBookmarks = _ParseJSON(JSONCode);
+            });
+
+            return ReturnableManagedBookmarks;
+        }
+
+        private static ManagedBookmarks _ParseJSON(string JSONCode)
+        {
+            ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
+
+
+            return ParsedBookmarks;
+        }
     }
 }
 
