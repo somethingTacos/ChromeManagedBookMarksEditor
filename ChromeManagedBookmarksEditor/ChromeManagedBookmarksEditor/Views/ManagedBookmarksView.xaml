@@ -38,14 +38,14 @@
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding ShowHelpCommand}"/>
         <cc:AsyncOperationButton Grid.Column="3" Grid.Row="3"
+                Style="{StaticResource MainButtonStyle}"
                 Command="{Binding SerializeCommand}">
             <Grid>
                 <Image gif:ImageBehavior.AnimatedSource="/Images/Gifs/BarberPole_LightPurple.gif"
                        Stretch="Fill" Visibility="{Binding Info.SerializingAnimation}"/>
 
-                <TextBlock Text="{Binding Info.SerializeText}" FontSize="16"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Info.SerializeText}"
+                           Style="{StaticResource MainButtonTextBlock}"/>
             </Grid>
         </cc:AsyncOperationButton>
         <Button Content="{Binding Info.CopyText}" Grid.Column="3" Grid.Row="4"
@@ -63,9 +63,8 @@
                        HorizontalAlignment="Right" Margin="200 0 0 0" Height="30"
                        Visibility="{Binding Info.LoadingAnimation}"/>
 
-                <TextBlock Text="{Binding Info.LoadText}" FontSize="16"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Info.LoadText}"
+                           Style="{StaticResource MainButtonTextBlock}"/>
             </Grid>
         </cc:AsyncOperationButton>
     </Grid>
