@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:ChromeManagedBookmarksEditor.Views"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:cc="clr-namespace:ChromeManagedBookmarksEditor.CustomControls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" IsTabStop="False">
 
@@ -36,19 +37,17 @@
         <Button Content="Help" Grid.Column="3" Grid.Row="1"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding ShowHelpCommand}"/>
-        <Button Grid.Column="3" Grid.Row="3"
-                Style="{StaticResource MainButtonStyle}"
+        <cc:AsyncOperationButton Grid.Column="3" Grid.Row="3"
                 Command="{Binding SerializeCommand}">
             <Grid>
                 <Image gif:ImageBehavior.AnimatedSource="/Images/Gifs/BarberPole_LightPurple.gif"
-                       Stretch="Fill"/>
-                
+                       Stretch="Fill" Visibility="{Binding Info.SerializingAnimation}"/>
+
                 <TextBlock Text="{Binding Info.SerializeText}" FontSize="16"
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-            
-        </Button>
+        </cc:AsyncOperationButton>
         <Button Content="{Binding Info.CopyText}" Grid.Column="3" Grid.Row="4"
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding CopyCommand}"/>
@@ -56,8 +55,18 @@
                  Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="Gainsboro"
                  Style="{StaticResource MainTextBoxStyle}"
                  />
-        <Button Content="{Binding Info.LoadText}" Grid.Column="2" Grid.Row="6"
+        <cc:AsyncOperationButton Grid.Column="2" Grid.Row="6"
                 Style="{StaticResource MainButtonStyle}"
-                />
+                Command="{Binding LoadCommand}">
+            <Grid>
+                <Image gif:ImageBehavior.AnimatedSource="/Images/Gifs/movingBlocks.gif"
+                       HorizontalAlignment="Right" Margin="200 0 0 0" Height="30"
+                       Visibility="{Binding Info.LoadingAnimation}"/>
+
+                <TextBlock Text="{Binding Info.LoadText}" FontSize="16"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </cc:AsyncOperationButton>
     </Grid>
 </UserControl>

@@ -48,6 +48,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
         {
             ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
 
+            System.Threading.Thread.Sleep(5000);
 
             return ParsedBookmarks;
         }

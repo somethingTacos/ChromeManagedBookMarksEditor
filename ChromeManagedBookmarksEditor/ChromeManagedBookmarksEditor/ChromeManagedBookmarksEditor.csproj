@@ -67,6 +67,7 @@
     <Compile Include="CustomControls\AlertBanner.xaml.cs">
       <DependentUpon>AlertBanner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\AsyncOperationButton.cs" />
     <Compile Include="CustomControls\BannerBacking.xaml.cs">
       <DependentUpon>BannerBacking.xaml</DependentUpon>
     </Compile>
@@ -193,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Gifs\BarberPole_lightPurple.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Gifs\movingBlocks.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

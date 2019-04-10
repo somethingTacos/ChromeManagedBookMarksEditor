@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Data;
 using PropertyChanged;
 
@@ -83,8 +84,8 @@ namespace ChromeManagedBookmarksEditor.Model
         public string CopyText { get; set; } = "Copy";
         public string SerializeText { get; set; } = "Serialize";
 
-        public bool IsSerializing { get; set; } = false;
-        public bool IsLoadingJSON { get; set; } = false;
+        public Visibility SerializingAnimation { get; set; } = Visibility.Hidden;
+        public Visibility LoadingAnimation { get; set; } = Visibility.Hidden;
     }
 
     [ImplementPropertyChanged]

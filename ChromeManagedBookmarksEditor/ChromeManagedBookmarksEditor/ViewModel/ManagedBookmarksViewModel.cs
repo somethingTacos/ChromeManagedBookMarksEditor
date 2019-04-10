@@ -197,16 +197,27 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnSerializeCommand(object parameter) //This method is going to be changed
         {
-            string ConvertedCode = string.Empty;
-            Info.SerializeText = "Serializing...";
-            ConvertedCode = await ChromeJSONConverter.ConvertToJSON(ChromeBookmarks.RootFolder);
-            Json.Code = ConvertedCode;
-            Info.SerializeText = "Serialize";
+            if (Info.SerializingAnimation != Visibility.Visible)
+            {
+                string ConvertedCode = string.Empty;
+                Info.SerializingAnimation = Visibility.Visible;
+                LoadCommand.RaiseCanExecuteChanged();
+                Info.SerializeText = "Serializing...";
+                ConvertedCode = await ChromeJSONConverter.ConvertToJSON(ChromeBookmarks.RootFolder);
+                Json.Code = ConvertedCode;
+                Info.SerializeText = "Serialize";
+                Info.SerializingAnimation = Visibility.Hidden;
+                LoadCommand.RaiseCanExecuteChanged();
+            }
+            else
+            {
+                Info.SerializeText = "Please Wait...";
+            }
         }
 
         private bool CanSerializeCommand()
         {
-            return true;
+            return Info.LoadingAnimation != Visibility.Visible;
         }
 
         private void OnCopyCommand(object parameter)
@@ -232,6 +243,21 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnLoadCommand(object parameter) //This method is going to be changed
         {
+            if (Info.LoadingAnimation != Visibility.Visible)
+            {
+                ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
+                Info.LoadingAnimation = Visibility.Visible;
+                SerializeCommand.RaiseCanExecuteChanged();
+                Info.LoadText = "Loading JSON...";
+                ParsedBookmarks = await ChromeJSONConverter.ParseJSON(Json.Code);
+                Info.LoadingAnimation = Visibility.Hidden;
+                Info.LoadText = "Load";
+                SerializeCommand.RaiseCanExecuteChanged();
+            }
+            else
+            {
+                Info.LoadText = "Please Wait...";
+            }
             //try
             //{
             //    ObservableCollection<ManagedBookmarks> tempBookMarks = new ObservableCollection<ManagedBookmarks>();
@@ -267,7 +293,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private bool CanLoadCommand()
         {
-            return _canLoad;
+            return Info.SerializingAnimation != Visibility.Visible;
         }
 
         private void onAddFolderCommand(object parameter)

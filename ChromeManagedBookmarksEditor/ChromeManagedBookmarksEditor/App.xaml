@@ -15,45 +15,11 @@
             <views:HelpView/>
         </DataTemplate>
         <!-- Styles -->
-        <!-- No Chrome Button Style -->
-        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
-                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <!-- Main Button Style -->
-        <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}"> <!-- BasedOn="{StaticResource NoChromeButton}"> -->
+        <Style x:Key="MainButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="0 0 0 3"/>
             <Setter Property="IsTabStop" Value="False"/>
         </Style>
-        
-        
-        
-        <!-- Serialize Button Animation testing stuff here. Going to make a custom button at some point. -->
-        <Style x:Key="SerializeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MainButtonStyle}">
-            
-        </Style>
-        
-        
-        
         <!-- Main TextBox Style -->
         <Style x:Key="MainTextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="3"/>
@@ -72,7 +38,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
         <!-- URL Selectable TextBox Style -->
         <Style x:Key="UrlTextBoxStyle" TargetType="{x:Type cc:SelectableTextBox}" BasedOn="{StaticResource SelectableTextBoxBaseTriggers}">
             <Setter Property="Background" Value="LightSteelBlue"/>
