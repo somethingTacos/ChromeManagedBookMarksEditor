@@ -346,6 +346,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                 case BannerInfo.BannerAction.RenameFolder:
                     {
                         Folder FolderToRename = new Folder();
+                        bool IsCurrentWorkingFolder = false;
                         
                         if(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).Count() > 0)
                         {
@@ -354,19 +355,36 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         else
                         {
                             FolderToRename = ChromeBookmarks.CurrentWorkingFolder;
+                            IsCurrentWorkingFolder = true;
                         }
 
                         if (NewFolder.Name != "")
                         {
-                            if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                            if (IsCurrentWorkingFolder)
                             {
-                                Banners.HideFolderBanner();
-                                Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                                if (ChromeBookmarks.CurrentWorkingFolder.FolderIndex == 0 ? false : ChromeBookmarks.CurrentWorkingFolder.Parent.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                                {
+                                    Banners.HideFolderBanner();
+                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                                }
+                                else
+                                {
+                                    FolderToRename.Name = NewFolder.Name.ToString().Trim();
+                                    Banners.HideFolderBanner();
+                                }
                             }
                             else
                             {
-                                FolderToRename.Name = NewFolder.Name.ToString().Trim();
-                                Banners.HideFolderBanner();
+                                if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
+                                {
+                                    Banners.HideFolderBanner();
+                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerInfo.BannerAction.Alert);
+                                }
+                                else
+                                {
+                                    FolderToRename.Name = NewFolder.Name.ToString().Trim();
+                                    Banners.HideFolderBanner();
+                                }
                             }
                         }
                         else
