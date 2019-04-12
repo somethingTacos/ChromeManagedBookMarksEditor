@@ -26,7 +26,156 @@ namespace ChromeManagedBookmarksEditor.Helpers
         {
             string convertedJSON = string.Empty;
 
-            System.Threading.Thread.Sleep(5000);
+            string topLevelName = $"[{{\"toplevel_name\":\"{RootFolder.Name}\"}},";
+
+            convertedJSON = topLevelName;
+
+            string iterateChildObjects(List<Folder> childFolders, bool IsLastFolder)
+            {
+
+                return string.Empty;
+            }
+
+            for(int i = 0; i < RootFolder.folders.Count(); i++)
+            {
+                if(i == 0)
+                {
+                    convertedJSON += $"{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
+                }
+                else
+                {
+                    convertedJSON += $",{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
+
+                }
+
+                convertedJSON += "]}";
+            }
+
+            for(int i = 0; i < RootFolder.URLs.Count(); i++)
+            {
+                
+            }
+
+            //    string iterateChildObject(int index, List<Folder> Folders, List<URL> Urls, bool isChildOfChild)
+            //    {
+            //        string childObjects = String.Empty;
+
+            //        for (int o = 0; o < Folders.Count; o++)
+            //        {
+            //            if (Folders[o].folders != null || Folders[o].URLs != null)
+            //            {
+            //                string Name = Folders[o].Name;
+
+            //                if (o is 0)
+            //                {
+            //                    childObjects += string.Format("{{\"name\":\"{0}\",\"children\":[", Name);
+            //                }
+            //                else
+            //                {
+            //                    childObjects += string.Format(",{{\"name\":\"{0}\",\"children\":[", Name);
+            //                }
+
+            //                List<Folder> childFolders = new List<Folder>();
+
+            //                if (Folders[o].folders != null)
+            //                {
+            //                    foreach (Folder folder in Folders[o].folders)
+            //                    {
+            //                        childFolders.Add(folder);
+            //                    }
+            //                }
+
+            //                List<URL> childURLs = new List<URL>();
+
+            //                foreach (URL url in Folders[o].URLs)
+            //                {
+            //                    childURLs.Add(url);
+            //                }
+
+            //                string childItems = iterateChildObject(o, childFolders, childURLs, true);
+
+            //                childObjects += childItems;
+            //            }
+            //        }
+
+
+            //        for (int n = 0; n < Urls.Count; n++)
+            //        {
+            //            string urlName = Urls[n].Name.ToString();
+            //            string url = Urls[n].Url.ToString();
+
+            //            if (index is 0 && n == 0 || n == 0)
+            //            {
+            //                childObjects += string.Format("{{\"name\":\"{0}\",\"url\":\"{1}\"}}", urlName, url);
+            //            }
+            //            else
+            //            {
+            //                childObjects += string.Format(",{{\"name\":\"{0}\",\"url\":\"{1}\"}}", urlName, url);
+            //            }
+            //        }
+
+            //        if (isChildOfChild ? index + 1 < Folders.Count || chromeBookmarks[0].Folders[index].URLs.Count != 0 : index + 1 < chromeBookmarks[0].Folders.Count)
+            //        {
+            //            childObjects += "]},";
+            //        }
+            //        else
+            //        {
+            //            childObjects += "]}";
+            //        }
+
+            //        return childObjects;
+            //    }
+
+            //    for (int i = 0; i < chromeBookmarks[0].Folders.Count; i++)
+            //    {
+            //        string Name = chromeBookmarks[0].Folders[i].Name.ToString();
+
+            //        if (i is 0 || i + 1 == chromeBookmarks[0].Folders.Count)
+            //        {
+            //            ConvertedJSON += string.Format("{{\"name\":\"{0}\",\"children\":[", Name);
+            //        }
+            //        else
+            //        {
+            //            ConvertedJSON += string.Format(",{{\"name\":\"{0}\",\"children\":[", Name);
+            //        }
+
+            //        List<Folder> childFolders = new List<Folder>();
+
+
+            //        foreach (Folder folder in chromeBookmarks[0].Folders[i].folders)
+            //        {
+            //            childFolders.Add(folder);
+            //        }
+
+            //        List<URL> childURLs = new List<URL>();
+
+            //        foreach (URL url in chromeBookmarks[0].Folders[i].URLs)
+            //        {
+            //            childURLs.Add(url);
+            //        }
+
+            //        string subFolders = iterateChildObject(i, childFolders, childURLs, false);
+
+            //        ConvertedJSON += subFolders;
+            //    }
+
+
+            //    for (int i = 0; i < chromeBookmarks[0].URLs.Count; i++)
+            //    {
+            //        string urlName = chromeBookmarks[0].URLs[i].Name.ToString();
+            //        string url = chromeBookmarks[0].URLs[i].Url.ToString();
+
+            //        if (i is 0 ? chromeBookmarks[0].Folders.Count is 0 : false)
+            //        {
+            //            ConvertedJSON += string.Format("{{\"name\":\"{0}\",\"url\":\"{1}\"}}", urlName, url);
+            //        }
+            //        else
+            //        {
+            //            ConvertedJSON += string.Format(",{{\"name\":\"{0}\",\"url\":\"{1}\"}}", urlName, url);
+            //        }
+            //    }
+
+            //    ConvertedJSON += "]";
 
             return convertedJSON;
         }
