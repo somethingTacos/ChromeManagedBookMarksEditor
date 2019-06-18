@@ -119,5 +119,8 @@
         <cc:AlertBanner Grid.Row="2" Style="{StaticResource AlertBannerStyle}" 
                             IsVisibleBanner="{Binding Banners.AlertBannerVisible}"/>
 
+        <cc:LoadingBanner Grid.Row="2" Style="{StaticResource LoadingBannerStyle}"
+                          IsVisibleBanner="{Binding Banners.LoadingBannerVisible}"/>
+
     </Grid>
 </UserControl>

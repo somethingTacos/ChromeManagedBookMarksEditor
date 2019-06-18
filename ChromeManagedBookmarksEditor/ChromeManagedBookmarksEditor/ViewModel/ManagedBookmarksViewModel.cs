@@ -217,7 +217,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private bool CanSerializeCommand()
         {
-            return Info.LoadingAnimation != Visibility.Visible;
+            return !Banners.LoadingBannerVisible;
         }
 
         private void OnCopyCommand(object parameter)
@@ -243,15 +243,15 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private async void OnLoadCommand(object parameter) //This method is going to be changed
         {
-            if (Info.LoadingAnimation != Visibility.Visible)
+            if (!Banners.LoadingBannerVisible)
             {
                 ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
-                Info.LoadingAnimation = Visibility.Visible;
+                Banners.ShowLoadingBanner("Loading JSON, please wait...");
                 SerializeCommand.RaiseCanExecuteChanged();
                 Info.LoadText = "Loading JSON...";
                 ParsedBookmarks = await ChromeJSONConverter.ParseJSON(Json.Code);
-                Info.LoadingAnimation = Visibility.Hidden;
                 Info.LoadText = "Load";
+                Banners.HideLoadingBanner();
                 SerializeCommand.RaiseCanExecuteChanged();
             }
             else

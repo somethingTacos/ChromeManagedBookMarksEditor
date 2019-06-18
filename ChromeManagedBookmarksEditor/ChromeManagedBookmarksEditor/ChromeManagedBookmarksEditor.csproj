@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\LoadingBanner.xaml.cs">
+      <DependentUpon>LoadingBanner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\AlertBanner.xaml.cs">
       <DependentUpon>AlertBanner.xaml</DependentUpon>
     </Compile>
@@ -94,6 +97,10 @@
     <Compile Include="Views\ManagedBookmarksView.xaml.cs">
       <DependentUpon>ManagedBookmarksView.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomControls\LoadingBanner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CustomControls\AlertBanner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,7 +203,7 @@
     <Resource Include="Images\Gifs\BarberPole_lightPurple.gif" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Gifs\movingBlocks.gif" />
+    <Resource Include="Images\Gifs\dots.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

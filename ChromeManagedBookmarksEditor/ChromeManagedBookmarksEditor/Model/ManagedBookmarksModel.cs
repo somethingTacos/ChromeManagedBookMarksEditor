@@ -85,7 +85,6 @@ namespace ChromeManagedBookmarksEditor.Model
         public string SerializeText { get; set; } = "Serialize";
 
         public Visibility SerializingAnimation { get; set; } = Visibility.Hidden;
-        public Visibility LoadingAnimation { get; set; } = Visibility.Hidden;
     }
 
     [ImplementPropertyChanged]
@@ -110,6 +109,9 @@ namespace ChromeManagedBookmarksEditor.Model
         public bool AlertBannerVisible { get; set; } = false;
         public string AlertBannerText { get; set; } = "";
         public string AlertBannerButtonText { get; set; } = "";
+
+        public bool LoadingBannerVisible { get; set; } = false;
+        public string LoadingBannerText { get; set; } = "THIS IS A TEST";
 
         public void ShowFolderBanner(string Message, string ConfirmButtonText, BannerAction Action)
         {
@@ -137,6 +139,18 @@ namespace ChromeManagedBookmarksEditor.Model
         {
             BannerBackingVisible = false;
             AlertBannerVisible = false;
+        }
+
+        public void ShowLoadingBanner(string Message)
+        {
+            LoadingBannerText = Message;
+            BannerBackingVisible = true;
+            LoadingBannerVisible = true;
+        }
+        public void HideLoadingBanner()
+        {
+            BannerBackingVisible = false;
+            LoadingBannerVisible = false;
         }
     }
 }

@@ -59,10 +59,6 @@
                 Style="{StaticResource MainButtonStyle}"
                 Command="{Binding LoadCommand}">
             <Grid>
-                <Image gif:ImageBehavior.AnimatedSource="/Images/Gifs/movingBlocks.gif"
-                       HorizontalAlignment="Right" Margin="200 0 0 0" Height="30"
-                       Visibility="{Binding Info.LoadingAnimation}"/>
-
                 <TextBlock Text="{Binding Info.LoadText}"
                            Style="{StaticResource MainButtonTextBlock}"/>
             </Grid>
