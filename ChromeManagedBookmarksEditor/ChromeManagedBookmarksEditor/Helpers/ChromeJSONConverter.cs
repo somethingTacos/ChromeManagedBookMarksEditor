@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChromeManagedBookmarksEditor.Model;
+using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
@@ -29,32 +31,136 @@ namespace ChromeManagedBookmarksEditor.Helpers
             string topLevelName = $"[{{\"toplevel_name\":\"{RootFolder.Name}\"}},";
 
             convertedJSON = topLevelName;
+            //------------------LOOKING FOR A BETTER WAY
+            /*Some thinking stuff...
+             * 
+             * Idea: -> Array of Joined Strings?
+             *     : Create an array of formatted strings per folder in order of recursion. 
+             *     : Array1[0] = folder1[],folder3[],url,url -- Root folder
+             *     : Array1[1] = folder2[],url,url           -- Folder1's content -- note the second folder is the first folder below folder1, not the next 'same-level' folder.
+             *     : Array1[2] = url,url                     -- Folder2's content -- note the array index matches the folders position in the recusion.
+             *     : Array1[3] = url,url                     -- Folder3's content
+             *     : 
+             *     : Join the arrays once the contents are constructed
+             *     : Something like -> Array[0].replace(folder1[],folder1[Array1[1]]) 
+             *     : NOT Array1[0] + Array1[1]
+             *     :
+             *     : Possible Issues 
+             *     :   - Recursion has to be infinitely scalable.
+             *     :   - Joining Array1 together to form the completed code will be a bit tricky, since child items can't just be 'tacked' on. 
+             *     :     They need to be placed inside the parent item. 
+             *     :     Note: Constructing folders with braces [] and then searching for the first folder[] by name should work as long as the content array is constructed in order correctly.
+             *     :   - Possibly more ineffient than just building out the code all at once? (old way)
+             *     
+             */
 
-            string iterateChildObjects(List<Folder> childFolders, bool IsLastFolder)
+            ObservableCollection<string> TestOC = new ObservableCollection<string>();
+
+            string GetFolderJSONContent(Folder folder)
             {
-
-                return string.Empty;
-            }
-
-            for(int i = 0; i < RootFolder.folders.Count(); i++)
-            {
-                if(i == 0)
+                ObservableCollection<string> folderContents = new ObservableCollection<string>();
+                if (folder.folders.Count > 0)
                 {
-                    convertedJSON += $"{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
+                    foreach (Folder subfolder in folder.folders)
+                    {
+                        folderContents.Add($"{{\"name\":\"{subfolder.Name}\",\"children\":[]}}");
+                    }
                 }
-                else
+
+                if (folder.URLs.Count > 0)
                 {
-                    convertedJSON += $",{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
-
+                    foreach (URL url in folder.URLs)
+                    {
+                        folderContents.Add($"{{\"name\":\"{url.Name}\",\"url\":\"{url.Url}\"}}");
+                    }
                 }
 
-                convertedJSON += "]}";
+                string joinedContents = String.Join(",", folderContents);
+                if(joinedContents == "") { joinedContents = "EMPTY"; }
+                return joinedContents;
             }
 
-            for(int i = 0; i < RootFolder.URLs.Count(); i++)
+            void IterateSubFolders(Folder folder)
             {
-                
+                TestOC.Add(GetFolderJSONContent(folder));
+                if (folder.folders.Count > 0)
+                {
+                    foreach (Folder subFolder in folder.folders)
+                    {
+                        IterateSubFolders(subFolder);
+                    }
+                }
             }
+
+            //Get RootFolder content
+            TestOC.Add(GetFolderJSONContent(RootFolder));
+
+            //iterate RootFolders.folders
+            if (RootFolder.folders.Count > 0)
+            {
+                foreach (Folder subfolder in RootFolder.folders)
+                {
+                    IterateSubFolders(subfolder);
+                }
+            }
+
+            //combine/replace content strings here
+            for(int i = 0; i < TestOC.Count(); i++)
+            {
+                /* Just some visual aid
+                 * 1  root content
+                 * 2  folder 1
+                 * 3  folder 1 .. 2
+                 * 4  folder 3
+                 * 5  folder 4
+                 * 6  folder 4 .. 5
+                 * 7  folder 4 .. 6
+                 * 8  folder 4 .. 7
+                 * 9  folder 8
+                 * 10 folder 9
+                 */
+            }
+
+            //just a test sting presention.<<
+            string TestString = "";
+            for(int i = 0; i < TestOC.Count(); i++)
+            {
+                TestString += $"{TestOC[i].ToString()} INDEX: {i.ToString()}\n\n";
+            }
+            MessageBox.Show(TestString);
+            //-----------------------------<<
+
+
+
+            //------------------OLD WAY BELOW
+
+            //string iterateChildObjects(List<Folder> childFolders, bool IsLastFolder)
+            //{
+
+            //    return string.Empty;
+            //}
+
+            //for(int i = 0; i < RootFolder.folders.Count(); i++)
+            //{
+            //    if(i == 0)
+            //    {
+            //        convertedJSON += $"{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
+            //    }
+            //    else
+            //    {
+            //        convertedJSON += $",{{\"name\":\"{RootFolder.folders[i].Name}\",\"children\":[";
+
+            //    }
+
+            //    convertedJSON += "]}";
+            //}
+
+            //for(int i = 0; i < RootFolder.URLs.Count(); i++)
+            //{
+
+            //}
+
+            //------------------OLD OLD WAY BELOW
 
             //    string iterateChildObject(int index, List<Folder> Folders, List<URL> Urls, bool isChildOfChild)
             //    {
