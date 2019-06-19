@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using PropertyChanged;
@@ -15,36 +17,7 @@ namespace ChromeManagedBookmarksEditor.Model
         public string CurrentWorkingFolderContextMenuText { get; set; } = "";
         public Folder CurrentWorkingFolder { get; set; } = new Folder();
         public Folder RootFolder { get; set; } = new Folder();
-        //public string toplevel_name { get; set; } = "Root Folder";  //maybe just make this another folder... or not... idk..., I might not need this...
-
-        //Might not need these anymore... idk...
-        //public ObservableCollection<Folder> Folders { get; set; } = new ObservableCollection<Folder>();
-        //public ObservableCollection<URL> URLs { get; set; } = new ObservableCollection<URL>();
-        //public IList Children
-        //{
-        //    get
-        //    {
-        //        return new CompositeCollection()
-        //        {
-        //            new CollectionContainer() { Collection = Folders },
-        //            new CollectionContainer() { Collection = URLs }
-        //        };
-        //    }
-        //}
     }
-
-    //[ImplementPropertyChanged]
-    //public class RootFolder
-    //{
-    //    public string toplevel_name { get; set; } = "";
-    //}
-
-    //[ImplementPropertyChanged]
-    //public class ParsedFolders
-    //{
-    //    public string Name { get; set; } = "";
-    //    public JArray children { get; set; } = new JArray();
-    //}
 
     [ImplementPropertyChanged]
     public class Folder
@@ -69,12 +42,51 @@ namespace ChromeManagedBookmarksEditor.Model
         public bool IsSelected { get; set; } = false;
     }
 
-    [ImplementPropertyChanged]
-    public class URL
+    public class URL : INotifyPropertyChanged
     {
-        public string Name { get; set; } = "";
-        public string Url { get; set; } = "";
-        public bool IsSelected { get; set; } = false;
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                value = new string(value.Where(x => char.IsWhiteSpace(x) || char.IsLetterOrDigit(x)).ToArray());
+                _name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
+        private string _url;
+        public string Url
+        {
+            get { return _url; }
+            set
+            {
+                char[] validSymbols = { '/', '.', ':' };
+                value = new string(value.Where(x => char.IsLetterOrDigit(x) || validSymbols.Contains(x)).ToArray());
+                _url = value;
+                RaisePropertyChanged("Url");
+            }
+        }
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
     }
 
     [ImplementPropertyChanged]
@@ -94,7 +106,7 @@ namespace ChromeManagedBookmarksEditor.Model
     }
 
     [ImplementPropertyChanged]
-    public class BannerInfo //I think this might need a rename... it's a bit more than just informative at this point...
+    public class Banners
     {
         public enum BannerAction { AddNewFolder, RemoveFolder, RenameFolder, ClearAllData, Alert}
 
