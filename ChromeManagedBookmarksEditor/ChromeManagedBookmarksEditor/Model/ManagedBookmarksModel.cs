@@ -106,7 +106,7 @@ namespace ChromeManagedBookmarksEditor.Model
     }
 
     [ImplementPropertyChanged]
-    public class Banners
+    public class BannerData
     {
         public enum BannerAction { AddNewFolder, RemoveFolder, RenameFolder, ClearAllData, Alert}
 

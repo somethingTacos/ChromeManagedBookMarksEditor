@@ -33,7 +33,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private NavigationViewModel _navigationViewModel { get; set; }
         public ManagedBookmarks ChromeBookmarks { get; set; }
-        public Banners Banners { get; set; }
+        public BannerData Banners { get; set; }
         public Folder NewFolder { get; set; }
         public bool _canLoad { get; set; }
         public JSONCode Json { get; set; }
@@ -86,7 +86,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             Folder tempFolder = new Folder();
             ManagedBookmarks tempMB = new ManagedBookmarks();
-            Banners tempBI = new Banners();
+            BannerData tempBI = new BannerData();
 
             tempMB.RootFolder.Name = "Root Folder";
 
@@ -106,7 +106,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             if (parameter is Folder folderToRename)
             {
                 ClearSelectedItems();
-                Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", Banners.BannerAction.RenameFolder);
+                Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", BannerData.BannerAction.RenameFolder);
             }
         }
         private bool canRenameParentFolderCommand()
@@ -117,7 +117,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             if(parameter is Folder folderToRename)
             {
-                Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", Banners.BannerAction.RenameFolder);
+                Banners.ShowFolderBanner($"Enter a new name for '{folderToRename.Name}'", "Rename", BannerData.BannerAction.RenameFolder);
             }
         }
         private bool canRenameSelectedFolderCommand()
@@ -128,13 +128,13 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             switch (Banners.ActiveAction)
             {
-                case Banners.BannerAction.AddNewFolder:
+                case BannerData.BannerAction.AddNewFolder:
                     {
                         NewFolder.Name = "";
                         Banners.HideFolderBanner();
                         break;
                     }
-                case Banners.BannerAction.RenameFolder:
+                case BannerData.BannerAction.RenameFolder:
                     {
                         NewFolder.Name = "";
                         Banners.HideFolderBanner();
@@ -306,7 +306,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private void onAddFolderCommand(object parameter)
         {
-            Banners.ShowFolderBanner("New Folder Name", "Add Folder", Banners.BannerAction.AddNewFolder);
+            Banners.ShowFolderBanner("New Folder Name", "Add Folder", BannerData.BannerAction.AddNewFolder);
         }
         private bool canAddFolderCommand()
         {
@@ -317,7 +317,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             switch(Banners.ActiveAction)
             {
-                case Banners.BannerAction.AddNewFolder:
+                case BannerData.BannerAction.AddNewFolder:
                     {
                         if (NewFolder.Name != "")
                         {
@@ -326,7 +326,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                             if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
                             {
                                 Banners.HideFolderBanner();
-                                Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", Banners.BannerAction.Alert);
+                                Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerData.BannerAction.Alert);
                             }
                             else
                             {
@@ -345,13 +345,13 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         else
                         {
                             Banners.HideFolderBanner();
-                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", Banners.BannerAction.Alert);
+                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", BannerData.BannerAction.Alert);
                         }
 
                         NewFolder.Name = "";
                         break;
                     }
-                case Banners.BannerAction.RenameFolder:
+                case BannerData.BannerAction.RenameFolder:
                     {
                         Folder FolderToRename = new Folder();
                         bool IsCurrentWorkingFolder = false;
@@ -375,7 +375,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                                 if (ChromeBookmarks.CurrentWorkingFolder.FolderIndex == 0 ? false : ChromeBookmarks.CurrentWorkingFolder.Parent.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
                                 {
                                     Banners.HideFolderBanner();
-                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", Banners.BannerAction.Alert);
+                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerData.BannerAction.Alert);
                                 }
                                 else
                                 {
@@ -388,7 +388,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                                 if (ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.Name == NewFolder.Name).Count() > 0)
                                 {
                                     Banners.HideFolderBanner();
-                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", Banners.BannerAction.Alert);
+                                    Banners.ShowAlertBanner($"The name '{NewFolder.Name}' is already in use", "OK", BannerData.BannerAction.Alert);
                                 }
                                 else
                                 {
@@ -400,7 +400,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         else
                         {
                             Banners.HideFolderBanner();
-                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", Banners.BannerAction.Alert);
+                            Banners.ShowAlertBanner($"The folder name cannot be blank", "OK", BannerData.BannerAction.Alert);
                         }
 
                         NewFolder.Name = "";
@@ -462,7 +462,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         }
                     }
 
-                    Banners.ShowAlertBanner(AlertMessage, "Remove", Banners.BannerAction.RemoveFolder);
+                    Banners.ShowAlertBanner(AlertMessage, "Remove", BannerData.BannerAction.RemoveFolder);
                 }
                 else
                 {
@@ -485,14 +485,14 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             switch(Banners.ActiveAction)
             {
-                case Banners.BannerAction.RemoveFolder:
+                case BannerData.BannerAction.RemoveFolder:
                     {
                         ChromeBookmarks.CurrentWorkingFolder.folders.Remove(ChromeBookmarks.CurrentWorkingFolder.folders.Where(x => x.IsSelected).FirstOrDefault());
                         ClearSelectedItems();
                         Banners.HideAlertBanner();
                         break;
                     }
-                case Banners.BannerAction.Alert:
+                case BannerData.BannerAction.Alert:
                     {
                         Banners.HideAlertBanner();
                         break;
