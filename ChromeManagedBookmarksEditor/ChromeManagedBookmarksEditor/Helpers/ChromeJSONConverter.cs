@@ -7,6 +7,8 @@ using ChromeManagedBookmarksEditor.Model;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
@@ -93,6 +95,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
             }
 
             convertedJSON = convertedJSON.Replace("[EMPTY]", "[]");
+            convertedJSON += "]";
 
             return convertedJSON;
         }
@@ -114,12 +117,23 @@ namespace ChromeManagedBookmarksEditor.Helpers
         {
             /* This one, I'm going to have to think about a bit more...
              * 
+             * Visual aid:
+             * 
+             * Top Level Name             - [{"toplevel_name":"Root Folder"},
+             * Folder 1 with children     - {"name":"FOLDER 1","children":[{"name":"FOLDER 2","children":[]},{"name":"F1 Content","url":"F1.content"}]},
+             * Folder 3 with children     - {"name":"FOLDER 3","children":[{"name":"F3 Content","url":"F3.content"}]},
+             * Remaining root folder urls - {"name":"Root Folder Content","url":"root.content"}]
+             * 
              * Idea: -> ... um... hmmm...
              * 
              */
             ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
 
-            System.Threading.Thread.Sleep(5000);
+            dynamic testThing = JsonConvert.DeserializeObject(JSONCode); //was trying to avoid NewtonSoft.JSON, but... oh well...
+
+            string rootFolderName = testThing[0].toplevel_name; //... ok ... this is something at least...
+
+            MessageBox.Show(rootFolderName);
 
             return ParsedBookmarks;
         }
