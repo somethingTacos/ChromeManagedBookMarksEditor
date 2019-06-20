@@ -35,7 +35,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
 
             convertedJSON = topLevelName;
 
-            ObservableCollection<string> TestOC = new ObservableCollection<string>();
+            ObservableCollection<string> JSONCollection = new ObservableCollection<string>();
 
             string GetFolderJSONContent(Folder folder)
             {
@@ -63,7 +63,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
 
             void IterateSubFolders(Folder folder)
             {
-                TestOC.Add(GetFolderJSONContent(folder));
+                JSONCollection.Add(GetFolderJSONContent(folder));
                 if (folder.folders.Count > 0)
                 {
                     foreach (Folder subFolder in folder.folders)
@@ -74,7 +74,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
             }
 
             //Get RootFolder content
-            TestOC.Add(GetFolderJSONContent(RootFolder));
+            JSONCollection.Add(GetFolderJSONContent(RootFolder));
 
             //iterate RootFolders.folders
             if (RootFolder.folders.Count > 0)
@@ -85,13 +85,13 @@ namespace ChromeManagedBookmarksEditor.Helpers
                 }
             }
 
-            convertedJSON += TestOC[0];
+            convertedJSON += JSONCollection[0];
 
             //replace folder children [] with actual contents
-            for(int i = 1; i < TestOC.Count(); i++)
+            for(int i = 1; i < JSONCollection.Count(); i++)
             {
                 var regex = new Regex(Regex.Escape("[]"));
-                convertedJSON = regex.Replace(convertedJSON, $"[{TestOC[i]}]", 1);
+                convertedJSON = regex.Replace(convertedJSON, $"[{JSONCollection[i]}]", 1);
             }
 
             convertedJSON = convertedJSON.Replace("[EMPTY]", "[]");
