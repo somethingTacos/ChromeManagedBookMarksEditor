@@ -124,16 +124,33 @@ namespace ChromeManagedBookmarksEditor.Helpers
              * Folder 3 with children     - {"name":"FOLDER 3","children":[{"name":"F3 Content","url":"F3.content"}]},
              * Remaining root folder urls - {"name":"Root Folder Content","url":"root.content"}]
              * 
-             * Idea: -> ... um... hmmm...
+             * Idea: -> Could try stripping all the unneccessary stuff from the JSON code and then translating it to a ManagedBookmarks object.
+             *     : 
+             *     : Going to require some testing...
              * 
              */
             ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
 
-            dynamic testThing = JsonConvert.DeserializeObject(JSONCode); //was trying to avoid NewtonSoft.JSON, but... oh well...
+            string testString = JSONCode.Replace("{", "");
+            testString = testString.Replace("}", "");
+            testString = testString.Replace("\"", "");
+            testString = testString.Remove(0, 1);
+            testString = testString.Remove(testString.Count() - 1, 1);
 
-            string rootFolderName = testThing[0].toplevel_name; //... ok ... this is something at least...
+            List<string> testList = new List<string>();
+            testList = testString.Split(',').ToList<string>();
 
-            MessageBox.Show(rootFolderName);
+            string tempString = "";
+            foreach(string blah in testList)
+            {
+                tempString += $"{blah}\n";
+            }
+
+            MessageBox.Show(tempString);
+
+            //dynamic testThing = JsonConvert.DeserializeObject(JSONCode); //was trying to avoid NewtonSoft.JSON, but... oh well... welp, might still be avoiding it...
+
+            //string rootFolderName = testThing[0].toplevel_name; //... ok ... this is something at least... or not...
 
             return ParsedBookmarks;
         }
