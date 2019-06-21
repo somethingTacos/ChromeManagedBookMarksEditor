@@ -7,8 +7,6 @@ using ChromeManagedBookmarksEditor.Model;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
@@ -119,38 +117,95 @@ namespace ChromeManagedBookmarksEditor.Helpers
              * 
              * Visual aid:
              * 
+             * JSON CODE IN -> 
              * Top Level Name             - [{"toplevel_name":"Root Folder"},
              * Folder 1 with children     - {"name":"FOLDER 1","children":[{"name":"FOLDER 2","children":[]},{"name":"F1 Content","url":"F1.content"}]},
              * Folder 3 with children     - {"name":"FOLDER 3","children":[{"name":"F3 Content","url":"F3.content"}]},
              * Remaining root folder urls - {"name":"Root Folder Content","url":"root.content"}]
              * 
+             * STRIPPED CODE ARRAY ->
+             * toplevel_name:Root Folder         - toplevel_name give the root folder name
+             * name:TEST                         - any name is the start of an object
+             * children:[name:Another Folder     - children denotes it being a folder and starts looking for objects to add to that folders name (previous line)
+             * children:[name:AF URL             - same as above, Another Folder is now a known folder and these are it's child objects
+             * url:sldfksdljkf]                  - ] denotes the end of the current folder's child objects (Another Folder)
+             * name:TEST URL                     - 
+             * url:slkdfslkjf]                   - url denotes a URL object using the name above (TEST URL), also ending of TEST's child objects
+             * name:ROOT URL                     - 
+             * url:jalsdjlsdf                    - 
+             * 
              * Idea: -> Could try stripping all the unneccessary stuff from the JSON code and then translating it to a ManagedBookmarks object.
              *     : 
              *     : Going to require some testing...
+             *     
              * 
              */
             ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
-
-            string testString = JSONCode.Replace("{", "");
-            testString = testString.Replace("}", "");
-            testString = testString.Replace("\"", "");
-            testString = testString.Remove(0, 1);
-            testString = testString.Remove(testString.Count() - 1, 1);
-
-            List<string> testList = new List<string>();
-            testList = testString.Split(',').ToList<string>();
-
-            string tempString = "";
-            foreach(string blah in testList)
+            try
             {
-                tempString += $"{blah}\n";
+
+
+                string StrippedJSONData = JSONCode.Replace("{", "");
+                StrippedJSONData = StrippedJSONData.Replace("}", "");
+                StrippedJSONData = StrippedJSONData.Replace("\"", "");
+                StrippedJSONData = StrippedJSONData.Remove(0, 1);
+                StrippedJSONData = StrippedJSONData.Remove(StrippedJSONData.Count() - 1, 1);
+
+                List<string> JSONDataList = new List<string>();
+                JSONDataList = StrippedJSONData.Split(',').ToList<string>();
+
+                Folder WorkingFolder = new Folder();
+                string lastName = "";
+
+                foreach (string data in JSONDataList)
+                {
+                    string[] CurrentData = data.Split(':');
+
+                    switch (CurrentData[0])
+                    {
+                        case "toplevel_name":
+                            {
+                                ParsedBookmarks.RootFolder.Name = CurrentData[1];
+                                ParsedBookmarks.RootFolder.FolderIndex = 0;
+                                WorkingFolder = ParsedBookmarks.RootFolder;
+                                break;
+                            }
+                        case "children":
+                            {
+                                Folder newFolder = new Folder { Name = lastName };
+                                newFolder.Parent = WorkingFolder;
+                                newFolder.FolderIndex = WorkingFolder.FolderIndex + 1;
+                                WorkingFolder.folders.Add(newFolder);
+
+                                if (data != "children:[]")
+                                {
+                                    lastName = data.Substring(10).Split(':')[1];
+                                    WorkingFolder = WorkingFolder.folders.Where(x => x == newFolder).FirstOrDefault();
+                                }
+                                break;
+                            }
+                        case "name":
+                            {
+                                lastName = CurrentData[1];
+                                break;
+                            }
+                        case "url":
+                            {
+                                URL newURL = new URL { Name = lastName, Url = String.Join(":", CurrentData) };
+
+                                bool FolderEnd = CurrentData[CurrentData.Count() - 1].EndsWith("]");
+                                newURL.Url = newURL.Url.Remove(0, 4);
+
+                                WorkingFolder.URLs.Add(newURL);
+
+                                if (FolderEnd) { WorkingFolder = WorkingFolder.Parent; }
+
+                                break;
+                            }
+                    }
+                }
             }
-
-            MessageBox.Show(tempString);
-
-            //dynamic testThing = JsonConvert.DeserializeObject(JSONCode); //was trying to avoid NewtonSoft.JSON, but... oh well... welp, might still be avoiding it...
-
-            //string rootFolderName = testThing[0].toplevel_name; //... ok ... this is something at least... or not...
+            catch(Exception ex) { }
 
             return ParsedBookmarks;
         }

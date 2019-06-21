@@ -40,7 +40,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public Info Info { get; set; }
 
         public DispatcherTimer CopyTimer = new DispatcherTimer();
-        
+        public DispatcherTimer LoadTimer = new DispatcherTimer();
+
         #endregion
 
         #region Default Contructor
@@ -75,6 +76,9 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
             CopyTimer.Interval = TimeSpan.FromSeconds(2);
             CopyTimer.Tick += CopyTimer_Tick;
+
+            LoadTimer.Interval = TimeSpan.FromSeconds(1);
+            LoadTimer.Tick += LoadTimer_Tick;
 
             LoadTree();
             _canLoad = true;
@@ -240,7 +244,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             catch (Exception ex)
             {
                 Info.CopyText = "Error :(";
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"{ex.Message}\n\nIs another program locking the clipboard?", "Could not get clipboard data",MessageBoxButton.OK, MessageBoxImage.Error);
                 Info.CopyText = "Copy";
             }
         }
@@ -259,8 +263,18 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                 Info.LoadText = "Loading JSON...";
                 ParsedBookmarks = await ChromeJSONConverter.ParseJSON(Json.Code);
                 Info.LoadText = "Load";
-                Banners.HideLoadingBanner();
-                SerializeCommand.RaiseCanExecuteChanged();
+                Banners.LoadingBannerText = "JSON Loaded";
+                LoadTimer.Start();
+                
+                
+
+                if (ParsedBookmarks.RootFolder.Name != "")
+                {
+                    ChromeBookmarks.RootFolder = ParsedBookmarks.RootFolder;
+                    ChromeBookmarks.CurrentWorkingFolder = ParsedBookmarks.RootFolder;
+                    ChromeBookmarks.CurrentWorkingFolderContextMenuText = $"Rename '{ParsedBookmarks.RootFolder.Name}'";
+                    ChromeBookmarks.CurrentWorkingFolderPath = ParsedBookmarks.RootFolder.Name;
+                }
             }
             else
             {
@@ -577,6 +591,13 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             CopyTimer.Stop();
             Info.CopyText = "Copy";
+        }
+
+        private void LoadTimer_Tick(object sender, EventArgs e)
+        {
+            LoadTimer.Stop();
+            Banners.HideLoadingBanner();
+            SerializeCommand.RaiseCanExecuteChanged();
         }
         #endregion
     }
