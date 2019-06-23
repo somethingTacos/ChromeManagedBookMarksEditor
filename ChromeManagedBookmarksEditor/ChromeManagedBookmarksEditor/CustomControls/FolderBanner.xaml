@@ -21,8 +21,16 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Banners.FolderBannerText}" FontSize="20" Margin="50 5" Foreground="Gainsboro"
                    Grid.ColumnSpan="5"/>
-        <TextBox Grid.Row="1" Grid.ColumnSpan="5" Margin="50 0" Height="30" Text="{Binding NewFolder.Name}"
-                 VerticalContentAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.ColumnSpan="5" Margin="50 0" Height="30" Text="{Binding NewFolder.Name, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalContentAlignment="Center"
+                 >
+            <TextBox.InputBindings>
+                <KeyBinding Key="Return" 
+                            Command="{Binding ConfirmFolderBannerCommand}"
+                            CommandParameter="{Binding ChromeBookmarks.CurrentWorkingFolder}"
+                            />
+            </TextBox.InputBindings>
+        </TextBox>
         <Button Content="{Binding Banners.FolderBannerButtonText}" Grid.Row="3" Grid.Column="1" Height="30" Width="100"
                 Command="{Binding ConfirmFolderBannerCommand}"
                 CommandParameter="{Binding ChromeBookmarks.CurrentWorkingFolder}"
