@@ -1,6 +1,8 @@
 ﻿using ChromeManagedBookmarksEditor.Model;
 using System.Collections.ObjectModel;
 using ChromeManagedBookmarksEditor.Helpers;
+using System.Windows;
+
 namespace ChromeManagedBookmarksEditor.ViewModel
 {
     //This is all going to change... I think... I would like something a little more flexable and I hate using images, but we shall see.
@@ -14,21 +16,23 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         {
             _navigationViewModel = navigationViewModel;
             BackCommand = new MyICommand(onBackCommand);
-            Guide blah = new Guide();
-            blah.TopicCollection = new ObservableCollection<HelpTopic>();
+            Guide tempGuideData = new Guide();
+            tempGuideData.TopicCollection = new ObservableCollection<HelpTopic>();
 
-            blah.TopicCollection.Add(new HelpTopic { Header = "Introduction", HelpImageNumber = 0 });
-            blah.TopicCollection.Add(new HelpTopic { Header = "Overview of Interface", HelpImageNumber = 1 });
-            blah.TopicCollection.Add(new HelpTopic { Header = "Tree View", HelpImageNumber = 2 } );
-            blah.TopicCollection.Add(new HelpTopic { Header = "Context Menus", HelpImageNumber = 3 } );
-            blah.TopicCollection.Add(new HelpTopic { Header = "Selecting TreeView Items", HelpImageNumber = 4 } );
-            blah.TopicCollection.Add(new HelpTopic { Header = "Loading JSON", HelpImageNumber = 5 } );
-            blah.TopicCollection.Add(new HelpTopic { Header = "Errors", HelpImageNumber = 6 });
-            blah.TopicCollection.Add(new HelpTopic { Header = "About", HelpImageNumber = 7 } );
+            //NOTE - make sure all HelpTextResource's are embedded resources
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Introduction", });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Overview of Interface",  });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Tree View",  } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Context Menus",  } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Selecting TreeView Items",  } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Loading JSON",  } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Errors",  });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "About",  } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Testing", HelpTextResource = "ChromeManagedBookmarksEditor.Images.HelpTopicImages.test.html" });
 
-            blah.CurrentHelpImage = SetCurrentHelpImage(0);
+            tempGuideData.CurrentHelpInfo = tempGuideData.TopicCollection[0].HelpTextResource;
 
-            HelpGuide = blah;
+            HelpGuide = tempGuideData;
         }
 
         public void onBackCommand(object parameter)
@@ -47,13 +51,8 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             set
             {
                 _currentTopic = value;
-                HelpGuide.CurrentHelpImage = SetCurrentHelpImage(_currentTopic.HelpImageNumber);
+                HelpGuide.CurrentHelpInfo =  _currentTopic.HelpTextResource;
             }
-        }
-
-        private string SetCurrentHelpImage(int imageNumber)
-        {
-            return "/ChromeManagedBookmarksEditor;component/Images/HelpTopicImages/" + imageNumber.ToString() + ".jpg";
         }
     }
 }

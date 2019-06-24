@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-
+using System.Windows;
 using PropertyChanged;
 
 namespace ChromeManagedBookmarksEditor.Model
@@ -10,13 +10,13 @@ namespace ChromeManagedBookmarksEditor.Model
     public class HelpTopic
     {
         public string Header { get; set; } = "";
-        public int HelpImageNumber { get; set; } = 0;
+        public string HelpTextResource { get; set; } = "";
     }
 
     [ImplementPropertyChanged]
     public class Guide
     {
         public ObservableCollection<HelpTopic> TopicCollection { get; set; } = new ObservableCollection<HelpTopic>();
-        public string CurrentHelpImage { get; set; } = "";
+        public string CurrentHelpInfo { get; set; } = "";
     }
 }

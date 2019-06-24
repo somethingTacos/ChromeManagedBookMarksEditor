@@ -32,7 +32,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         public MyICommand CopyCommand { get; set; }
 
         private NavigationViewModel _navigationViewModel { get; set; }
-        public ManagedBookmarks ChromeBookmarks { get; set; }
+        public static ManagedBookmarks ChromeBookmarks { get; set; }
         public BannerData Banners { get; set; }
         public Folder NewFolder { get; set; }
         public bool _canLoad { get; set; }
@@ -89,14 +89,18 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         private void LoadTree()
         {
             Folder tempFolder = new Folder();
-            ManagedBookmarks tempMB = new ManagedBookmarks();
             BannerData tempBI = new BannerData();
 
-            tempMB.RootFolder.Name = "Root Folder";
+            if (ChromeBookmarks == null)
+            {
+                ManagedBookmarks tempMB = new ManagedBookmarks();
+                tempMB.RootFolder.Name = "Root Folder";
 
-            tempMB.CurrentWorkingFolder = tempMB.RootFolder;
+                tempMB.CurrentWorkingFolder = tempMB.RootFolder;
 
-            ChromeBookmarks = tempMB;
+                ChromeBookmarks = tempMB;
+            }
+
             Banners = tempBI;
             NewFolder = tempFolder;
 
@@ -171,7 +175,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
         public bool canExitFolderCommand()
         {
-            //need to make sure folder is not root folder.
             return ChromeBookmarks.CurrentWorkingFolder.FolderIndex != 0;
         }
 
@@ -233,8 +236,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private void OnCopyCommand(object parameter)
         {
-            
-            
             try
             {
                 Clipboard.SetText(Json.Code);
@@ -280,37 +281,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             {
                 Info.LoadText = "Please Wait...";
             }
-            //try
-            //{
-            //    ObservableCollection<ManagedBookmarks> tempBookMarks = new ObservableCollection<ManagedBookmarks>();
-            //    _canLoad = false;
-            //    LoadCommand.RaiseCanExecuteChanged();
-            //    changeInfo("Loading JSON...");
-            //    //tempBookMarks = await LoadJSON(json.Code);
-
-            //    if(tempBookMarks != null)
-            //    {
-            //        ChromeBookmarks.Clear();
-
-            //        foreach (ManagedBookmarks bkmk in tempBookMarks)
-            //        {
-            //            ChromeBookmarks.Add(bkmk);
-            //        }
-
-            //        changeInfo("JSON Code loaded into TreeView");
-            //    }
-            //    else
-            //    {
-            //        changeInfo("Failed to load JSON, check syntax");
-            //    }
-
-            //    _canLoad = true;
-            //    LoadCommand.RaiseCanExecuteChanged();
-            //}
-            //catch(Exception)
-            //{
-            //    changeInfo("Something went wrong, please restart program.  :(");
-            //}
         }
 
         private bool CanLoadCommand()
@@ -434,7 +404,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
         }
         private bool CanAddUrlCommand()
         {
-            return true; // ChromeBookmarks.CurrentWorkingFolder.URLs.Where(x => x.IsSelected == true).Count() > 0;
+            return true;
         }
 
         private void onRemoveSelectedCommand(object parameter)
@@ -511,6 +481,17 @@ namespace ChromeManagedBookmarksEditor.ViewModel
                         Banners.HideAlertBanner();
                         break;
                     }
+                case BannerData.BannerAction.ClearAllData:
+                    {
+                        ChromeBookmarks.RootFolder.Name = "Root Folder";
+                        ChromeBookmarks.CurrentWorkingFolderPath = "Root Folder";
+                        ChromeBookmarks.CurrentWorkingFolderContextMenuText = "Rename 'Root Folder'";
+                        ChromeBookmarks.CurrentWorkingFolder = ChromeBookmarks.RootFolder;
+                        ChromeBookmarks.RootFolder.folders.Clear();
+                        ChromeBookmarks.RootFolder.URLs.Clear();
+                        Banners.HideAlertBanner();
+                        break;
+                    }
             }
         }
         private bool canConfirmAlertBannerCommand()
@@ -527,16 +508,14 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             return true;
         }
 
-        // CLEAR ALL -- Not sure what I'm going to do for this yet, probably just a button or something, idk
         private void OnClearAllCommand(object parameter)
         {
-            //ChromeBookmarks.Clear();
-            //ChromeBookmarks.Add(new ManagedBookmarks { toplevel_name = "Root Folder", URLs = new ObservableCollection<URL>(), Folders = new ObservableCollection<Folder>() });
+            Banners.ShowAlertBanner("Are you sure you want to clear all currently loaded managed bookmark data", "Clear Data", BannerData.BannerAction.ClearAllData);
         }
 
         private bool CanClearAllCommand()
         {
-            return true;
+            return ChromeBookmarks.CurrentWorkingFolder == ChromeBookmarks.RootFolder;
         }
         #endregion
 
@@ -585,6 +564,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             ChromeBookmarks.CurrentWorkingFolderPath = newPath;
             ClearSelectedItems();
             ExitFolderCommand.RaiseCanExecuteChanged();
+            ClearAllCommand.RaiseCanExecuteChanged();
         }
 
         private void CopyTimer_Tick(object sender, EventArgs e)

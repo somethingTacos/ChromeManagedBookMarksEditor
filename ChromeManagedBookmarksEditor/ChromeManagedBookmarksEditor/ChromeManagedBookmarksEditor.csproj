@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomControls\WebBrowserUtility.cs" />
     <Compile Include="CustomControls\LoadingBanner.xaml.cs">
       <DependentUpon>LoadingBanner.xaml</DependentUpon>
     </Compile>
@@ -204,6 +205,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Gifs\dots.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\HelpTopicImages\test.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

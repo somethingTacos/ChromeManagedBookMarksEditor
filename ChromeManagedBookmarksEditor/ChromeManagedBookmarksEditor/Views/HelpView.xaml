@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChromeManagedBookmarksEditor.Views"
              xmlns:data="clr-namespace:ChromeManagedBookmarksEditor.Model"
+             xmlns:cc="clr-namespace:ChromeManagedBookmarksEditor.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -22,9 +23,13 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Content="Back" Grid.Row="0"
-                Command="{Binding BackCommand}"/>
+                Command="{Binding BackCommand}"
+                />
         <ListBox x:Name="HeaderList"  Grid.Column="0" Grid.Row="1" ItemsSource="{Binding HelpGuide.TopicCollection}"
-                 SelectedItem="{Binding CurrentTopic}"/>
-        <Image Grid.Column="1" Grid.Row="1" Source="{Binding HelpGuide.CurrentHelpImage}"/>
+                 SelectedItem="{Binding CurrentTopic}"
+                 />
+        <WebBrowser cc:WebBrowserUtility.BindableSource="{Binding HelpGuide.CurrentHelpInfo}"
+                    Grid.Column="1" Grid.Row="1" Navigating="WebBrowser_Navigating"
+                    />
     </Grid>
 </UserControl>
