@@ -29,7 +29,7 @@
                  SelectedItem="{Binding CurrentTopic}"
                  />
         <WebBrowser cc:WebBrowserUtility.BindableSource="{Binding HelpGuide.CurrentHelpInfo}"
-                    Grid.Column="1" Grid.Row="1" Navigating="WebBrowser_Navigating"
+                    Grid.Column="1" Grid.RowSpan="2" Navigating="WebBrowser_Navigating"
                     />
     </Grid>
 </UserControl>
