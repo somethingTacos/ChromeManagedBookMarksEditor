@@ -20,7 +20,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             tempGuideData.TopicCollection = new ObservableCollection<HelpTopic>();
 
             //NOTE - make sure all HelpTextResource's are embedded resources
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Introduction", });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Introduction", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.introduction.html" });
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Overview of Interface",  });
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Tree View",  } );
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Context Menus",  } );
@@ -28,7 +28,7 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Loading JSON",  } );
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Errors",  });
             tempGuideData.TopicCollection.Add(new HelpTopic { Header = "About",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Testing", HelpTextResource = "ChromeManagedBookmarksEditor.Images.HelpTopicImages.test.html" });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Testing",  });
 
             tempGuideData.CurrentHelpInfo = tempGuideData.TopicCollection[0].HelpTextResource;
 

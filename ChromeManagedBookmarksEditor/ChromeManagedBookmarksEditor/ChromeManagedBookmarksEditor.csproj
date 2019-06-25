@@ -181,14 +181,6 @@
     <Resource Include="Images\delete-folder.png" />
     <Resource Include="Images\folder.png" />
     <Resource Include="Images\help.png" />
-    <Resource Include="Images\HelpTopicImages\0.jpg" />
-    <Resource Include="Images\HelpTopicImages\1.jpg" />
-    <Resource Include="Images\HelpTopicImages\2.jpg" />
-    <Resource Include="Images\HelpTopicImages\3.jpg" />
-    <Resource Include="Images\HelpTopicImages\4.jpg" />
-    <Resource Include="Images\HelpTopicImages\5.jpg" />
-    <Resource Include="Images\HelpTopicImages\6.JPG" />
-    <Resource Include="Images\HelpTopicImages\7.JPG" />
     <Resource Include="Images\root-directory.png" />
     <Resource Include="Images\three-circling-arrows.png" />
     <Resource Include="Images\trashcan.png" />
@@ -210,7 +202,7 @@
     <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\HelpTopicImages\test.html" />
+    <EmbeddedResource Include="HelpDocuments\introduction.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
