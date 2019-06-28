@@ -175,16 +175,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\add-folder.png" />
-    <Resource Include="Images\add-url.png" />
     <Resource Include="Images\chrome-logo.png" />
-    <Resource Include="Images\delete-folder.png" />
-    <Resource Include="Images\folder.png" />
-    <Resource Include="Images\help.png" />
-    <Resource Include="Images\root-directory.png" />
     <Resource Include="Images\three-circling-arrows.png" />
-    <Resource Include="Images\trashcan.png" />
-    <Resource Include="Images\url.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Rework_Ideas_Whiteboard.png" />
@@ -202,7 +194,23 @@
     <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="HelpDocuments\introduction.html" />
+    <EmbeddedResource Include="HelpDocuments\Introduction.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HelpDocuments\InterfaceOverview.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HelpDocuments\About.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HelpDocuments\LoadingJSON.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HelpDocuments\ObjectInteractions.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\HelpDocImages\contextMenu.jpg" />
+    <Resource Include="Images\HelpDocImages\InterfaceOverview.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

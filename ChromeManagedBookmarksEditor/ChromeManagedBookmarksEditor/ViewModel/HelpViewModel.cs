@@ -20,15 +20,11 @@ namespace ChromeManagedBookmarksEditor.ViewModel
             tempGuideData.TopicCollection = new ObservableCollection<HelpTopic>();
 
             //NOTE - make sure all HelpTextResource's are embedded resources
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Introduction", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.introduction.html" });
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Overview of Interface",  });
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Tree View",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Context Menus",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Selecting TreeView Items",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Loading JSON",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Errors",  });
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "About",  } );
-            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Testing",  });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Introduction", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.Introduction.html" });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Interface Overview", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.InterfaceOverview.html" });
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Object Interactions", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.ObjectInteractions.html" } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "Loading JSON", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.LoadingJSON.html" } );
+            tempGuideData.TopicCollection.Add(new HelpTopic { Header = "About", HelpTextResource = "ChromeManagedBookmarksEditor.HelpDocuments.About.html" } );
 
             tempGuideData.CurrentHelpInfo = tempGuideData.TopicCollection[0].HelpTextResource;
 
