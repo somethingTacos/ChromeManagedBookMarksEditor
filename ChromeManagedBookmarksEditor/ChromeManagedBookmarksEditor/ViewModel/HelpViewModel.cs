@@ -1,12 +1,10 @@
 ﻿using ChromeManagedBookmarksEditor.Model;
 using System.Collections.ObjectModel;
 using ChromeManagedBookmarksEditor.Helpers;
-using System.Windows;
 using System.Linq;
 using System.Reflection;
 using System.IO;
 using System;
-using Microsoft.Win32;
 
 namespace ChromeManagedBookmarksEditor.ViewModel
 {

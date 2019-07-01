@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using PropertyChanged;
 
 namespace ChromeManagedBookmarksEditor.Model
