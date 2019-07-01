@@ -116,14 +116,16 @@ namespace ChromeManagedBookmarksEditor.Helpers
             ManagedBookmarks ParsedBookmarks = new ManagedBookmarks();
             try
             {
-                string StrippedJSONData = JSONCode.Replace("{", "");
+                string StrippedJSONData = JSONCode.Replace("},{", "}|{");
+                StrippedJSONData = StrippedJSONData.Replace("\",\"", "\"|\"");
+                StrippedJSONData = StrippedJSONData.Replace("{", "");
                 StrippedJSONData = StrippedJSONData.Replace("}", "");
                 StrippedJSONData = StrippedJSONData.Replace("\"", "");
                 StrippedJSONData = StrippedJSONData.Remove(0, 1);
                 StrippedJSONData = StrippedJSONData.Remove(StrippedJSONData.Count() - 1, 1);
 
                 List<string> JSONDataList = new List<string>();
-                JSONDataList = StrippedJSONData.Split(',').ToList<string>(); //<-- I'm going to have to look into allowing ',' by reworking the parser a little bit.
+                JSONDataList = StrippedJSONData.Split('|').ToList<string>();
 
                 Folder WorkingFolder = new Folder();
                 string lastName = "";
