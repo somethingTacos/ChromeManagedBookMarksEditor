@@ -41,29 +41,6 @@ namespace ChromeManagedBookmarksEditor.ViewModel
 
         private void CheckHelpDocImagesExist() // <-- this will need to be fully tested after the installers are created.  <-- -- NOTE
         {
-            string GetInstallPath()
-            {
-                string registry_key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-                using (Microsoft.Win32.RegistryKey key = Registry.LocalMachine.OpenSubKey(registry_key))
-                {
-                    foreach (string subkey_name in key.GetSubKeyNames())
-                    {
-                        using (RegistryKey subkey = key.OpenSubKey(subkey_name))
-                        {
-                            if (subkey.GetValue("DisplayName") != null)
-                            {
-                                if (subkey.GetValue("DisplayName").Equals("ChromeManagedBookmarksEditor"))
-                                {
-                                    return (string)subkey.GetValue("InstallLocation");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return null;
-            }
-
             void WriteResourceToFile(string resourceName, string filePath)
             {
                 using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
