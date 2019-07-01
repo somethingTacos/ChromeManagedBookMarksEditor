@@ -123,7 +123,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
                 StrippedJSONData = StrippedJSONData.Remove(StrippedJSONData.Count() - 1, 1);
 
                 List<string> JSONDataList = new List<string>();
-                JSONDataList = StrippedJSONData.Split(',').ToList<string>();
+                JSONDataList = StrippedJSONData.Split(',').ToList<string>(); //<-- I'm going to have to look into allowing ',' by reworking the parser a little bit.
 
                 Folder WorkingFolder = new Folder();
                 string lastName = "";

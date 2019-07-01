@@ -61,7 +61,7 @@ namespace ChromeManagedBookmarksEditor.Model
             get { return _url; }
             set
             {
-                char[] validSymbols = { '/', '.', ':' };
+                char[] validSymbols = { '/', '.', ':', '&', '-', '?', '_', '=', }; // ',' }; Can't allow this until I rework the parser.
                 value = new string(value.Where(x => char.IsLetterOrDigit(x) || validSymbols.Contains(x)).ToArray());
                 _url = value;
                 RaisePropertyChanged("Url");
