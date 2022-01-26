@@ -21,9 +21,9 @@ namespace ChromeManagedBookmarksEditor
         {
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
 
-            return AppBuilder.Configure<App>()
+            return AppBuilder
+                   .Configure<App>()
                    .UsePlatformDetect()
-                   .UseReactiveUI()
                    .LogToTrace()
                    .UseReactiveUI();
         }
