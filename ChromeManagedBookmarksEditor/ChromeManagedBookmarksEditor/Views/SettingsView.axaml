@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChromeManagedBookmarksEditor.Views.SettingsView">
-  <Grid RowDefinitions="10,*,AUTO,10"
+  <Grid RowDefinitions="10,AUTO,*,10"
         ColumnDefinitions="10,*,AUTO,*,10">
 
 
     <Button Content="Save and Close Settings"
-            Grid.Row="2" Grid.Column="2"
+            Grid.Row="1" Grid.Column="2"
             Command="{Binding SaveAndCloseCommand}"
             />
     

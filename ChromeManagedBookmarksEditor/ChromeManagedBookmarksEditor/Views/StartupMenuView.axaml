@@ -5,16 +5,47 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChromeManagedBookmarksEditor.Views.StartupMenuView">
 
-  <Grid RowDefinitions="10,AUTO,*,AUTO,*,10" 
-        ColumnDefinitions="10,*,AUTO,10,AUTO,*,AUTO,10">
+  <Grid RowDefinitions="10,AUTO,*,1*,*,AUTO,*,10" 
+        ColumnDefinitions="10,*,1*,10,1*,*,AUTO,10">
     
     <Button Content="Settings"
             Grid.Row="1" Grid.Column="6"
             Command="{Binding OpenSettingsCommand}"
             />
     
+    <Button Content="Load From File"
+            Grid.Row="3" Grid.Column="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            />
+
+    <Button Content="Start New"
+            Grid.Row="3" Grid.Column="4"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            />
     
+    <TextBox Watermark="Load JSON directly"
+             Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5"
+             CornerRadius="5 0 0 5"
+             BorderThickness="1 1 0 1"
+             />
     
+    <Button Content="Load"
+            Grid.Row="5" Grid.Column="6"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            CornerRadius="0 5 5 0"
+            Background="Transparent"
+            BorderBrush="Black"
+            />
+             
   </Grid>
   
 </UserControl>
