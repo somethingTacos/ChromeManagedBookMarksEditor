@@ -86,12 +86,12 @@ namespace ChromeManagedBookmarksEditor.ViewModels
         /// <param name="Title"></param>
         /// <param name="Message"></param>
         /// <param name="Type"></param>
-        /// <param name="Experation"></param>
+        /// <param name="Expiration"></param>
         /// <param name="OnClick"></param>
         /// <param name="OnClose"></param>
-        public void SendNotification(string Title, string Message, NotificationType Type = NotificationType.Information, TimeSpan? Experation = null, Action? OnClick = null, Action? OnClose = null)
+        public void SendNotification(string Title, string Message, NotificationType Type = NotificationType.Information, TimeSpan? Expiration = null, Action? OnClick = null, Action? OnClose = null)
         {
-            NotificationManager.Show(new Avalonia.Controls.Notifications.Notification(Title, Message, Type, Experation, OnClick, OnClose));
+            NotificationManager.Show(new Avalonia.Controls.Notifications.Notification(Title, Message, Type, Expiration, OnClick, OnClose));
         }
     }
 }
