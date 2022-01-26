@@ -1,7 +1,9 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using ReactiveUI;
+using Splat;
 using System;
+using System.Reflection;
 
 namespace ChromeManagedBookmarksEditor
 {
@@ -16,9 +18,14 @@ namespace ChromeManagedBookmarksEditor
 
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .LogToTrace()
-                .UseReactiveUI();
+        {
+            Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
+
+            return AppBuilder.Configure<App>()
+                   .UsePlatformDetect()
+                   .UseReactiveUI()
+                   .LogToTrace()
+                   .UseReactiveUI();
+        }
     }
 }

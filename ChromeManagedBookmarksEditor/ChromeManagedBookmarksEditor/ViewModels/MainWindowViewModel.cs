@@ -1,11 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using ReactiveUI;
 
 namespace ChromeManagedBookmarksEditor.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ReactiveObject, IScreen
     {
-        public string Greeting => "Welcome to Avalonia!";
+        public RoutingState Router { get; set; } = new RoutingState();
+
+        public MainWindowViewModel()
+        {
+            Router.Navigate.Execute(new StartupMenuViewModel(this));
+        }
     }
 }
