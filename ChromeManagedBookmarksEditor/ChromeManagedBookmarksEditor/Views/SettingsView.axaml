@@ -12,6 +12,17 @@
             Grid.Row="1" Grid.Column="2"
             Command="{Binding SaveAndCloseCommand}"
             />
+
+    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
+      
+      <Label Content="Save Folder" ToolTip.Tip="Path to a folder to save data in."
+             ToolTip.VerticalOffset="-30" ToolTip.HorizontalOffset="15"
+             />
+      <TextBox Watermark="Enter path to a folder to save data in"
+               
+               />
+      
+    </StackPanel>
     
   </Grid>
 </UserControl>

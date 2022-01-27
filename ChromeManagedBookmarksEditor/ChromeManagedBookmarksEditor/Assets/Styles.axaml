@@ -3,8 +3,51 @@
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
+          <StackPanel Margin="10">
+
+            <!-- linked textbox and button -->
+            <Grid ColumnDefinitions="AUTO,AUTO">
+              <TextBox Watermark="Blah Something Here"
+                       Classes="linkedright"/>
+              <Button Content="Do Stuff" Grid.Column="1"
+                      Classes="linkedleft"/>
+            </Grid>
+            
+            
+          </StackPanel>
         </Border>
     </Design.PreviewWith>
 
-    <!-- Add Styles Here -->
+  <!-- Add Styles Here -->
+
+  <!-- Button Styles -->
+  <!-- Source Ref: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/Button.xaml --> 
+
+  <!-- linkedleft -->
+  <Style Selector="Button.linkedleft">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="0 5 5 0"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </Style>
+
+  <Style Selector="Button.linkedleft:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <!-- TextBox Styles -->
+  <!-- Source Ref: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/TextBox.xaml -->
+
+  <!-- linkedright -->
+  <Style Selector="TextBox.linkedright">
+    <Setter Property="CornerRadius" Value="5 0 0 5"/>
+    <Setter Property="BorderThickness" Value="1 1 0 1"/>
+  </Style>
+
+  <Style Selector="TextBox.linkedright:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderThickness" Value="1 1 0 1"/>
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+  </Style>
 </Styles>

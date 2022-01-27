@@ -7,7 +7,11 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ChromeManagedBookmarksEditor.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="ChromeManagedBookmarksEditor">
+        Title="Chrome Managed Bookmarks Editor">
+
+  <Window.Styles>
+    <StyleInclude Source="/Assets/Styles.axaml"/>
+  </Window.Styles>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>

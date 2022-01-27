@@ -1,6 +1,8 @@
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ChromeManagedBookmarksEditor.ViewModels;
+using ReactiveUI;
+using System;
 
 namespace ChromeManagedBookmarksEditor.Views
 {
