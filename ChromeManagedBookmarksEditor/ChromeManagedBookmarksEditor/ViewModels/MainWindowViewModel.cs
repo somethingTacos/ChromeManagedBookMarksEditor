@@ -1,14 +1,34 @@
+using ChromeManagedBookmarksEditor.Helpers;
+using ChromeManagedBookmarksEditor.Models;
 using ReactiveUI;
+using Splat;
+using System.Reactive.Disposables;
 
 namespace ChromeManagedBookmarksEditor.ViewModels
 {
-    public class MainWindowViewModel : ReactiveObject, IScreen
+    public class MainWindowViewModel : ReactiveObject, IActivatableViewModel, IScreen
     {
+        public ViewModelActivator Activator { get; set; } = new ViewModelActivator();
+
         public RoutingState Router { get; set; } = new RoutingState();
+
+        private SettingsHelper settingsHelper => Locator.Current.GetService<SettingsHelper>();
+
+        private Settings? settings;
 
         public MainWindowViewModel()
         {
-            Router.Navigate.Execute(new StartupMenuViewModel(this));
+            this.WhenActivated((CompositeDisposable d) =>
+            {
+                settings = settingsHelper.LoadSettings();
+
+                if(settings != null)
+                {
+                    Locator.CurrentMutable.RegisterConstant(settings);
+                }
+
+                Router.NavigateAndReset.Execute(new StartupMenuViewModel(this));
+            });
         }
     }
 }

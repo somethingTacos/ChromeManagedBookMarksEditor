@@ -1,8 +1,8 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
+using ChromeManagedBookmarksEditor.Helpers;
 using ChromeManagedBookmarksEditor.ViewModels;
 using Splat;
 
@@ -18,7 +18,11 @@ namespace ChromeManagedBookmarksEditor.Views
 #endif
             WindowNotificationManager notificationManager = new WindowNotificationManager(this);
 
+            SettingsHelper settingsHelper = new SettingsHelper(notificationManager);
+
             Locator.CurrentMutable.RegisterConstant(notificationManager);
+
+            Locator.CurrentMutable.RegisterConstant(settingsHelper);
         }
 
         private void InitializeComponent()
