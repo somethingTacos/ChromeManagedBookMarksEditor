@@ -12,10 +12,13 @@ namespace ChromeManagedBookmarksEditor.Models.Results
 
         public object? Data { get; private set; } = null;
 
+        public bool HasData => Data != null;
+
         protected GenericResult(string Message, object? Data = null, string? ErrorMessage = null)
         {
             this.Message = Message;
             this.ErrorMessage = ErrorMessage;
+            this.Data = Data;
         }
 
         public static GenericResult FromSuccess(string OptionalMessage = "", object? OptionalData = null) => new GenericResult(OptionalMessage, OptionalData, null);

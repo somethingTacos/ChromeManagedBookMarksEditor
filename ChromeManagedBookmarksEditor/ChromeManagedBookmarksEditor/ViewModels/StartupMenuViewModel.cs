@@ -1,8 +1,4 @@
-﻿using ChromeManagedBookmarksEditor.Helpers;
-using ChromeManagedBookmarksEditor.Models;
-using ReactiveUI;
-using Splat;
-using System.Reactive.Disposables;
+﻿using ReactiveUI;
 using System.Threading.Tasks;
 
 namespace ChromeManagedBookmarksEditor.ViewModels
@@ -23,9 +19,6 @@ namespace ChromeManagedBookmarksEditor.ViewModels
         public void StartNewCommand()
         {
             //TODO - Navigate to editor without any data for a fresh start
-            //NavigateTo()
-
-            SendNotification("", "Freshly baked json commin right up ... eventually ...");
         }
 
         public async Task LoadFromFileCommand()
@@ -35,8 +28,6 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             //TODO - maybe change the interface to have a list of recent files, just to make things quicker.
             //     - and have a smaller 'browse' button to manually pick a file.
             //     - Maybe support drag and drop as well.
-
-            SendNotification("", "This would load something if it was setup to do so. :)");
         }
 
         public async Task LoadJsonCommand()
