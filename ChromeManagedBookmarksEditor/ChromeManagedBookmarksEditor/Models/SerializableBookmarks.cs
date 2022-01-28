@@ -1,6 +1,7 @@
 ﻿using ChromeManagedBookmarksEditor.Helpers;
 using Splat;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -78,8 +79,8 @@ namespace ChromeManagedBookmarksEditor.Models
 
                 Bookmark[]? bookmarks = Data.OfType<Bookmark>().ToArray();
 
-                mbm.Folders = new System.Collections.ObjectModel.ObservableCollection<Folder>(folders ?? new Folder[0]);
-                mbm.Bookmarks = new System.Collections.ObjectModel.ObservableCollection<Bookmark>(bookmarks ?? new Bookmark[0]);
+                mbm.Folders = new ObservableCollection<Folder>(folders ?? new Folder[0]);
+                mbm.Bookmarks = new ObservableCollection<Bookmark>(bookmarks ?? new Bookmark[0]);
 
                 return mbm;
             }
