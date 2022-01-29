@@ -42,9 +42,21 @@ namespace ChromeManagedBookmarksEditor.Helpers
             {
                 string jsonData = File.ReadAllText(FilePath);
 
-                T Data = JsonConvert.DeserializeObject<T>(jsonData);
+                return Deserialize<T>(jsonData);
+            }
+            catch(Exception ex)
+            {
+                return GenericResult.FromException(ex);
+            }
+        }
 
-                return GenericResult.FromSuccess("", Data);
+        public static GenericResult Deserialize<T>(string json) where T : class
+        {
+            try
+            {
+                T data = JsonConvert.DeserializeObject<T>(json);
+
+                return GenericResult.FromSuccess("", data);
             }
             catch(Exception ex)
             {

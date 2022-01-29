@@ -19,7 +19,7 @@
              ToolTip.VerticalOffset="-30" ToolTip.HorizontalOffset="15"
              />
       <TextBox Watermark="Enter path to a folder to save data in"
-               
+               Text="{Binding settings.SaveFolder}"
                />
       
     </StackPanel>

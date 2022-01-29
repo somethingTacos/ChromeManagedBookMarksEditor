@@ -6,43 +6,62 @@
              x:Class="ChromeManagedBookmarksEditor.Views.StartupMenuView"
              >
 
-  <Grid RowDefinitions="10,AUTO,*,1*,*,AUTO,*,10" 
-        ColumnDefinitions="10,*,1*,10,1*,*,AUTO,10">
+  <Grid RowDefinitions="10,AUTO,10,AUTO,*,AUTO,10"
+        ColumnDefinitions="10,*,AUTO,10">
     
     <Button Content="Settings"
-            Grid.Row="1" Grid.Column="6"
+            Grid.Row="1" Grid.Column="2"
             Command="{Binding OpenSettingsCommand}"
             />
     
-    <Button Content="Load From File"
-            Command="{Binding LoadFromFileCommand}"
-            Grid.Row="3" Grid.Column="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            />
+    <Label Content="Saved Files"
+           Grid.Row="3" Grid.Column="1"
+           />
 
     <Button Content="Start New"
+            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
             Command="{Binding StartNewCommand}"
-            Grid.Row="3" Grid.Column="4"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
             />
+    
+
+    <ItemsControl Items="{Binding SavedFilesCollection}"
+                  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                  BorderBrush="Black"
+                  CornerRadius="5"
+                  BorderThickness="1"
+                  Margin="0 0 0 10"
+                  >
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button Content="{Binding Name}" Command="{Binding $parent[ItemsControl].DataContext.LoadJsonFromFile}"
+                  CommandParameter="{Binding FullName}"
+                  Classes="spanningcard"
+                  />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <Button Content="Browse" Grid.Row="4" Grid.Column="2"
+            Command="{Binding BrowseCommand}"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            Margin="0 0 0 10"
+            Classes="linkedbottomrightcorner"/>
     
     <TextBox Watermark="Load JSON directly"
              Text="{Binding JsonToLoad}"
-             Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5"
+             Grid.Row="5" Grid.Column="1"
              Classes="linkedright"
              />
     
     <Button Content="Load"
             Command="{Binding LoadJsonCommand}"
-            Grid.Row="5" Grid.Column="6"
+            CommandParameter="{Binding JsonToLoad}"
+            Grid.Row="5" Grid.Column="2"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
+            HorizontalAlignment="Stretch"
             Classes="linkedleft"
             />
              

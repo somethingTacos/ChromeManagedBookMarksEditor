@@ -20,12 +20,9 @@ namespace ChromeManagedBookmarksEditor.ViewModels
         {
             this.WhenActivated((CompositeDisposable d) =>
             {
-                settings = settingsHelper.LoadSettings();
+                settings = settingsHelper.LoadSettings() ?? new Settings();
 
-                if(settings != null)
-                {
-                    Locator.CurrentMutable.RegisterConstant(settings);
-                }
+                Locator.CurrentMutable.RegisterConstant(settings);
 
                 Router.NavigateAndReset.Execute(new StartupMenuViewModel(this));
             });

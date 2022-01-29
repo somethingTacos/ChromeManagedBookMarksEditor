@@ -1,14 +1,14 @@
-﻿using ReactiveUI;
-using System;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using ReactiveUI;
 
 namespace ChromeManagedBookmarksEditor.Models
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Settings : ReactiveObject
     {
         private string _Settings = "";
 
-        [JsonPropertyName("save_folder")]
+        [JsonProperty("save_folder")]
         public string SaveFolder
         {
             get => _Settings;

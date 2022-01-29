@@ -26,9 +26,9 @@ namespace ChromeManagedBookmarksEditor.Models
             }
         }
 
-        public SerializableBookmarks(string FilePath)
+        public SerializableBookmarks(string Json, bool FromFile = false)
         {
-            var result = JsonHelper.LoadFromFile<object[]>(FilePath);
+            var result = FromFile ? JsonHelper.LoadFromFile<object[]>(Json) : JsonHelper.Deserialize<object[]>(Json);
 
             if(result.Succeeded && result.HasData && result.Data is object[] data)
             {
@@ -69,6 +69,10 @@ namespace ChromeManagedBookmarksEditor.Models
             return "";
         }
 
+        /// <summary>
+        /// Builds the data object array into a ManagedBookmarks object
+        /// </summary>
+        /// <returns>a <see cref="ManagedBookmarks"/> object or null</returns>
         public ManagedBookmarks BuildData()
         {
             if (Data.Count == 0) return null;

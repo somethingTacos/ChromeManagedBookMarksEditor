@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:rxui="using:Avalonia.ReactiveUI"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="500"
         x:Class="ChromeManagedBookmarksEditor.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Chrome Managed Bookmarks Editor">
+        Title="Chrome Managed Bookmarks Editor"
+        Height="500" Width="900">
 
   <Window.Styles>
     <StyleInclude Source="/Assets/Styles.axaml"/>
