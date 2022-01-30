@@ -2,7 +2,82 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="using:ChromeManagedBookmarksEditor.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChromeManagedBookmarksEditor.Views.EditorView">
-  Welcome to Avalonia!
+
+  <Grid RowDefinitions="10,AUTO,*,10,AUTO,10"
+        ColumnDefinitions="10,AUTO,*,AUTO,10">
+    
+    <Button Content="Back to Menu"
+            Command="{Binding BackToMenuCommand}"
+            Grid.Row="1" Grid.Column="1"
+            />
+    
+    <TextBox Watermark="File Name" Text="{Binding SaveFileName}"
+             Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+             Margin="10 0 0 0"
+             />
+
+    <TreeView Items="{Binding RootFolders}"
+              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+              BorderThickness="1" BorderBrush="Black"
+              Margin="0 10 0 0"
+              CornerRadius="5"
+              >
+      <TreeView.DataTemplates>
+        <TreeDataTemplate DataType="model:Folder" ItemsSource="{Binding Children}">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Text="{Binding Name}"/>
+            <Button Content="Add Folder" 
+                    Command="{Binding $parent[TreeView].DataContext.AddFolderCommand}"
+                    CommandParameter="{Binding}"
+                    />
+            <Button Content="Add Link" 
+                    Command="{Binding $parent[TreeView].DataContext.AddLinkCommand}"
+                    CommandParameter="{Binding}"
+                    />
+            <Button Content="Remove"
+                    Command="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
+                    CommandParameter="{Binding}"
+                    />
+          </StackPanel>
+        </TreeDataTemplate>
+        <DataTemplate DataType="model:Bookmark">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <TextBox Watermark="Name" Text="{Binding Name}"/>
+            <TextBox Watermark="Url" Text="{Binding Url}"/>
+            <Button Content="Remove"
+                    Command="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
+                    CommandParameter="{Binding}"
+                    />
+          </StackPanel>
+        </DataTemplate>
+      </TreeView.DataTemplates>
+    </TreeView>
+    
+    <Button Content="Serialize"
+            Grid.Row="2" Grid.Column="3"
+            Command="{Binding SerializeCommand}"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            Classes="linkedbottomrightcorner"
+            />
+    
+    <TextBox Watermark="Serialized bookmarks will be here :)" 
+             Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+             Text="{Binding JsonText}"
+             Classes="linkedright"
+             />
+    
+    <Button Content="Copy"
+            Grid.Row="4" Grid.Column="3"
+            Command="{Binding CopyCommand}"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Classes="linkedleft"
+            />
+  </Grid>
+  
 </UserControl>

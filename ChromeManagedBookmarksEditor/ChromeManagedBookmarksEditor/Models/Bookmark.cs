@@ -1,11 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using ChromeManagedBookmarksEditor.Interfaces;
+using Newtonsoft.Json;
 using ReactiveUI;
 
 namespace ChromeManagedBookmarksEditor.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class Bookmark : ReactiveObject
+    public class Bookmark : ReactiveObject, IChild
     {
+        public Folder? Parent { get; set; } = null;
+
+        public Bookmark(Folder? Parent = null)
+        {
+            this.Parent = Parent;
+        }
+
         private string _Name = "";
 
         [JsonProperty("name")]
@@ -23,5 +31,6 @@ namespace ChromeManagedBookmarksEditor.Models
             get => _Url;
             set => this.RaiseAndSetIfChanged(ref _Url, value);
         }
+
     }
 }

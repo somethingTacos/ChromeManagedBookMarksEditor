@@ -1,7 +1,7 @@
 ﻿using ChromeManagedBookmarksEditor.Helpers;
+using ChromeManagedBookmarksEditor.Interfaces;
 using Splat;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
@@ -9,26 +9,22 @@ namespace ChromeManagedBookmarksEditor.Models
 {
     public class SerializableBookmarks
     {
+        private string SaveFileName = "";
+
         public List<object> Data { get; private set; } = new List<object>();
 
         public SerializableBookmarks(ManagedBookmarks ManagedBookmarks)
         {
             Data.Add(ManagedBookmarks);
 
-            foreach(Folder f in ManagedBookmarks.Folders)
-            {
-                Data.Add(f);
-            }
-
-            foreach (Bookmark b in ManagedBookmarks.Bookmarks)
-            {
-                Data.Add(b);
-            }
+            Data.AddRange(ManagedBookmarks.RootFolder.Children);
         }
 
         public SerializableBookmarks(string Json, bool FromFile = false)
         {
             var result = FromFile ? JsonHelper.LoadFromFile<object[]>(Json) : JsonHelper.Deserialize<object[]>(Json);
+
+            if (FromFile) SaveFileName = new FileInfo(Json).Name.Replace(".json", "");
 
             if(result.Succeeded && result.HasData && result.Data is object[] data)
             {
@@ -39,6 +35,11 @@ namespace ChromeManagedBookmarksEditor.Models
                     Data = convertedData.ToList();
                 }
             }
+        }
+
+        public string SerializeData()
+        {
+            return JsonHelper.Serialize(Data);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace ChromeManagedBookmarksEditor.Models
                 return "";
             }
 
-            string filePath = Path.Join(saveFolder, FileName);
+            string filePath = Path.Join(saveFolder, $"{FileName}.json");
 
             var result = JsonHelper.SaveToFile(Data, filePath);
 
@@ -79,12 +80,18 @@ namespace ChromeManagedBookmarksEditor.Models
 
             if (Data[0] is ManagedBookmarks mbm)
             {
-                Folder[]? folders = Data.OfType<Folder>().ToArray();
+                mbm.RootFolder.Name = mbm.RootName;
 
-                Bookmark[]? bookmarks = Data.OfType<Bookmark>().ToArray();
+                mbm.SaveFileName = SaveFileName;
 
-                mbm.Folders = new ObservableCollection<Folder>(folders ?? new Folder[0]);
-                mbm.Bookmarks = new ObservableCollection<Bookmark>(bookmarks ?? new Bookmark[0]);
+                foreach(var item in Data)
+                {
+                    if(item is IChild child)
+                    {
+                        child.Parent = mbm.RootFolder;
+                        mbm.RootFolder.Children.Add(child);
+                    }
+                }
 
                 return mbm;
             }

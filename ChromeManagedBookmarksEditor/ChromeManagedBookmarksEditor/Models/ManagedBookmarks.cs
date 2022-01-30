@@ -5,19 +5,13 @@ using System.Collections.ObjectModel;
 namespace ChromeManagedBookmarksEditor.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class ManagedBookmarks : ReactiveObject
+    public class ManagedBookmarks
     {
-        private string _RootName = "";
+        public string SaveFileName = "";
 
         [JsonProperty("toplevel_name")]
-        public string RootName
-        {
-            get => _RootName;
-            set => this.RaiseAndSetIfChanged(ref _RootName, value);
-        }
+        public string RootName = "";
 
-        public ObservableCollection<Folder>  Folders { get; set; } = new ObservableCollection<Folder>();
-
-        public ObservableCollection<Bookmark>  Bookmarks { get; set; } = new ObservableCollection<Bookmark>();
+        public Folder RootFolder = new Folder();
     }
 }

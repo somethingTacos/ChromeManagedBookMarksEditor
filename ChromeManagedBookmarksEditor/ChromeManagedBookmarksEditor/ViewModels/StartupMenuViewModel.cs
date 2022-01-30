@@ -84,12 +84,6 @@ namespace ChromeManagedBookmarksEditor.ViewModels
         {
             string? saveFolder = Locator.Current.GetService<Settings>()?.SaveFolder;
 
-            if (string.IsNullOrWhiteSpace(saveFolder) || !Directory.Exists(saveFolder))
-            {
-                SendNotification("Check Settings", "Save folder either isn't set or doesn't exist", Avalonia.Controls.Notifications.NotificationType.Warning);
-                return;
-            }
-
             OpenFileDialog dialog = new OpenFileDialog();
 
             dialog.Directory = saveFolder;

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using ChromeManagedBookmarksEditor.Models;
 using System.Linq;
+using ChromeManagedBookmarksEditor.Interfaces;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
@@ -33,6 +34,18 @@ namespace ChromeManagedBookmarksEditor.Helpers
             catch(Exception ex)
             {
                 return GenericResult.FromException(ex);
+            }
+        }
+
+        public static string Serialize<T>(T Data)
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(Data);
+            }
+            catch(Exception ex)
+            {
+                return "";
             }
         }
 
@@ -92,6 +105,25 @@ namespace ChromeManagedBookmarksEditor.Helpers
 
                         if(item is Folder f && f.Name != "")
                         {
+                            if (f.Children.Count > 0)
+                            {
+                                var result = ConvertDataToTypes(f.Children.ToArray());
+
+                                if(result.Succeeded && result.HasData && result.Data is object[] childObjects)
+                                {
+                                    f.Children.Clear();
+
+                                    foreach(object obj in childObjects)
+                                    {
+                                        if(obj is IChild child)
+                                        {
+                                            child.Parent = f;
+                                            f.Children.Add(child);
+                                        }
+                                    }
+                                }
+                            }
+
                             convertedData.Add(item);
                             continue;
                         }

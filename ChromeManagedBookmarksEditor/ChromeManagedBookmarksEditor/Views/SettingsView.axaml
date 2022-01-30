@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChromeManagedBookmarksEditor.Views.SettingsView">
   <Grid RowDefinitions="10,AUTO,*,10"
-        ColumnDefinitions="10,*,AUTO,*,10">
+        ColumnDefinitions="10,*,AUTO,AUTO,*,10">
 
 
     <Button Content="Save and Close Settings"
@@ -13,7 +13,12 @@
             Command="{Binding SaveAndCloseCommand}"
             />
 
-    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
+    <Button Content="Cancel"
+            Grid.Row="1" Grid.Column="3"
+            Command="{Binding CancelCommand}"
+            />
+
+    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
       
       <Label Content="Save Folder" ToolTip.Tip="Path to a folder to save data in."
              ToolTip.VerticalOffset="-30" ToolTip.HorizontalOffset="15"
