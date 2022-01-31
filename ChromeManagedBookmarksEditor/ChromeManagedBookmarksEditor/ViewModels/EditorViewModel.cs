@@ -5,6 +5,7 @@ using ReactiveUI;
 using Splat;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ChromeManagedBookmarksEditor.ViewModels
@@ -76,6 +77,12 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public async Task CopyCommand()
         {
+            if(string.IsNullOrWhiteSpace(JsonText))
+            {
+                SendNotification("", "Nothing to copy");
+                return;
+            }
+
             if (Application.Current?.Clipboard != null)
             {
                 SendNotification("", "Copied!", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
@@ -107,6 +114,18 @@ namespace ChromeManagedBookmarksEditor.ViewModels
                 SendNotification("No save folder", "Json file could not be automatically saved since the save folder isn't set.", Avalonia.Controls.Notifications.NotificationType.Warning, TimeSpan.FromSeconds(7));
                 JsonText = serializer.SerializeData();
             }
+
+            if (SaveFileName != "" && originData?.SaveFileName != "" && SaveFileName != originData?.SaveFileName)
+            {
+                string oldFilePath = Path.Join(Locator.Current.GetService<Settings>().SaveFolder, $"{originData?.SaveFileName}.json");
+
+                if (File.Exists(oldFilePath))
+                {
+                    File.Delete(oldFilePath);
+                }
+            }
+
+            SendNotification("", $"{SaveFileName} saved", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
         }
     }
 }
