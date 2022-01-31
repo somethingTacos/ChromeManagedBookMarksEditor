@@ -1,5 +1,9 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:b="using:ChromeManagedBookmarksEditor.Behaviors"
+        xmlns:idd="using:Avalonia.Xaml.Interactions.DragAndDrop"
+        >
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
@@ -77,4 +81,31 @@
     <Setter Property="BorderThickness" Value="1 1 0 1"/>
     <Setter Property="BorderBrush" Value="DodgerBlue"/>
   </Style>
+
+  <!-- TreeView Styles-->
+  <!-- Source Ref: https://github.com/wieslawsoltes/AvaloniaBehaviors -->
+  <Style Selector="TreeView.IChildDragAndDrop">
+    <Style.Resources>
+      <b:IChildTreeViewDropHandler x:Key="IChildTreeViewDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource IChildTreeViewDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeView.IChildDragAndDrop TreeViewItem">
+    <Setter Property="IsExpanded" Value="True" />
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDragBehavior />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+  
 </Styles>
