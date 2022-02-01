@@ -3,11 +3,20 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <ApplicationIcon>Assets\chrome-logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <AvaloniaResource Remove="Assets\Styles.axaml" />
     <None Remove=".gitignore" />
+    <None Remove="Assets\bookmark.png" />
+    <None Remove="Assets\chrome-logo.ico" />
+    <None Remove="Assets\directory.png" />
+    <None Remove="Assets\empty-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\chrome-logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.12" />

@@ -16,55 +16,55 @@
             />
     
     <TextBox Watermark="File Name" Text="{Binding SaveFileName}"
-             Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+             Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
              Margin="10 0 0 0"
              />
 
     <TreeView Items="{Binding RootFolders}"
-              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+              Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
               BorderThickness="1" BorderBrush="Black"
               Margin="0 10 0 0"
               CornerRadius="5"
-              Classes="IChildDragAndDrop"
+              Classes.IChildDragAndDrop="{Binding AllowNodeDragDrop}"
+              KeyboardNavigation.TabNavigation="Contained"
+              KeyboardNavigation.IsTabStop="False"
               >
       <TreeView.DataTemplates>
         <TreeDataTemplate DataType="model:Folder" ItemsSource="{Binding Children}">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <TextBox Text="{Binding Name}"/>
-            <Button Content="Add Folder" 
-                    Command="{Binding $parent[TreeView].DataContext.AddFolderCommand}"
-                    CommandParameter="{Binding}"
-                    />
-            <Button Content="Add Link" 
-                    Command="{Binding $parent[TreeView].DataContext.AddLinkCommand}"
-                    CommandParameter="{Binding}"
-                    />
-            <Button Content="Remove"
-                    Command="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
-                    CommandParameter="{Binding}"
-                    />
-          </StackPanel>
+          <cc:FolderControl FolderItem="{Binding}"
+                            AddFolderCommand="{Binding $parent[TreeView].DataContext.AddFolderCommand}"
+                            AddLinkCommand="{Binding $parent[TreeView].DataContext.AddLinkCommand}"
+                            RemoveCommand="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
+                            IsDragDropAllowed="{Binding !$parent[TreeView].DataContext.AllowNodeDragDrop}"
+                            HorizontalAlignment="Left"
+                            />
         </TreeDataTemplate>
         <DataTemplate DataType="model:Bookmark">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <TextBox Watermark="Name" Text="{Binding Name}"/>
-            <TextBox Watermark="Url" Text="{Binding Url}"/>
-            <Button Content="Remove"
-                    Command="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
-                    CommandParameter="{Binding}"
-                    />
-          </StackPanel>
+          <cc:BookmarkControl BookmarkItem="{Binding}"
+                              RemoveCommand="{Binding $parent[TreeView].DataContext.RemoveItemCommand}"
+                              IsDragDropAllowed="{Binding !$parent[TreeView].DataContext.AllowNodeDragDrop}"
+                              HorizontalAlignment="Left"
+                              />
         </DataTemplate>
       </TreeView.DataTemplates>
     </TreeView>
     
-    <Button Content="Serialize and Save"
+    <Button Content="Serialize"
             Grid.Row="2" Grid.Column="3"
+            Margin="10 0"
             Command="{Binding SerializeCommand}"
             VerticalAlignment="Bottom"
-            HorizontalAlignment="Right"
-            Classes="linkedbottomrightcorner"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
             />
+
+    <ToggleSwitch Content="Drag and Drop"
+                  Grid.Row="2" Grid.Column="3"
+                  VerticalAlignment="Top"
+                  Margin="10"
+                  IsChecked="{Binding AllowNodeDragDrop}"
+                  Background="Transparent"
+                  />
     
     <TextBox Watermark="Serialized bookmarks will be here :)" 
              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"

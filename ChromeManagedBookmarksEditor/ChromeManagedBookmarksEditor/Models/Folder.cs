@@ -8,6 +8,8 @@ namespace ChromeManagedBookmarksEditor.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Folder : ReactiveObject, IChild
     {
+        public bool IsRoot { get; set; } = false;
+
         public Folder? Parent { get; set; } = null;
 
         public Folder(Folder? Parent = null)

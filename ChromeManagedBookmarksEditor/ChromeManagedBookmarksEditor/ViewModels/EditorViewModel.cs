@@ -12,6 +12,13 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 {
     public class EditorViewModel : ViewModelBase
     {
+        private bool _AllowNodeDragDrop = false;
+        public bool AllowNodeDragDrop
+        {
+            get => _AllowNodeDragDrop;
+            set => this.RaiseAndSetIfChanged(ref _AllowNodeDragDrop, value);
+        }
+
         private ManagedBookmarks? originData;
 
         private string _SaveFileName = "";
@@ -32,7 +39,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public EditorViewModel(IScreen Host, ManagedBookmarks? Bookmarks = null) : base(Host)
         {
-            Folder root = new Folder() { Name = "Managed Bookmarks"};
+            Folder root = new Folder() { Name = "Managed Bookmarks", IsRoot = true };
 
             if(Bookmarks != null)
             {

@@ -12,6 +12,6 @@ namespace ChromeManagedBookmarksEditor.Models
         [JsonProperty("toplevel_name")]
         public string RootName = "";
 
-        public Folder RootFolder = new Folder();
+        public Folder RootFolder = new Folder() { IsRoot = true };
     }
 }

@@ -26,17 +26,33 @@ namespace ChromeManagedBookmarksEditor.Behaviors
             var sourceChildren = sourceParent is Folder ? sourceParent.Children : vm.RootFolders[0].Children;
             var targetChildren = targetParent is Folder ? targetParent.Children : vm.RootFolders[0].Children;
 
+            if (sourceChildren is not object || targetChildren is not object) return false;
+
             var sourceIndex = sourceChildren.IndexOf(sourceNode);
             var targetIndex = targetChildren.IndexOf(targetNode);
 
-            if (sourceIndex < 0 || targetIndex < 0)
+            if (sourceIndex < 0 
+            || targetIndex < 0
+            || (IChild)sourceNode == targetParent)
             {
                 return false;
             }
 
-            //TODO - finish drag drop handler, still a WIP
+            if (bExecute)
+            {
+                if (sourceChildren == targetChildren)
+                {
+                    MoveItem(sourceChildren, sourceIndex, targetIndex);
+                }
+                else
+                {
+                    sourceNode.Parent = targetParent;
 
-            return false;
+                    MoveItem(sourceChildren, targetChildren, sourceIndex, targetIndex);
+                }
+            }
+
+            return true;
         }
 
         public override bool Validate(object? sender, DragEventArgs e, object? sourceContext, object? targetContext, object? state)

@@ -6,7 +6,7 @@
         xmlns:rxui="using:Avalonia.ReactiveUI"
         mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="500"
         x:Class="ChromeManagedBookmarksEditor.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/chrome-logo.ico"
         Title="Chrome Managed Bookmarks Editor"
         Height="500" Width="900">
 

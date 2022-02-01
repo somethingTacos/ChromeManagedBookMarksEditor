@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChromeManagedBookmarksEditor.CustomControls.FolderControl"
+             Padding="5"
+             >
+
+  <Border Background="Transparent"
+          BorderThickness="0"
+          CornerRadius="5"
+          BoxShadow="1 1 5 1 Gray"
+          >
+    <Border BorderBrush="Gold" 
+            BorderThickness="4 0 0 0"
+            CornerRadius="5"
+            >
+      
+    
+  <Grid RowDefinitions="2,AUTO,2"
+        ColumnDefinitions="10,AUTO,AUTO,20,AUTO,AUTO,AUTO">
+    <!-- <a href="https://www.flaticon.com/free-icons/empty-folder" title="empty folder icons">Empty folder icons created by Creative Stall Premium - Flaticon</a> -->
+    <Image Source="/Assets/empty-folder.png"
+           IsVisible="{Binding !FolderItem.IsRoot, RelativeSource={
+                      RelativeSource AncestorType=UserControl}}"
+           Grid.Row="1" Grid.Column="1"
+           Height="20"
+           Margin="0 0 10 0"
+           />
+    <!-- <a href="https://www.flaticon.com/free-icons/directory" title="directory icons">Directory icons created by DinosoftLabs - Flaticon</a> -->
+    <Image Source="/Assets/directory.png"
+           IsVisible="{Binding FolderItem.IsRoot, RelativeSource={
+                      RelativeSource AncestorType=UserControl}}"
+           Grid.Row="1" Grid.Column="1"
+           Height="20"
+           Margin="0 0 10 0"
+           />
+    <TextBox Text="{Binding FolderItem.Name, RelativeSource={
+                   RelativeSource AncestorType=UserControl}}"
+             Watermark="Name"
+             Grid.Row="1" Grid.Column="2"
+             VerticalAlignment="Center"
+             IsEnabled="{Binding IsDragDropAllowed, RelativeSource={
+                        RelativeSource AncestorType=UserControl}}"
+             IsTabStop="True"
+             MinWidth="150"
+             />
+
+    <Button Content="Add Link"
+            Grid.Column="4" Grid.RowSpan="3"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Command="{Binding AddLinkCommand, RelativeSource={
+                      RelativeSource AncestorType=UserControl}}"
+            CommandParameter="{Binding}"
+            BorderThickness="0"
+            CornerRadius="0"
+            Classes="oncard"
+            />
+    <Button Content="Add Folder"
+            Grid.Column="5" Grid.RowSpan="3"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Command="{Binding AddFolderCommand, RelativeSource={
+                      RelativeSource AncestorType=UserControl}}"
+            CommandParameter="{Binding}"
+            BorderThickness="0"
+            CornerRadius="0"
+            Classes="oncard"
+            />
+    <Button Content="&#x2715;"
+            Grid.Column="6" Grid.RowSpan="3"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Command="{Binding RemoveCommand, RelativeSource={
+                      RelativeSource AncestorType=UserControl}}"
+            CommandParameter="{Binding}"
+            CornerRadius="0 5 5 0"
+            Classes="delete"
+            BorderThickness="0"
+            IsEnabled="{Binding !FolderItem.IsRoot, RelativeSource={
+                       RelativeSource AncestorType=UserControl}}"
+            />
+  </Grid>
+    </Border>
+  </Border>
+</UserControl>
