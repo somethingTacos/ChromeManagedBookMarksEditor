@@ -1,0 +1,224 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:b="using:ChromeManagedBookmarksEditor.Behaviors"
+        xmlns:idd="using:Avalonia.Xaml.Interactions.DragAndDrop"
+        >
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+          <StackPanel Margin="10">
+
+            <!-- linked textbox and button -->
+            <Grid ColumnDefinitions="AUTO,AUTO">
+              <TextBox Watermark="Blah Something Here"
+                       Classes="linkedright"/>
+              <Button Content="Do Stuff" Grid.Column="1"
+                      Classes="linkedleft"/>
+            </Grid>
+            
+            
+          </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+  <!-- Add Styles Here -->
+
+  <!-- Button Styles -->
+  <!-- Source Ref: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/Button.xaml -->
+
+  <!-- default button style -->
+  <Style Selector="Button:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+
+  <Style Selector="Button:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="DodgerBlue"/>
+  </Style>
+
+  <Style Selector="Button:disabled /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Gray"/>
+  </Style>
+
+  <!-- delete -->
+  <Style Selector="Button.delete">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="IndianRed"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+
+  <Style Selector="Button.delete:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Background" Value="IndianRed"/>
+  </Style>
+
+  <Style Selector="Button.delete:pointerover">
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  
+  <Style Selector="Button.delete:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="DarkRed"/>
+  </Style>
+
+  <!-- oncard -->
+  <Style Selector="Button.oncard">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+
+  <Style Selector="Button.oncard:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Background" Value="LightBlue"/>
+  </Style>
+
+  <Style Selector="Button.oncard:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Cyan"/>
+  </Style>
+  
+  <!-- linkedleft -->
+  <Style Selector="Button.linkedleft">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="0 5 5 0"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </Style>
+
+  <Style Selector="Button.linkedleft:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+    <Setter Property="Background" Value="Gainsboro"/>
+  </Style>
+
+  <!-- linkedbottomrightcorner -->
+  <Style Selector="Button.linkedbottomrightcorner">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="5 0 5 0"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </Style>
+
+  <Style Selector="Button.linkedbottomrightcorner:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+    <Setter Property="Background" Value="Gainsboro"/>
+  </Style>
+
+  <!-- spanningcard -->
+  <Style Selector="Button.spanningcard">
+    <Setter Property="Margin" Value="5"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="Background" Value="Gainsboro"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0 0 0 2"/>
+  </Style>
+
+  <Style Selector="Button.spanningcard:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+    <Setter Property="BorderThickness" Value="0 0 0 2"/>
+  </Style>
+
+  <!-- TextBox Styles -->
+  <!-- Source Ref: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/TextBox.xaml -->
+
+  <!-- linkedright -->
+  <Style Selector="TextBox.linkedright">
+    <Setter Property="CornerRadius" Value="5 0 0 5"/>
+    <Setter Property="BorderThickness" Value="1 1 0 1"/>
+  </Style>
+
+  <Style Selector="TextBox.linkedright:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderThickness" Value="1 1 0 1"/>
+    <Setter Property="BorderBrush" Value="DodgerBlue"/>
+  </Style>
+
+  <!-- TreeView Styles-->
+  <!-- Source Ref: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/TreeViewItem.xaml -->
+  <!-- Behaviors Ref: https://github.com/wieslawsoltes/AvaloniaBehaviors -->
+
+  <Style Selector="TreeViewItem">
+    <Setter Property="IsExpanded" Value="True"/>
+    <Setter Property="IsTabStop" Value="False"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
+  </Style>
+  
+  <Style Selector="TreeView.IChildDragAndDrop">
+    <Style.Resources>
+      <b:IChildTreeViewDropHandler x:Key="IChildTreeViewDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource IChildTreeViewDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeView.IChildDragAndDrop TreeViewItem">
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDragBehavior />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Remove highlight from treeview selections -->
+  <!--  PointerOver state  -->
+  <Style Selector="TreeViewItem /template/ Border#PART_LayoutRoot:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundPointerOver}" />
+  </Style>
+
+  <!--  Pressed state  -->
+  <Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundPressed}" />
+  </Style>
+
+  <!--  Disabled state  -->
+  <Style Selector="TreeViewItem:disabled /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem:disabled /template/ Border#PART_LayoutRoot > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundDisabled}" />
+  </Style>
+
+  <!--  Selected state  -->
+  <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundSelected}" />
+  </Style>
+
+  <!--  Selected PointerOver state  -->
+  <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundSelectedPointerOver}" />
+  </Style>
+
+  <!--  Selected Pressed state  -->
+  <Style Selector="TreeViewItem:pressed:selected /template/ Border#PART_LayoutRoot:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="TreeViewItem:pressed:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundSelectedPressed}" />
+  </Style>
+  
+</Styles>

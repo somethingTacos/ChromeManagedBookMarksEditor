@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChromeManagedBookmarksEditor.Views.StartupMenuView"
+             >
+
+  <Grid RowDefinitions="10,AUTO,10,AUTO,*,AUTO,10"
+        ColumnDefinitions="10,*,AUTO,10">
+    
+    <Button Content="Settings"
+            Grid.Row="1" Grid.Column="2"
+            Command="{Binding OpenSettingsCommand}"
+            />
+    
+    <Label Content="Saved Files"
+           Grid.Row="3" Grid.Column="1"
+           />
+
+    <Button Content="Start New"
+            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            Command="{Binding StartNewCommand}"
+            />
+    
+
+    <ItemsControl Items="{Binding SavedFilesCollection}"
+                  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                  BorderBrush="Black"
+                  CornerRadius="5"
+                  BorderThickness="1"
+                  Margin="0 0 0 10"
+                  >
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button Content="{Binding Name}" Command="{Binding $parent[ItemsControl].DataContext.LoadJsonFromFile}"
+                  CommandParameter="{Binding FullName}"
+                  Classes="spanningcard"
+                  />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <Button Content="Browse" Grid.Row="4" Grid.Column="2"
+            Command="{Binding BrowseCommand}"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            Margin="0 0 0 10"
+            Classes="linkedbottomrightcorner"/>
+    
+    <TextBox Watermark="Load JSON directly"
+             Text="{Binding JsonToLoad}"
+             Grid.Row="5" Grid.Column="1"
+             Classes="linkedright"
+             />
+    
+    <Button Content="Load"
+            Command="{Binding LoadJsonCommand}"
+            CommandParameter="{Binding JsonToLoad}"
+            Grid.Row="5" Grid.Column="2"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Classes="linkedleft"
+            />
+             
+  </Grid>
+  
+</UserControl>
