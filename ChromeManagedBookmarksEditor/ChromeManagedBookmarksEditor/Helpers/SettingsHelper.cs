@@ -41,7 +41,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
 
             notificationManager.Show(new Notification(
                 "No Settings Found",
-                "A new settings file will be created when you edit your settings or try to save a json file.",
+                "A new settings file will be created when you edit your settings.",
                 NotificationType.Information,
                 TimeSpan.FromSeconds(10)));
 
