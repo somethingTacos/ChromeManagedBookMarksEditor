@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using ChromeManagedBookmarksEditor.Interfaces;
 using ChromeManagedBookmarksEditor.Models;
+using ChromeManagedBookmarksEditor.Models.Serializers;
 using ReactiveUI;
 using Splat;
 using System.Collections.ObjectModel;
@@ -55,9 +57,27 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             });
         }
 
-        private void LoadBookmarksDataEditor(string json, bool FromFile = false)
+        private void LoadBookmarksDataEditor(BookmarkSerializedType type, string data, bool FromFile = false)
         {
-            SerializableBookmarks serializer = new SerializableBookmarks(json, FromFile);
+            IBookmarkSerializer? serializer = null;
+
+            switch (type)
+            {
+                case BookmarkSerializedType.Json:
+                    serializer = JsonBookmarkSerializer.FromJson(data, FromFile);
+                    break;
+                case BookmarkSerializedType.Html:
+                    serializer = HtmlBookmarkSerializer.FromHtml(data, FromFile);
+                    break;
+                default:
+                    break;
+            }
+
+            if(serializer == null)
+            {
+                SendNotification("Serilizer Load Error", "Something went wrong loading data from file :(", Avalonia.Controls.Notifications.NotificationType.Error);
+                return;
+            }
 
             ManagedBookmarks bookmarks = serializer.BuildData();
 
@@ -70,9 +90,19 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             NavigateTo(new EditorViewModel(HostScreen, bookmarks));
         }
 
-        public void LoadJsonFromFile(string FilePath)
+        public void LoadDataFromFile(string FilePath)
         {
-            LoadBookmarksDataEditor(FilePath, true);
+            switch(new FileInfo(FilePath).Extension)
+            {
+                case ".json":
+                    LoadBookmarksDataEditor(BookmarkSerializedType.Json, FilePath, true);
+                    break;
+                case ".html":
+                    LoadBookmarksDataEditor(BookmarkSerializedType.Html, FilePath, true);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void StartNewCommand()
@@ -90,7 +120,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             dialog.AllowMultiple = false;
 
-            dialog.Filters.Add(new FileDialogFilter() { Extensions = { "json" } });
+            dialog.Filters.Add(new FileDialogFilter() { Extensions = { "json", "html" } });
 
             if(Application.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -98,7 +128,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
                 if(result != null && result.Length > 0)
                 {
-                    LoadBookmarksDataEditor(result[0], true);
+                    LoadDataFromFile(result[0]);
                 }
             }
         }
@@ -111,7 +141,9 @@ namespace ChromeManagedBookmarksEditor.ViewModels
                 return;
             }
 
-            LoadBookmarksDataEditor(json);
+            // TODO: allow html direct load
+
+            LoadBookmarksDataEditor(BookmarkSerializedType.Json, json);
         }
     }
 }
