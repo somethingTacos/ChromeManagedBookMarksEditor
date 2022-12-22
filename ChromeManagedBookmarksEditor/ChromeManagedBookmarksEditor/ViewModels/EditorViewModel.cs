@@ -1,9 +1,11 @@
 ﻿using Avalonia;
 using ChromeManagedBookmarksEditor.Interfaces;
 using ChromeManagedBookmarksEditor.Models;
+using ChromeManagedBookmarksEditor.Models.Serializers;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -37,6 +39,22 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public ObservableCollection<Folder> RootFolders { get; set; } = new ObservableCollection<Folder>();
 
+        // lazy
+        private string _SelectedSerializeOutputType = "";
+        public string SelectedSerializeOutputType
+        {
+            get => _SelectedSerializeOutputType;
+            set => this.RaiseAndSetIfChanged(ref _SelectedSerializeOutputType, value);
+        }
+
+        // more lazy
+        // TODO: use BookmarkSerializedType with a converter
+        public List<string> SerializeOutputTypes { get; } = new List<string>
+        {
+            "Json",
+            "Html"
+        };
+
         public EditorViewModel(IScreen Host, ManagedBookmarks? Bookmarks = null) : base(Host)
         {
             Folder root = new Folder() { Name = "Managed Bookmarks", IsRoot = true };
@@ -50,6 +68,8 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             RootFolders.Add(root);
 
             originData = Bookmarks;
+
+            SelectedSerializeOutputType = SerializeOutputTypes[0];
         }
 
         public void AddLinkCommand(object sender)
@@ -102,6 +122,11 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             NavigateTo(new StartupMenuViewModel(HostScreen));
         }
 
+        public void SortCommand()
+        {
+            SendNotification("Nope", "Not a thing yet WIP", Avalonia.Controls.Notifications.NotificationType.Warning);
+        }
+
         public void SerializeCommand()
         {
             ManagedBookmarks bookmarks = new ManagedBookmarks();
@@ -110,7 +135,29 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             bookmarks.RootFolder = RootFolders[0];
 
-            SerializableBookmarks serializer = new SerializableBookmarks(bookmarks);
+            IBookmarkSerializer? serializer = null;
+
+            // TODO: remove lazy switch
+
+            switch (SelectedSerializeOutputType)
+            {
+                case "Json":
+                    {
+                        serializer = new JsonBookmarkSerializer(bookmarks);
+                        break;
+                    }
+                case "Html":
+                    {
+                        serializer = new HtmlBookmarkSerializer(bookmarks);
+                        break;
+                    }
+            }
+
+            if (serializer == null)
+            {
+                SendNotification("Serialization Error", "Something went wrong during serilization :(", Avalonia.Controls.Notifications.NotificationType.Error, TimeSpan.FromSeconds(5));
+                return;
+            }
 
             SaveFileName = SaveFileName == "" ? bookmarks.RootName : SaveFileName;
 
