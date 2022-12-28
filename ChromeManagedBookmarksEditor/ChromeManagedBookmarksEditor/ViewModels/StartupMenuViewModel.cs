@@ -1,9 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using ChromeManagedBookmarksEditor.Interfaces;
 using ChromeManagedBookmarksEditor.Models;
+using ChromeManagedBookmarksEditor.Models.Serializers;
 using ReactiveUI;
 using Splat;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Disposables;
@@ -13,11 +16,11 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 {
     public class StartupMenuViewModel : ViewModelBase
     {
-        private string _JsonToLoad = "";
-        public string JsonToLoad
+        private string _DataToLoad = "";
+        public string DataToLoad
         {
-            get => _JsonToLoad;
-            set => this.RaiseAndSetIfChanged(ref _JsonToLoad, value);
+            get => _DataToLoad;
+            set => this.RaiseAndSetIfChanged(ref _DataToLoad, value);
         }
 
         private ObservableCollection<FileInfo> SavedFilesCollection { get; set; } = new ObservableCollection<FileInfo>();
@@ -44,7 +47,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
                 foreach (string file in files)
                 {
-                    if (file.EndsWith(".json"))
+                    if (file.EndsWith(".json") || file.EndsWith(".html"))
                     {
                         Dispatcher.UIThread.InvokeAsync(() =>
                         {
@@ -55,9 +58,27 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             });
         }
 
-        private void LoadBookmarksDataEditor(string json, bool FromFile = false)
+        private void LoadBookmarksDataEditor(BookmarkSerializedType type, string data, bool FromFile = false)
         {
-            SerializableBookmarks serializer = new SerializableBookmarks(json, FromFile);
+            IBookmarkSerializer? serializer = null;
+
+            switch (type)
+            {
+                case BookmarkSerializedType.Json:
+                    serializer = JsonBookmarkSerializer.FromJson(data, FromFile);
+                    break;
+                case BookmarkSerializedType.Html:
+                    serializer = HtmlBookmarkSerializer.FromHtml(data, FromFile);
+                    break;
+                default:
+                    break;
+            }
+
+            if(serializer == null)
+            {
+                SendNotification("Serilizer Load Error", "Something went wrong loading data from file :(", Avalonia.Controls.Notifications.NotificationType.Error);
+                return;
+            }
 
             ManagedBookmarks bookmarks = serializer.BuildData();
 
@@ -67,17 +88,31 @@ namespace ChromeManagedBookmarksEditor.ViewModels
                 return;
             }
 
-            NavigateTo(new EditorViewModel(HostScreen, bookmarks));
+            NavigateTo(new EditorViewModel(HostScreen, type, bookmarks));
         }
 
-        public void LoadJsonFromFile(string FilePath)
+        public void LoadDataFromFile(object FilePath)
         {
-            LoadBookmarksDataEditor(FilePath, true);
+            if (FilePath is string path)
+            {
+
+                switch (new FileInfo(path).Extension)
+                {
+                    case ".json":
+                        LoadBookmarksDataEditor(BookmarkSerializedType.Json, path, true);
+                        break;
+                    case ".html":
+                        LoadBookmarksDataEditor(BookmarkSerializedType.Html, path, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         public void StartNewCommand()
         {
-            NavigateTo(new EditorViewModel(HostScreen));
+            NavigateTo(new EditorViewModel(HostScreen, BookmarkSerializedType.Json));
         }
 
         public async Task BrowseCommand()
@@ -90,7 +125,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             dialog.AllowMultiple = false;
 
-            dialog.Filters.Add(new FileDialogFilter() { Extensions = { "json" } });
+            dialog.Filters.Add(new FileDialogFilter() { Extensions = new SerializationOutputs().AvailableTypes });
 
             if(Application.Current.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -98,20 +133,30 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
                 if(result != null && result.Length > 0)
                 {
-                    LoadBookmarksDataEditor(result[0], true);
+                    LoadDataFromFile(result[0]);
                 }
             }
         }
 
-        public void LoadJsonCommand(string json = "")
+        public void LoadDataCommand(object data)
         {
-            if(string.IsNullOrWhiteSpace(json))
+            if (data is string text)
             {
-                SendNotification("", "No Json to load", Avalonia.Controls.Notifications.NotificationType.Warning);
-                return;
-            }
 
-            LoadBookmarksDataEditor(json);
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    SendNotification("", "No data to load", Avalonia.Controls.Notifications.NotificationType.Warning);
+                    return;
+                }
+
+                if (text.StartsWith("<!DOCTYPE NETSCAPE-Bookmark-file-1>"))
+                {
+                    LoadBookmarksDataEditor(BookmarkSerializedType.Html, text);
+                    return;
+                }
+
+                LoadBookmarksDataEditor(BookmarkSerializedType.Json, text);
+            }
         }
     }
 }

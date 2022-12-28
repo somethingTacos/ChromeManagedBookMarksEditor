@@ -22,8 +22,6 @@
             ColumnDefinitions="10,AUTO,AUTO,10,AUTO,20,AUTO">
         <!-- <a href="https://www.flaticon.com/free-icons/bookmark" title="bookmark icons">Bookmark icons created by Pixel perfect - Flaticon</a> -->
         <Image Source="/Assets/bookmark.png"
-               IsVisible="{Binding FolderItem.IsRoot, RelativeSource={
-                      RelativeSource AncestorType=UserControl}}"
                Grid.Row="1" Grid.Column="1"
                Height="20"
                Margin="0 0 10 0"
@@ -58,8 +56,6 @@
                 CornerRadius="0 5 5 0"
                 Classes="delete"
                 BorderThickness="0"
-                IsVisible="{Binding !FolderItem.IsRoot, RelativeSource={
-                       RelativeSource AncestorType=UserControl}}"
             />
       </Grid>
     </Border>
