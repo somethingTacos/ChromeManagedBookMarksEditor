@@ -66,14 +66,23 @@
 		    HorizontalAlignment="Stretch"
 			>
 
-
-			<Button Content="Sort Sub Folders Alphabetically"
+			<TextBlock Text="Sort Type"/>
+			<ComboBox Items="{Binding Sorts}"
+					  SelectedItem="{Binding SelectedSortType}"
+					  HorizontalAlignment="Stretch"
+				/>
+			<Button Content="Sort Folders"
 					VerticalAlignment="Bottom"
 					HorizontalAlignment="Stretch"
 					Command="{Binding SortCommand}"
 				/>
 
-			<ComboBox Items="{Binding Outputs.AvailableTypes}"
+			<Separator Foreground="Black"
+					   Background="Black"
+					   Height="1"/>
+
+			<TextBlock Text="Output Type"/>
+			<ComboBox Items="{Binding Outputs}"
 					  SelectedItem="{Binding SelectedSerializeOutputType}"
 					  VerticalAlignment="Bottom"
 					  HorizontalAlignment="Stretch"

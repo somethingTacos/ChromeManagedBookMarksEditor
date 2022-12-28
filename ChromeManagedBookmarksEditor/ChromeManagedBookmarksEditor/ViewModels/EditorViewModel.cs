@@ -2,11 +2,14 @@
 using ChromeManagedBookmarksEditor.Interfaces;
 using ChromeManagedBookmarksEditor.Models;
 using ChromeManagedBookmarksEditor.Models.Serializers;
+using DynamicData;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChromeManagedBookmarksEditor.ViewModels
@@ -38,17 +41,25 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public ObservableCollection<Folder> RootFolders { get; set; } = new ObservableCollection<Folder>();
 
-        // lazy
-        private string _SelectedSerializeOutputType = "";
-        public string SelectedSerializeOutputType
+        private OutputType _SelectedSerializeOutputType = OutputType.Json;
+        public OutputType SelectedSerializeOutputType
         {
             get => _SelectedSerializeOutputType;
             set => this.RaiseAndSetIfChanged(ref _SelectedSerializeOutputType, value);
         }
 
-        public SerializationOutputs Outputs { get; set; } = new SerializationOutputs();
+        private SortType _SelectedSortType = SortType.All;
+        public SortType SelectedSortType
+        {
+            get => _SelectedSortType;
+            set => this.RaiseAndSetIfChanged(ref _SelectedSortType, value);
+        }
 
-        public EditorViewModel(IScreen Host, BookmarkSerializedType outputType, ManagedBookmarks? Bookmarks = null) : base(Host)
+        public List<OutputType> Outputs { get; } = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().ToList();
+
+        public List<SortType> Sorts { get; } = Enum.GetValues(typeof(SortType)).Cast<SortType>().ToList();
+
+        public EditorViewModel(IScreen Host, OutputType outputType, ManagedBookmarks? Bookmarks = null) : base(Host)
         {
             Folder root = new Folder() { Name = "Managed Bookmarks", IsRoot = true };
 
@@ -62,7 +73,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             originData = Bookmarks;
 
-            SelectedSerializeOutputType = outputType.ToString().ToLower();
+            SelectedSerializeOutputType = outputType;
         }
 
         public void AddLinkCommand(object sender)
@@ -115,15 +126,67 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             NavigateTo(new StartupMenuViewModel(HostScreen));
         }
 
+        public void SortFolder(Folder folder, SortType sort)
+        {
+            List<object> sortedList = new List<object>();
+            List<IChild> children = folder.Children.Cast<IChild>().ToList();
+
+            void OrderFolder()
+            {
+                var folders = children.Where(x => x is Folder).ToList();
+                children.Remove(folders);
+
+                children.AddRange(folders.OrderBy(x => x.Name).ToList());
+            }
+
+            void OrderLinks()
+            {
+                var links = children.Where(x => x is Bookmark).ToList();
+                children.Remove(links);
+
+                children.AddRange(links.OrderBy(x => x.Name).ToList());
+            }
+
+            switch (SelectedSortType)
+            {
+                case SortType.FoldersOnly:
+                    OrderFolder();
+
+                    var links = children.Where(x => x is Bookmark).ToList();
+
+                    children.Remove(links);
+                    children.AddRange(links);
+
+                    break;
+                case SortType.UrlsOnly:
+                    OrderLinks();
+                    break;
+                case SortType.All:
+                    OrderFolder();
+                    OrderLinks();
+                    break;
+                default:
+                    break;
+            }
+
+            folder.Children.Clear();
+
+            foreach(var child in children)
+            {
+                if(child is Folder subFolder)
+                {
+                    SortFolder(subFolder, sort);
+                    folder.Children.Add(subFolder);
+                    continue;
+                }
+
+                folder.Children.Add(child);
+            }
+        }
+
         public void SortCommand()
         {
-            /* TODO: sort-options
-             * add combo box for sort options
-             * this method
-             * cleanup those lazy strings and use the enums with a converter, for realz this time
-             */
-
-            SendNotification("Nope", "Not a thing yet WIP", Avalonia.Controls.Notifications.NotificationType.Warning);
+            SortFolder(RootFolders[0], SelectedSortType);
         }
 
         public void SerializeCommand()
@@ -136,16 +199,14 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             IBookmarkSerializer? serializer = null;
 
-            // TODO: remove lazy switch
-
             switch (SelectedSerializeOutputType)
             {
-                case "json":
+                case OutputType.Json:
                     {
                         serializer = new JsonBookmarkSerializer(bookmarks);
                         break;
                     }
-                case "html":
+                case OutputType.Html:
                     {
                         serializer = new HtmlBookmarkSerializer(bookmarks);
                         break;
@@ -170,7 +231,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             if (SaveFileName != "" && originData?.SaveFileName != "" && SaveFileName != originData?.SaveFileName)
             {
-                string oldFilePath = Path.Join(Locator.Current.GetService<Settings>().SaveFolder, $"{originData?.SaveFileName}.{SelectedSerializeOutputType}");
+                string oldFilePath = Path.Join(Locator.Current.GetService<Settings>().SaveFolder, $"{originData?.SaveFileName}.{SelectedSerializeOutputType.ToString().ToLower()}");
 
                 if (File.Exists(oldFilePath))
                 {
@@ -178,7 +239,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
                 }
             }
 
-            SendNotification("", $"{SaveFileName}.{SelectedSerializeOutputType} saved", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
+            SendNotification("", $"{SaveFileName}.{SelectedSerializeOutputType.ToString().ToLower()} saved", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
         }
     }
 }
