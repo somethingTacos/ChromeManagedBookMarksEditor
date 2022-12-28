@@ -1,6 +1,9 @@
-﻿using ChromeManagedBookmarksEditor.Interfaces;
-using System;
+﻿using ChromeManagedBookmarksEditor.Helpers;
+using ChromeManagedBookmarksEditor.Interfaces;
+using Splat;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ChromeManagedBookmarksEditor.Models.Serializers
 {
@@ -14,20 +17,52 @@ namespace ChromeManagedBookmarksEditor.Models.Serializers
         {
         }
 
-        public static HtmlBookmarkSerializer FromHtml(string html, bool FromFile = false)
+        public static HtmlBookmarkSerializer? FromHtml(string html, bool FromFile = false)
         {
-            throw new NotImplementedException();
+            string saveFileName = "";
+
+            var result = FromFile ? HtmlHelper.LoadFromFile(html) : HtmlHelper.Deserialize(html);
+
+            if (FromFile)
+            {
+                saveFileName = new FileInfo(html).Name.Replace(".html", "");
+            }
+
+            if (result.Succeeded && result.HasData && result.Data is object[] data)
+            {
+                return new HtmlBookmarkSerializer(saveFileName, data.ToList());
+            }
+
+            return null;
         }
 
 
         public string SerializeData()
         {
-            throw new NotImplementedException();
+            return HtmlHelper.Serialize(Data.ToArray());
         }
 
         public string SerializeDataToFile(string FileName)
         {
-            throw new NotImplementedException();
+            if (Data.Count == 0) return "";
+
+            string saveFolder = Locator.Current.GetService<Settings>()?.SaveFolder ?? "";
+
+            if (saveFolder == "")
+            {
+                return "";
+            }
+
+            string filePath = Path.Join(saveFolder, $"{FileName}.html");
+
+            var result = HtmlHelper.SaveToFile(Data, filePath);
+
+            if (result.Succeeded && result.HasData && result.Data is string html)
+            {
+                return html;
+            }
+
+            return "";
         }
     }
 }

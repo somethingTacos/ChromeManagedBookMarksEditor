@@ -73,7 +73,7 @@
 					Command="{Binding SortCommand}"
 				/>
 
-			<ComboBox Items="{Binding SerializeOutputTypes}"
+			<ComboBox Items="{Binding Outputs.AvailableTypes}"
 					  SelectedItem="{Binding SelectedSerializeOutputType}"
 					  VerticalAlignment="Bottom"
 					  HorizontalAlignment="Stretch"
@@ -91,8 +91,9 @@
 
 		<TextBox Watermark="Serialized bookmarks will be here :)"
 				 Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
-				 Text="{Binding JsonText}"
+				 Text="{Binding DataText}"
 				 Classes="linkedright"
+				 MaxHeight="50"
              />
 
 		<Button Content="Copy"

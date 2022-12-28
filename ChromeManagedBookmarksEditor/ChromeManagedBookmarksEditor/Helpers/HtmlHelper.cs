@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BookmarksManager;
 using ChromeManagedBookmarksEditor.Models;
 using ChromeManagedBookmarksEditor.Models.Results;
+using System.IO;
+using ChromeManagedBookmarksEditor.Interfaces;
 
 namespace ChromeManagedBookmarksEditor.Helpers
 {
-    
+
     public static class HtmlHelper
     {
         private static BookmarkFolder ConvertToNetScapeFolder(Folder folder)
@@ -21,6 +20,7 @@ namespace ChromeManagedBookmarksEditor.Helpers
                 if (child is Folder subFolder)
                 {
                     netscapeFolder.Add(ConvertToNetScapeFolder(subFolder));
+                    continue;
                 }
 
                 if (child is Bookmark bookmark)
@@ -32,47 +32,141 @@ namespace ChromeManagedBookmarksEditor.Helpers
             return netscapeFolder;
         }
 
-        private static List<object> ConvertToObjectList(BookmarkFolder folder)
+        private static Folder ConvertToFolder(BookmarkFolder folder, Folder parent = null)
         {
-            List<object> data = new List<object>();
+            Folder managedFolder = new Folder(parent)
+            {
+                Name = folder.Title
+            };
 
             foreach (var child in folder)
             {
+                if (child is BookmarkLink link)
+                {
+                    managedFolder.Children.Add(new Bookmark(parent)
+                    {
+                        Name = link.Title,
+                        Url = link.Url
+                    });
+                }
 
+                if (child is BookmarkFolder subFolder)
+                {
+                    managedFolder.Children.Add(ConvertToFolder(subFolder, parent));
+                }
             }
 
-            return data;
+            return managedFolder;
         }
 
-        public static string Serialize(ManagedBookmarks bookmarks)
+        public static string Serialize(object[] bookmarks)
         {
-            var netscapeBookmarks = new BookmarkFolder()
+            return new NetscapeBookmarksWriter(SerializeToContainer(bookmarks)).ToString();
+        }
+
+        public static BookmarkFolder SerializeToContainer(object[] bookmarks)
+        {
+            var rootFolder = new BookmarkFolder();
+
+            foreach (var bookmark in bookmarks)
             {
-                ConvertToNetScapeFolder(bookmarks.RootFolder)
+                if (bookmark is ManagedBookmarks managedBookmarks)
+                {
+                    rootFolder.Title = managedBookmarks.RootName;
+                    continue;
+                }
+
+                if (bookmark is Bookmark link)
+                {
+                    rootFolder.Add(new BookmarkLink(link.Name, link.Url));
+                    continue;
+                }
+
+                if (bookmark is Folder folder)
+                {
+                    rootFolder.Add(ConvertToNetScapeFolder(folder));
+                }
+            }
+
+            var container = new BookmarkFolder()
+            {
+                rootFolder
             };
 
-            return new NetscapeBookmarksWriter(netscapeBookmarks).ToString();
+            return container;
         }
 
-        public static GenericResult Deserialize(string Html)
+        public static GenericResult Deserialize(string html)
         {
-            var netscapeBookmarks = new NetscapeBookmarksReader().Read(Html);
+            var netscapeBookmarks = new NetscapeBookmarksReader().Read(html);
 
             if (netscapeBookmarks == null) return GenericResult.FromError("Failed to deserialize bookmarks");
 
-            var data = ConvertToObjectList(netscapeBookmarks);
+            List<object> data = new List<object>();
 
-            return GenericResult.FromSuccess("", data);
+            if (netscapeBookmarks == null || netscapeBookmarks.Count == 0) return GenericResult.FromError("Bookmarks are null or have no child items");
+
+            data.Add(new ManagedBookmarks()
+            {
+                RootName = netscapeBookmarks[0].Title
+            });
+
+            if (netscapeBookmarks[0] is BookmarkFolder rootFolder)
+            {
+                foreach (var child in rootFolder)
+                {
+                    if (child is BookmarkLink link)
+                    {
+                        data.Add(new Bookmark()
+                        {
+                            Name = link.Title,
+                            Url = link.Url
+                        });
+                    }
+
+                    if (child is BookmarkFolder subFolder)
+                    {
+                        data.Add(ConvertToFolder(subFolder));
+                    }
+                }
+            }
+
+            return GenericResult.FromSuccess("", data.ToArray());
         }
 
-        public static GenericResult SaveToFile()
+        public static GenericResult SaveToFile(List<object> data, string filePath)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var container = SerializeToContainer(data.ToArray());
+
+                using (var file = File.OpenWrite(filePath))
+                {
+                    var writer = new NetscapeBookmarksWriter(container);
+
+                    writer.Write(file);
+
+                    return GenericResult.FromSuccess("", writer.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromException(ex);
+            }
         }
 
-        public static GenericResult LoadFromFile()
+        public static GenericResult LoadFromFile(string filePath)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string htmlData = File.ReadAllText(filePath);
+
+                return Deserialize(htmlData);
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromException(ex);
+            }
         }
     }
 }

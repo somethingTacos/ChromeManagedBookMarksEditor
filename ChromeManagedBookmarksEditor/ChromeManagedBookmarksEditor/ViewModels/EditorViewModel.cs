@@ -30,11 +30,11 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             set => this.RaiseAndSetIfChanged(ref _SaveFileName, value);
         }
 
-        private string _JsonText = "";
-        public string JsonText
+        private string _DataText = "";
+        public string DataText
         {
-            get => _JsonText;
-            set => this.RaiseAndSetIfChanged(ref _JsonText, value);
+            get => _DataText;
+            set => this.RaiseAndSetIfChanged(ref _DataText, value);
         }
 
         public ObservableCollection<Folder> RootFolders { get; set; } = new ObservableCollection<Folder>();
@@ -47,15 +47,9 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             set => this.RaiseAndSetIfChanged(ref _SelectedSerializeOutputType, value);
         }
 
-        // more lazy
-        // TODO: use BookmarkSerializedType with a converter
-        public List<string> SerializeOutputTypes { get; } = new List<string>
-        {
-            "Json",
-            "Html"
-        };
+        public SerializationOutputs Outputs { get; set; } = new SerializationOutputs();
 
-        public EditorViewModel(IScreen Host, ManagedBookmarks? Bookmarks = null) : base(Host)
+        public EditorViewModel(IScreen Host, BookmarkSerializedType outputType, ManagedBookmarks? Bookmarks = null) : base(Host)
         {
             Folder root = new Folder() { Name = "Managed Bookmarks", IsRoot = true };
 
@@ -69,7 +63,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             originData = Bookmarks;
 
-            SelectedSerializeOutputType = SerializeOutputTypes[0];
+            SelectedSerializeOutputType = outputType.ToString().ToLower();
         }
 
         public void AddLinkCommand(object sender)
@@ -104,7 +98,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public async Task CopyCommand()
         {
-            if(string.IsNullOrWhiteSpace(JsonText))
+            if(string.IsNullOrWhiteSpace(DataText))
             {
                 SendNotification("", "Nothing to copy");
                 return;
@@ -113,7 +107,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
             if (Application.Current?.Clipboard != null)
             {
                 SendNotification("", "Copied!", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
-                await Application.Current.Clipboard.SetTextAsync(JsonText);
+                await Application.Current.Clipboard.SetTextAsync(DataText);
             }
         }
 
@@ -141,12 +135,12 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             switch (SelectedSerializeOutputType)
             {
-                case "Json":
+                case "json":
                     {
                         serializer = new JsonBookmarkSerializer(bookmarks);
                         break;
                     }
-                case "Html":
+                case "html":
                     {
                         serializer = new HtmlBookmarkSerializer(bookmarks);
                         break;
@@ -161,17 +155,17 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
             SaveFileName = SaveFileName == "" ? bookmarks.RootName : SaveFileName;
 
-            JsonText = serializer.SerializeDataToFile(SaveFileName);
+            DataText = serializer.SerializeDataToFile(SaveFileName);
 
-            if(JsonText == "")
+            if(DataText == "")
             {
-                SendNotification("No save folder", "Json file could not be automatically saved since the save folder isn't set.", Avalonia.Controls.Notifications.NotificationType.Warning, TimeSpan.FromSeconds(7));
-                JsonText = serializer.SerializeData();
+                SendNotification("No save folder", "File could not be automatically saved since the save folder isn't set.", Avalonia.Controls.Notifications.NotificationType.Warning, TimeSpan.FromSeconds(7));
+                DataText = serializer.SerializeData();
             }
 
             if (SaveFileName != "" && originData?.SaveFileName != "" && SaveFileName != originData?.SaveFileName)
             {
-                string oldFilePath = Path.Join(Locator.Current.GetService<Settings>().SaveFolder, $"{originData?.SaveFileName}.json");
+                string oldFilePath = Path.Join(Locator.Current.GetService<Settings>().SaveFolder, $"{originData?.SaveFileName}.{SelectedSerializeOutputType}");
 
                 if (File.Exists(oldFilePath))
                 {
@@ -179,7 +173,7 @@ namespace ChromeManagedBookmarksEditor.ViewModels
                 }
             }
 
-            SendNotification("", $"{SaveFileName} saved", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
+            SendNotification("", $"{SaveFileName}.{SelectedSerializeOutputType} saved", Avalonia.Controls.Notifications.NotificationType.Success, TimeSpan.FromSeconds(2));
         }
     }
 }

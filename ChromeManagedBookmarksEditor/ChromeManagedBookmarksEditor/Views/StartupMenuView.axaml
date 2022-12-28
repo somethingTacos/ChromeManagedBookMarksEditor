@@ -34,7 +34,7 @@
                   >
       <ItemsControl.ItemTemplate>
         <DataTemplate>
-          <Button Content="{Binding Name}" Command="{Binding $parent[ItemsControl].DataContext.LoadJsonFromFile}"
+          <Button Content="{Binding Name}" Command="{Binding $parent[ItemsControl].DataContext.LoadDataFromFile}"
                   CommandParameter="{Binding FullName}"
                   Classes="spanningcard"
                   />
@@ -49,15 +49,16 @@
             Margin="0 0 0 10"
             Classes="linkedbottomrightcorner"/>
     
-    <TextBox Watermark="Load JSON directly"
-             Text="{Binding JsonToLoad}"
+    <TextBox Watermark="Load data directly"
+             Text="{Binding DataToLoad}"
              Grid.Row="5" Grid.Column="1"
              Classes="linkedright"
+			 MaxHeight="100"
              />
     
     <Button Content="Load"
-            Command="{Binding LoadJsonCommand}"
-            CommandParameter="{Binding JsonToLoad}"
+            Command="{Binding LoadDataCommand}"
+            CommandParameter="{Binding DataToLoad}"
             Grid.Row="5" Grid.Column="2"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
