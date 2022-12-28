@@ -5,7 +5,6 @@ using ChromeManagedBookmarksEditor.Models.Serializers;
 using ReactiveUI;
 using Splat;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -118,6 +117,12 @@ namespace ChromeManagedBookmarksEditor.ViewModels
 
         public void SortCommand()
         {
+            /* TODO: sort-options
+             * add combo box for sort options
+             * this method
+             * cleanup those lazy strings and use the enums with a converter, for realz this time
+             */
+
             SendNotification("Nope", "Not a thing yet WIP", Avalonia.Controls.Notifications.NotificationType.Warning);
         }
 
