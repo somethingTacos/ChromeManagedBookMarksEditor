@@ -1,6 +1,6 @@
 ﻿namespace ChromeManagedBookmarksEditor.Models
 {
-    public enum BookmarkSerializedType
+    public enum OutputType
     {
         Json,
         Html

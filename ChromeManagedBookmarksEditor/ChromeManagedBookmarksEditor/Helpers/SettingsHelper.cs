@@ -27,11 +27,11 @@ namespace ChromeManagedBookmarksEditor.Helpers
             {
                 var result = JsonHelper.LoadFromFile<Settings>(SettingsFilePath);
 
-                if (result.Succeeded && result.Data != null)
+                if (result.Succeeded && result.HasData)
                 {
                     notificationManager.Show(new Notification("", "Settings Loaded", NotificationType.Success, TimeSpan.FromSeconds(2)));
 
-                    return (Settings)result.Data;
+                    return (Settings)result.Data!;
                 }
 
                 notificationManager.Show(new Notification("Error Loading Settings", result.ErrorMessage, NotificationType.Error));
